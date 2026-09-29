@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NUNU KIDS | ملابس المواليد</title>
+<meta name="description" content="نونو كيدز: ملابس المواليد من الولادة حتى عمر سنة، وبكجات تجهيز البيبي. الدفع عند الاستلام.">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+
+
+<main>
+
+<!-- البانر الرئيسي / العرض (الصور مؤقتة لحد ما تجهز صور المتجر) -->
+<section class="hero" id="offers">
+  <div class="hero__photos">
+      <img src="https://images.unsplash.com/photo-1766918780914-e19d9de76d85?w=700&h=900&fit=crop&auto=format&q=70" alt="ملابس بيبي على علاقة" loading="eager">
+      <img src="https://images.unsplash.com/photo-1601168313753-6797eabb6550?w=700&h=900&fit=crop&auto=format&q=70" alt="بيبي بسلة قش" loading="eager">
+      <img src="https://images.unsplash.com/photo-1768693602418-260d828b878d?w=700&h=900&fit=crop&auto=format&q=70" alt="ملابس بيبي بسلة">
+      <img src="https://images.unsplash.com/photo-1522771930-78848d9293e8?w=700&h=900&fit=crop&auto=format&q=70" alt="بيبي بأواعي شتوية">
+  </div>
+  <div class="hero__overlay">
+    <div class="hero__text" id="heroText"></div>
+  </div>
+</section>
+
+<!-- شريط متحرك -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track" id="marquee"></div>
+</div>
+
+<!-- ليش تشتري منا -->
+<section class="trust">
+  <div class="container trust__row">
+    <div><svg class="ic"><use href="#i-cash"/></svg><span>الدفع عند الاستلام</span></div>
+    <div><svg class="ic"><use href="#i-truck"/></svg><span>توصيل لكل المناطق</span></div>
+    <div><svg class="ic"><use href="#i-swap"/></svg><span>تبديل خلال 7 أيام</span></div>
+    <div><svg class="ic"><use href="#i-leaf"/></svg><span>قطن ناعم 100%</span></div>
+  </div>
+</section>
+
+<!-- حسب العمر -->
+<section class="section" id="ages">
+  <div class="container">
+    <div class="section__head">
+      <h2>تسوقي حسب العمر</h2>
+      <p>اختاري عمر البيبي، وبنوريكي المقاسات المناسبة إله</p>
+    </div>
+    <div class="ages">
+      <a href="#" class="age">
+        <div class="age__img"><img src="https://images.unsplash.com/photo-1773243086631-962baefccd8a?w=400&h=520&fit=crop&auto=format&q=70" alt="بيبي عمر 0 – 3 أشهر" loading="lazy"><small>حديثي الولادة</small></div>
+        <b>0 – 3</b><span>أشهر</span>
+      </a>
+      <a href="#" class="age">
+        <div class="age__img"><img src="https://images.unsplash.com/photo-1744424705158-b1612369bbcb?w=400&h=520&fit=crop&auto=format&q=70" alt="بيبي عمر 3 – 6 أشهر" loading="lazy"></div>
+        <b>3 – 6</b><span>أشهر</span>
+      </a>
+      <a href="#" class="age">
+        <div class="age__img"><img src="https://images.unsplash.com/photo-1605644235751-709c7254e3e3?w=400&h=520&fit=crop&auto=format&q=70" alt="بيبي عمر 6 – 9 أشهر" loading="lazy"></div>
+        <b>6 – 9</b><span>أشهر</span>
+      </a>
+      <a href="#" class="age">
+        <div class="age__img"><img src="https://images.unsplash.com/photo-1711313532755-47fe78c65a50?w=400&h=520&fit=crop&auto=format&q=70" alt="بيبي عمر 9 – 12 شهر" loading="lazy"></div>
+        <b>9 – 12</b><span>شهر</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- وصل حديثاً -->
+<section class="section section--tint" id="new">
+  <div class="container">
+    <div class="section__head section__head--row">
+      <div>
+        <h2>وصل حديثاً</h2>
+        <p>أحدث القطع اللي نزلت عالمتجر</p>
+      </div>
+      <a href="#" class="link-more">شوفي الكل ←</a>
+    </div>
+    <div class="products" id="newGrid"></div>
+  </div>
+</section>
+
+<!-- مختارات إلك: بتظهر بس للزبونة اللي تصفحت قبل -->
+<section class="section" id="forYou" hidden>
+  <div class="container">
+    <div class="section__head section__head--row">
+      <div><h2>مختارات إلك</h2><p>حسب اللي عجبك ومقاس البيبي</p></div>
+    </div>
+    <div class="products" id="forYouGrid"></div>
+  </div>
+</section>
+
+<!-- بكجات تجهيز البيبي -->
+<section class="section" id="bundles">
+  <div class="container">
+    <div class="section__head">
+      <h2>بكجات تجهيز البيبي</h2>
+      <p>كل اللي بتحتاجيه للبيبي بطلب واحد، وبسعر أقل من شراء كل قطعة لحالها</p>
+    </div>
+    <div class="bundles" id="bundleGrid"></div>
+  </div>
+</section>
+
+<!-- بانر عرض ثانوي: بيظهر بس إذا في عرض فعّال محدد "banner" -->
+<section class="container" id="promo" hidden></section>
+
+<!-- حسب النوع -->
+<section class="section" id="types">
+  <div class="container">
+    <div class="section__head">
+      <h2>تسوقي حسب النوع</h2>
+    </div>
+    <div class="types">
+      <a href="#" class="type"><svg class="garment"><use href="#i-onesie"/></svg><span>ملابس داخلية</span></a>
+      <a href="#" class="type"><svg class="garment"><use href="#i-sleeper"/></svg><span>أواعي وبيجامات</span></a>
+      <a href="#" class="type"><svg class="garment"><use href="#i-hat"/></svg><span>طواقي وإكسسوارات</span></a>
+      <a href="#" class="type"><svg class="garment"><use href="#i-socks"/></svg><span>كلسات وقفازات</span></a>
+      <a href="#" class="type"><svg class="garment"><use href="#i-bib"/></svg><span>مراويل</span></a>
+      <a href="#" class="type"><svg class="garment"><use href="#i-blanket"/></svg><span>بطانيات ولفّات</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- آراء الأمهات -->
+<section class="section section--tint">
+  <div class="container">
+    <div class="section__head">
+      <h2>شو حكوا الأمهات عنا</h2>
+    </div>
+    <div class="reviews">
+      <figure class="review"><div class="stars">★★★★★</div><blockquote>القطن ناعم كتير وما عمل أي حساسية للبيبي. البكج وصل مرتب ومغلف كأنه هدية.</blockquote><figcaption>أم ليان</figcaption></figure>
+      <figure class="review"><div class="stars">★★★★★</div><blockquote>طلبت جهاز المولود كامل ووصلني خلال يومين. المقاسات مضبوطة.</blockquote><figcaption>أم آدم</figcaption></figure>
+      <figure class="review"><div class="stars">★★★★★</div><blockquote>الأسعار حلوة، والدفع عند الاستلام ريّحني كتير.</blockquote><figcaption>أم كرم</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+
+<script src="js/data.js"></script>
+<script src="js/recs.js"></script>
+<script src="js/layout-markup.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>
