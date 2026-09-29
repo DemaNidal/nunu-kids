@@ -8,8 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/product.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/pages/product.css">
+<script type="module" src="js/pages/product.js"></script>
 </head>
 <body class="page-product">
 
@@ -41,28 +44,17 @@
 <!-- شريط الإضافة للسلة على الموبايل -->
 <div class="buybar" id="buybar"></div>
 
-<!-- دليل المقاسات -->
 <dialog class="modal" id="sizeGuide">
   <div class="modal__head">
     <h3>دليل المقاسات</h3>
-    <button class="icon-btn" data-close aria-label="إغلاق"><svg class="ic"><use href="#i-x"/></svg></button>
+    <button type="button" class="icon-btn" data-close aria-label="إغلاق">✕</button>
   </div>
   <table class="size-table">
     <thead><tr><th>المقاس</th><th>الوزن</th><th>الطول</th></tr></thead>
-    <tbody>
-      <tr><td><bdi dir="ltr">0–3</bdi> أشهر</td><td><bdi dir="ltr">3 – 6</bdi> كغ</td><td><bdi dir="ltr">50 – 62</bdi> سم</td></tr>
-      <tr><td><bdi dir="ltr">3–6</bdi> أشهر</td><td><bdi dir="ltr">6 – 8</bdi> كغ</td><td><bdi dir="ltr">62 – 68</bdi> سم</td></tr>
-      <tr><td><bdi dir="ltr">6–9</bdi> أشهر</td><td><bdi dir="ltr">8 – 9.5</bdi> كغ</td><td><bdi dir="ltr">68 – 74</bdi> سم</td></tr>
-      <tr><td><bdi dir="ltr">9–12</bdi> شهر</td><td><bdi dir="ltr">9.5 – 11</bdi> كغ</td><td><bdi dir="ltr">74 – 80</bdi> سم</td></tr>
-    </tbody>
+    <tbody id="sizeGuideBody"></tbody>
   </table>
   <p class="modal__note">نصيحة: إذا البيبي على حدود مقاسين، اختاري المقاس الأكبر لأنه بيكبر بسرعة.</p>
 </dialog>
 
-<script src="js/data.js"></script>
-<script src="js/recs.js"></script>
-<script src="js/layout-markup.js"></script>
-<script src="js/layout.js"></script>
-<script src="js/product.js"></script>
 </body>
 </html>

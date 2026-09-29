@@ -9,8 +9,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/checkout.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/pages/checkout.css">
+<script type="module" src="js/pages/checkout.js"></script>
 </head>
 <body class="page-checkout">
 
@@ -62,7 +65,7 @@
         <h2><span class="step">3</span> طريقة الدفع</h2>
         <label class="pay-opt">
           <input type="radio" name="payment" value="cod" checked>
-          <svg class="ic"><use href="#i-cash"/></svg>
+          <i data-icon="cash"></i>
           <div><b>الدفع نقداً عند الاستلام</b><small>بتدفعي للمندوب لما يوصلك الطلب</small></div>
         </label>
       </section>
@@ -76,10 +79,5 @@
 <!-- شريط التأكيد على الموبايل -->
 <div class="co-bar" id="coBar"></div>
 
-<script src="js/data.js"></script>
-<script src="js/recs.js"></script>
-<script src="js/layout-markup.js"></script>
-<script src="js/layout.js"></script>
-<script src="js/checkout.js"></script>
 </body>
 </html>

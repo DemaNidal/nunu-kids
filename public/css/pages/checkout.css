@@ -1,4 +1,6 @@
-/* ===== إتمام الطلب ===== */
+/* ============================================================
+   إتمام الطلب
+   ============================================================ */
 .checkout { padding-top: 24px; padding-bottom: 40px; }
 .checkout__title { font-size: clamp(28px, 3.4vw, 36px); margin-bottom: 18px; }
 .checkout__grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 28px; align-items: start; }
@@ -46,23 +48,18 @@
 .sum-line__info b { display: block; font-size: 15px; }
 .sum-line__info small { color: var(--muted); font-size: 13px; }
 .sum-line__price { font-weight: 700; }
-.qty--sm { margin-top: 2px; }
-.qty--sm button { width: 24px; height: 24px; font-size: 14px; }
-.qty--sm span { font-size: 13px; }
 
 .sum-rows { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; display: grid; gap: 8px; }
 .sum-rows > div { display: flex; justify-content: space-between; gap: 12px; }
 .sum-rows em { font-style: normal; color: var(--muted); font-size: 14px; }
 .sum-disc { color: var(--mauve); font-size: 14px; }
-.free { color: #3f7a5a; }
+.free { color: var(--success); }
 .sum-total { border-top: 1px dashed var(--line); padding-top: 10px; font-size: 18px; }
 .sum-total b { font-family: var(--font-head); font-size: 26px; }
 .co-submit { margin-top: 16px; font-size: 17px; padding: 14px; }
 .co-note { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; color: var(--muted); margin: 10px 0 0; }
 .co-trust { list-style: none; padding: 12px 0 0; margin: 12px 0 0; border-top: 1px solid var(--line); display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
 .co-trust li { display: flex; align-items: center; gap: 8px; }
-
-.suggest--co { margin: 14px 0 0; }
 
 .co-bar { display: none; }
 

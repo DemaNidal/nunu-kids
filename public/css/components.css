@@ -1,0 +1,102 @@
+/* ============================================================
+   قطع بتتكرر: كرت المنتج، السعر، العداد، الكمية، الاقتراحات، النوافذ
+   ============================================================ */
+
+/* ===== شبكة المنتجات وكرت المنتج ===== */
+.products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.card {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); transition: transform .2s;
+}
+.card:hover { transform: translateY(-3px); }
+.card__img { position: relative; display: block; aspect-ratio: 1; overflow: hidden; background: var(--cream); }
+.card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.card:hover .card__img img { transform: scale(1.05); }
+.card__fav { position: absolute; top: 8px; left: 8px; width: 36px; height: 36px; background: var(--white); color: var(--mauve); }
+.card__fav.on .ic { fill: var(--mauve); }
+.card__body { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px 14px; }
+.card__title { font-weight: 700; font-size: 16px; }
+.card__title:hover { color: var(--blue); }
+
+.badges { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chips span { font-size: 11px; padding: 1px 8px; border-radius: var(--pill); background: var(--blush); color: var(--muted); }
+.chips span.off { text-decoration: line-through; opacity: .55; }
+
+@media (max-width: 1023px) { .products { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 679px) {
+  .products { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .card__body { padding: 10px; }
+  .card__title { font-size: 14px; }
+  .card .btn--sm { font-size: 14px; padding: 8px 10px; }
+}
+
+/* ===== السعر ===== */
+.price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.price b { font-size: 19px; }
+.price s { color: var(--muted); font-size: 14px; }
+.price--sale b { color: var(--mauve); }
+.price--lg b { font-family: var(--font-head); font-size: 28px; }
+.price--xl { align-items: center; gap: 10px; margin: 12px 0 16px; }
+.price--xl b { font-family: var(--font-head); font-size: 34px; line-height: 1; }
+.price--xl s { font-size: 18px; }
+@media (max-width: 679px) { .price b { font-size: 16px; } }
+
+.save {
+  display: inline-block; align-self: flex-start; padding: 2px 12px; border-radius: var(--pill);
+  background: var(--cream); color: var(--navy); font-weight: 700; font-size: 14px;
+}
+.save--empty { visibility: hidden; }
+
+/* ===== العدّاد التنازلي ===== */
+.countdown { display: flex; justify-content: center; gap: 10px; }
+.countdown__unit { display: flex; flex-direction: column; align-items: center; }
+.countdown b { font-family: var(--font-head); line-height: 1.1; }
+
+/* شفاف فوق الصور (البانر) */
+.countdown--glass .countdown__unit {
+  min-width: 66px; padding: 8px 6px; border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, .18); border: 1px solid rgba(255, 255, 255, .45); backdrop-filter: blur(6px);
+}
+.countdown--glass b { font-size: 26px; }
+.countdown--glass span { font-size: 12px; opacity: .9; }
+@media (max-width: 859px) { .countdown--glass .countdown__unit { min-width: 58px; } }
+
+/* صغير بسطر وحدة (صفحة المنتج) */
+.countdown--mini { flex-wrap: wrap; justify-content: flex-start; gap: 4px 8px; }
+.countdown--mini .countdown__unit { flex-direction: row; align-items: baseline; gap: 3px; font-size: 12px; }
+.countdown--mini b { font-size: 20px; padding: 0 6px; border-radius: 6px; background: rgba(255, 255, 255, .14); }
+
+/* ===== الكمية ===== */
+.qty { display: inline-flex; align-items: center; margin-top: 4px; border: 1px solid var(--line); border-radius: var(--pill); }
+.qty button { width: 28px; height: 28px; border: 0; background: transparent; color: var(--navy); font-size: 16px; }
+.qty span { min-width: 20px; text-align: center; font-size: 14px; }
+.qty--sm button { width: 24px; height: 24px; font-size: 14px; }
+.qty--sm span { font-size: 13px; }
+.qty--lg { margin: 0; background: var(--white); }
+.qty--lg button { width: 42px; height: 48px; font-size: 20px; }
+.qty--lg span { min-width: 28px; font-size: 17px; font-weight: 700; }
+
+/* ===== اقتراحات (السلة وصفحة الدفع) ===== */
+.suggest { margin: 14px 0 6px; padding: 12px; border-radius: var(--radius-sm); background: var(--blush); }
+.suggest__title { margin: 0 0 8px; font-weight: 700; font-size: 14px; }
+.suggest__row { display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; align-items: center; padding: 6px 0; }
+.suggest__row + .suggest__row { border-top: 1px solid var(--line); }
+.suggest__img { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; background: var(--cream); }
+.suggest__img img { width: 100%; height: 100%; object-fit: cover; }
+.suggest__info { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
+.suggest__info a { font-weight: 500; font-size: 14px; }
+.suggest__info small { color: var(--muted); font-size: 12px; }
+.suggest__info s { opacity: .7; }
+.suggest__add {
+  padding: 5px 12px; border-radius: var(--pill); border: 1.5px solid var(--navy);
+  background: var(--white); color: var(--navy); font-size: 13px; font-weight: 700; white-space: nowrap;
+}
+.suggest__add:hover { background: var(--navy); color: var(--white); }
+
+/* ===== نافذة منبثقة ===== */
+.modal { width: min(460px, calc(100% - 32px)); padding: 22px; border: 0; border-radius: var(--radius); color: var(--navy); }
+.modal::backdrop { background: var(--overlay); }
+.modal__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.modal__note { margin: 14px 0 0; font-size: 14px; color: var(--muted); }

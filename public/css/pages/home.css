@@ -1,0 +1,113 @@
+/* ============================================================
+   الصفحة الرئيسية
+   ============================================================ */
+
+/* ===== البانر ===== */
+.hero { position: relative; height: 560px; overflow: hidden; background: var(--cream); }
+.hero__photos { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+.hero__photos img { width: 100%; height: 100%; object-fit: cover; }
+.hero__overlay { position: absolute; inset: 0; display: grid; place-items: center; padding: 16px; background: rgba(49, 56, 87, .38); }
+.hero__text { max-width: 620px; text-align: center; color: var(--white); }
+.hero h1 { font-size: clamp(34px, 5.5vw, 60px); margin: 14px 0 6px; text-shadow: 0 2px 16px rgba(0, 0, 0, .25); }
+.hero p { font-size: clamp(17px, 2.2vw, 21px); margin: 0 0 22px; }
+.hero__cta { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+@media (max-width: 859px) {
+  .hero { height: 520px; }
+  .hero__photos { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
+  .hero__overlay { background: var(--overlay); }
+  .hero__cta .btn { flex: 1; white-space: nowrap; padding: 12px 16px; }
+}
+
+/* ===== الشريط المتحرك ===== */
+.marquee { overflow: hidden; white-space: nowrap; padding: 10px 0; background: var(--pink); color: var(--navy); font-weight: 700; font-size: 15px; }
+.marquee__track { display: inline-flex; gap: 22px; animation: marquee 28s linear infinite; }
+.marquee i { font-style: normal; color: var(--mauve); }
+@keyframes marquee { to { transform: translateX(50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }
+
+/* ===== شريط الثقة ===== */
+.trust { background: var(--white); border-bottom: 1px solid var(--line); }
+.trust__row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding-top: 18px; padding-bottom: 18px; }
+.trust__row div { display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 15px; }
+.trust .ic { width: 28px; height: 28px; color: var(--blue); }
+@media (max-width: 859px) {
+  .trust__row { grid-template-columns: repeat(2, 1fr); }
+  .trust__row div { justify-content: flex-start; font-size: 14px; }
+}
+
+/* ===== حسب العمر ===== */
+.ages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.age { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.age__img {
+  position: relative; width: 100%; aspect-ratio: 4 / 5; overflow: hidden;
+  border: 4px solid var(--white); border-radius: var(--pill) var(--pill) var(--radius) var(--radius); background: var(--cream);
+}
+.age__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.age:hover .age__img img { transform: scale(1.06); }
+.age__img small {
+  position: absolute; bottom: 10px; right: 50%; transform: translateX(50%);
+  padding: 2px 10px; border-radius: var(--pill); background: var(--white); font-size: 12px; font-weight: 700; white-space: nowrap;
+}
+.age b { margin-top: 12px; font-family: var(--font-head); font-size: 26px; line-height: 1; direction: ltr; }
+.age span { color: var(--muted); font-size: 15px; }
+@media (max-width: 859px) {
+  .ages { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .age b { font-size: 22px; }
+}
+
+/* ===== البكجات ===== */
+.bundles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.bundle {
+  position: relative; display: flex; flex-direction: column; padding: 24px 22px;
+  background: var(--white); border: 2px solid var(--line); border-radius: var(--radius);
+}
+.bundle--featured { border-color: var(--blue); }
+.bundle__flag {
+  position: absolute; z-index: 1; top: -14px; right: 50%; transform: translateX(50%);
+  padding: 3px 14px; border-radius: var(--pill); background: var(--blue); color: var(--white);
+  font-size: 13px; font-weight: 700; white-space: nowrap;
+}
+.bundle__img { margin: -8px -6px 14px; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--radius-sm); background: var(--cream); }
+.bundle__img img { width: 100%; height: 100%; object-fit: cover; }
+.bundle h3 { font-size: 24px; }
+.bundle__count { color: var(--muted); font-size: 14px; }
+.bundle .hearts { display: grid; gap: 6px; margin: 14px 0 18px; font-size: 15px; }
+.bundle .price { margin-bottom: 4px; }
+.bundle .save { margin-bottom: 14px; }
+@media (max-width: 859px) { .bundles { grid-template-columns: 1fr; gap: 24px; } }
+
+/* ===== بانر العرض ===== */
+.promo {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 30px 32px;
+  border-radius: var(--radius); color: var(--white); background: var(--navy);
+  background-image:
+    radial-gradient(circle at 8% 120%, var(--mauve) 0 90px, transparent 91px),
+    radial-gradient(circle at 96% -30%, var(--blue) 0 80px, transparent 81px);
+}
+.promo h3 { font-size: clamp(22px, 3vw, 30px); margin: 8px 0 2px; }
+.promo p { margin: 0; color: var(--pink); }
+@media (max-width: 679px) { .promo { flex-direction: column; align-items: stretch; text-align: center; padding: 26px 20px; } }
+
+/* ===== حسب النوع ===== */
+.types { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.type {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 8px; text-align: center;
+  background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); font-weight: 500;
+}
+.type:hover { border-color: var(--pink); }
+.garment {
+  width: 64px; height: 64px; padding: 10px; border-radius: 50%; background: var(--blush);
+  fill: var(--white); stroke: var(--navy); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round;
+}
+@media (max-width: 859px) {
+  .types { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .type { font-size: 14px; }
+}
+
+/* ===== الآراء ===== */
+.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.review { margin: 0; padding: 22px; border-radius: var(--radius); background: var(--blush); }
+.review blockquote { margin: 8px 0 12px; }
+.review figcaption { font-weight: 700; }
+.stars { color: var(--mauve); letter-spacing: 2px; }
+@media (max-width: 859px) { .reviews { grid-template-columns: 1fr; } }

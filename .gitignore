@@ -1,0 +1,14 @@
+# الحزم (بتتنزل من جديد بـ npm install)
+node_modules/
+
+# كلمات السر ومفاتيح الخدمات (Cloudinary، قاعدة البيانات...)
+.env
+.env.*
+!.env.example
+
+# إعدادات محلية
+.claude/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
