@@ -3,7 +3,7 @@
 export const STORE = {
   name: 'NUNU KIDS',
   currency: '₪',
-  freeShippingOver: 200, // 0 = بدون توصيل مجاني
+  freeShippingOver: 0, // 0 = بدون توصيل مجاني. لتفعيله: حطي المبلغ (مثلاً 200)
   whatsapp: '', // رقم دولي بدون + (مثلاً 970591234567)
   facebook: '',
   instagram: '',

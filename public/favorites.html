@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المفضلة | NUNU KIDS</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<script src="js/file-warning.js"></script>
+<script type="module" src="js/pages/favorites.js"></script>
+</head>
+<body>
+
+<main class="section">
+  <div class="container">
+    <div class="section__head">
+      <span class="eyebrow">القطع اللي عجبتك</span>
+      <h1>المفضلة</h1>
+      <p id="favSummary"></p>
+    </div>
+    <div class="products" id="favGrid"></div>
+  </div>
+</main>
+
+<section class="section section--tint" id="favRecs" hidden>
+  <div class="container">
+    <div class="section__head section__head--row">
+      <div><span class="eyebrow">ممكن تعجبك كمان</span><h2>قطع بتلبق مع اختياراتك</h2></div>
+    </div>
+    <div class="products" id="favRecsGrid"></div>
+  </div>
+</section>
+
+</body>
+</html>

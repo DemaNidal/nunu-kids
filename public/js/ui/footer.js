@@ -29,6 +29,7 @@ export function footerHTML() {
         </div>
         <div>
           <h4>مساعدة</h4>
+          <a href="favorites.html">المفضلة</a>
           <a href="#">تتبع طلبي</a>
           <a href="#">دليل المقاسات</a>
           <a href="#">سياسة التبديل</a>

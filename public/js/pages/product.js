@@ -10,7 +10,7 @@ import { recommend } from '../store/recommend.js';
 import { mountLayout } from '../ui/layout.js';
 import { openDrawer } from '../ui/cart-drawer.js';
 import { icon } from '../ui/icons.js';
-import { badges, priceTag, productGrid, productUrl, qtyControl, countdownHTML, startCountdown, toast } from '../ui/components.js';
+import { badges, favButton, priceTag, productGrid, productUrl, qtyControl, countdownHTML, startCountdown, toast } from '../ui/components.js';
 
 mountLayout();
 
@@ -82,6 +82,7 @@ const buyHTML = (p) => `
   <div class="buy">
     ${qtyControl(1, { plus: 'data-qty="1"', minus: 'data-qty="-1"', cls: 'qty--lg' })}
     <button type="button" class="btn btn--primary" data-add-to-cart ${inStock(p) ? '' : 'disabled'}>${addLabel(p)}</button>
+    ${favButton(p, 'fav-btn--box')}
   </div>`;
 
 const PERKS = [

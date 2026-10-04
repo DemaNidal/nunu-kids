@@ -1,59 +1,73 @@
 // الصفحة الرئيسية — أجزاء العروض بتظهر بس إذا في عرض فعّال
 import { $, esc, img, ltr, money } from '../utils.js';
-import { SIZES } from '../config.js';
-import { HERO_PHOTOS, AGE_GROUPS, TYPE_TILES, TRUST_POINTS, REVIEWS } from '../data/content.js';
+import { SIZES, CATEGORIES } from '../config.js';
+import { HERO_SLIDES, OFFER_SLIDE_PHOTOS, AGE_GROUPS, TRUST_POINTS, REVIEWS } from '../data/content.js';
 import { items, bundles } from '../store/catalog.js';
 import { liveOffers, priceOf } from '../store/pricing.js';
 import { cart } from '../store/cart.js';
 import { behavior } from '../store/behavior.js';
 import { recommend } from '../store/recommend.js';
 import { mountLayout } from '../ui/layout.js';
-import { promoMessages } from '../ui/header.js';
-import { icon, garment } from '../ui/icons.js';
+import { initSlider } from '../ui/slider.js';
+import { icon } from '../ui/icons.js';
 import { productGrid, productUrl, priceTag, countdownHTML, startCountdown } from '../ui/components.js';
 
 mountLayout();
 
-// ===== البانر الرئيسي =====
-function renderHero() {
-  $('#heroPhotos').innerHTML = HERO_PHOTOS
-    .map((p, i) => `<img src="${img(p.id, 700, 900)}" alt="${esc(p.alt)}" ${i > 1 ? 'loading="lazy"' : ''}>`)
-    .join('');
-
+// ===== البانر الرئيسي (سلايدر) =====
+// العرض الفعّال (إذا في) بيصير أول شريحة، ومعه عدّاد
+function heroSlides() {
   const offer = liveOffers().find((o) => o.hero);
-  if (!offer) {
-    $('#heroText').innerHTML = `
-      <span class="pill">NUNU KIDS</span>
-      <h1>كل ما يحتاجه بيبيك</h1>
-      <p>ملابس ناعمة من أول يوم لأول سنة</p>
-      <div class="hero__cta">
-        <a href="#new" class="btn btn--light">تسوقي الجديد</a>
-        <a href="#bundles" class="btn btn--outline-light">بكجات تجهيز البيبي</a>
-      </div>`;
-    return;
-  }
+  if (!offer) return HERO_SLIDES;
   const onBundles = offer.target.kind === 'category' && offer.target.ids.includes('bundles');
-  $('#heroText').innerHTML = `
-    <span class="pill pill--sale">${esc(offer.label || 'عرض')}</span>
-    <h1>جهّزي لبيبيك أحلى استقبال</h1>
-    <p>${esc(offer.title)}</p>
-    ${offer.endsAt ? countdownHTML('countdown--glass') : ''}
-    <div class="hero__cta">
-      <a href="${onBundles ? '#bundles' : '#new'}" class="btn btn--light">تسوقي العرض</a>
-      <a href="#new" class="btn btn--outline-light">شوفي الجديد</a>
-    </div>`;
-  if (offer.endsAt) startCountdown($('#heroText .countdown'), offer.endsAt, renderHero);
+  return [{
+    eyebrow: offer.label || 'عرض خاص',
+    title: offer.title,
+    text: 'العرض لفترة محدودة، والخصم بيتطبق تلقائياً.',
+    cta: { label: 'تسوقي العرض', href: onBundles ? '#bundles' : '#new' },
+    endsAt: offer.endsAt,
+    ...OFFER_SLIDE_PHOTOS,
+  }, ...HERO_SLIDES];
 }
 
-function renderMarquee() {
-  const once = ['تسوقي وصل حديثاً', ...promoMessages()]
-    .map((m) => `<span>${esc(m)}</span><i>♥</i>`)
-    .join('');
-  $('#marquee').innerHTML = once + once; // مكرر عشان الحركة تكون متواصلة
+const slideHTML = (s, i) => `
+  <article class="slide" aria-roledescription="شريحة" aria-label="${i + 1}">
+    <div class="container slide__inner">
+      <div class="slide__photo"><img src="${img(s.photo, 640)}" alt="" ${i ? 'loading="lazy"' : ''}></div>
+      <div class="slide__text">
+        <span class="slide__hearts" aria-hidden="true">♡♡</span>
+        <span class="eyebrow">${esc(s.eyebrow)}</span>
+        ${i ? `<h2>${esc(s.title)}</h2>` : `<h1>${esc(s.title)}</h1>`}
+        <p>${esc(s.text)}</p>
+        ${s.endsAt ? countdownHTML('countdown--hero') : ''}
+        <a href="${s.cta.href}" class="btn btn--ghost">${esc(s.cta.label)}</a>
+      </div>
+      <div class="slide__polaroid"><img src="${img(s.polaroid, 420, 500)}" alt="" loading="lazy"></div>
+    </div>
+  </article>`;
+
+function renderHero() {
+  const slides = heroSlides();
+  $('#heroSlides').innerHTML = slides.map(slideHTML).join('');
+  slides.forEach((s, i) => {
+    if (s.endsAt) startCountdown($(`#heroSlides .slide:nth-child(${i + 1}) .countdown`), s.endsAt);
+  });
+  initSlider($('#offers'));
 }
 
 function renderTrust() {
-  $('#trust').innerHTML = TRUST_POINTS.map((t) => `<div>${icon(t.icon)}<span>${esc(t.text)}</span></div>`).join('');
+  $('#trust').innerHTML = TRUST_POINTS.map((t) => `
+    <div class="trust__item">
+      ${icon(t.icon)}
+      <div><b>${esc(t.text)}</b><small>${esc(t.desc)}</small></div>
+    </div>`).join('');
+}
+
+// مربعات الأقسام بإطار، بدرجات اللون الطاغي
+function renderTypes() {
+  $('#typesGrid').innerHTML = Object.entries(CATEGORIES)
+    .map(([key, name]) => `<a href="${key === 'bundles' ? '#bundles' : '#new'}" class="tile tile--${key}"><span>${esc(name)}</span></a>`)
+    .join('');
 }
 
 function renderAges() {
@@ -69,6 +83,8 @@ function renderAges() {
       </a>`;
   }).join('');
 }
+
+const renderNew = () => { $('#newGrid').innerHTML = productGrid(items().filter((p) => p.isNew).slice(0, 8)); };
 
 function renderForYou() {
   if (behavior.viewCount() < 2) return;
@@ -93,6 +109,8 @@ function bundleCard(b) {
     </article>`;
 }
 
+const renderBundles = () => { $('#bundleGrid').innerHTML = bundles().map(bundleCard).join(''); };
+
 function renderPromo() {
   const offer = liveOffers().find((o) => o.banner);
   if (!offer) return;
@@ -100,18 +118,12 @@ function renderPromo() {
   $('#promo').innerHTML = `
     <div class="promo">
       <div>
-        <span class="pill">${esc(offer.label || 'عرض خاص')}</span>
+        <span class="eyebrow">${esc(offer.label || 'عرض خاص')}</span>
         <h3>${esc(offer.title)}</h3>
         <p>العرض بيتطبق تلقائياً بالسلة</p>
       </div>
       <a href="#new" class="btn btn--light">تسوقي هلأ</a>
     </div>`;
-}
-
-function renderTypes() {
-  $('#typesGrid').innerHTML = TYPE_TILES
-    .map((t) => `<a href="#" class="type">${garment(t.icon)}<span>${esc(t.name)}</span></a>`)
-    .join('');
 }
 
 function renderReviews() {
@@ -123,13 +135,8 @@ function renderReviews() {
     </figure>`).join('');
 }
 
-renderHero();
-renderMarquee();
-renderTrust();
-renderAges();
-$('#newGrid').innerHTML = productGrid(items().filter((p) => p.isNew).slice(0, 8));
-renderForYou();
-$('#bundleGrid').innerHTML = bundles().map(bundleCard).join('');
-renderPromo();
-renderTypes();
-renderReviews();
+// كل قسم لحاله: إذا قسم واحد صار فيه خطأ، باقي الصفحة بتضل تظهر
+[renderHero, renderTrust, renderNew, renderTypes, renderAges, renderForYou, renderBundles, renderPromo, renderReviews]
+  .forEach((render) => {
+    try { render(); } catch (err) { console.error(`خطأ بقسم ${render.name}:`, err); }
+  });

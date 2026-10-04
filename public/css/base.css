@@ -1,28 +1,49 @@
 /* ============================================================
    الأساسيات: الألوان، الخطوط، الأزرار، والأدوات العامة
-   ألوان الهوية: Whimsical Sky Garden
+   اللون الطاغي: نيود / وردي ترابي (بوتيك ناعم ودافي)
+   لتغيير اللون الطاغي للموقع كله: عدّلي درجات --brand-* بس
    ============================================================ */
 :root {
-  --navy: #313857;
-  --blue: #598099;
-  --blue-dark: #476a80;
-  --mauve: #BB7B85;
-  --pink: #EDBABC;
-  --cream: #FAEDCD;
-  --blush: #FFF1F2;
+  /* درجات اللون الطاغي — من الأفتح للأغمق */
+  /* مأخوذة من ألوان Rose Bloom بالزبط (100 = الهيدر، 300 = الشريط العلوي، 500 = لون الشعار) */
+  --brand-50: #F9F7F5;
+  --brand-100: #F3EFEC;
+  --brand-200: #ECE3DE;
+  --brand-300: #E5D0C7;
+  --brand-400: #D6BCB0;
+  --brand-500: #C4A08F;
+  --brand-600: #AD8676;
+  --brand-700: #8A6858;
+  --brand-800: #6B5045;
+
+  --navy: #313857;      /* النصوص */
   --white: #ffffff;
-  --muted: #6b6f85;
-  --line: #f0dcdd;
+  --muted: #6b7086;
+  --line: #EAE2DD;
+  --heading: var(--brand-600); /* لون العناوين */
+  --shadow-rgb: 107, 80, 69;    /* لون الظلال (rgba) */
+
+  /* لمسات وردية صغيرة بتردد ألوان الشعار */
+  --pink: #EDBABC;      /* إطار حروف الشعار */
+  --blush: #F8F1EE;     /* خلفية وردية فاتحة كتير */
+  --mauve: #BB7B85;     /* قلب الشعار + الخصومات */
   --success: #3f7a5a;
   --warning: #b0602f;
-  --overlay: rgba(49, 56, 87, .45);
 
-  --radius: 18px;
-  --radius-sm: 12px;
+  /* أسماء الاستخدام */
+  --tint: var(--brand-50);     /* تعبئة خفيفة (خانات، شارات) */
+  --tint-2: var(--brand-100);  /* خلفيات الصور والصناديق */
+  --blue: var(--brand-700);    /* الأزرار */
+  --blue-dark: var(--brand-800);
+  --overlay: rgba(107, 80, 69, .4);
+
+  --radius: 6px;
+  --radius-sm: 4px;
   --pill: 999px;
 
-  --font-head: 'Baloo Bhaijaan 2', 'Tajawal', sans-serif;
-  --font-body: 'Tajawal', system-ui, sans-serif;
+  --font-head: 'Markazi Text', serif;                   /* العناوين: راقي متل المجلات */
+  --font-script: 'Aref Ruqaa', serif;               /* سطر بخط اليد فوق العناوين */
+  --font-body: 'IBM Plex Sans Arabic', system-ui, sans-serif;
 }
 
 /* ===== Reset ===== */
@@ -32,20 +53,20 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--navy);
-  background: var(--blush);
+  background: var(--white);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; }
-h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; margin: 0; }
+h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1.3; margin: 0; color: var(--heading); }
 [hidden] { display: none !important; }
 
 /* ===== أدوات عامة ===== */
 .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 
-.ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 .ic--sm { width: 18px; height: 18px; vertical-align: -4px; }
 .brand { width: 22px; height: 22px; fill: currentColor; flex-shrink: 0; }
 .brand.ic--sm { width: 18px; height: 18px; vertical-align: -4px; }
@@ -53,57 +74,65 @@ h1, h2, h3, h4 { font-family: var(--font-head); line-height: 1.3; margin: 0; }
 @media (max-width: 859px) { .only-desktop { display: none !important; } }
 @media (min-width: 860px) { .only-mobile { display: none !important; } }
 
-/* ===== الأزرار ===== */
+/* ===== الأزرار — مستطيلة ورفيعة ===== */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 12px 26px; border-radius: var(--pill); border: 2px solid transparent;
-  font-weight: 700; font-size: 16px; transition: transform .15s, background .15s, color .15s;
+  padding: 12px 30px; border-radius: var(--radius-sm); border: 1px solid transparent;
+  font-weight: 500; font-size: 15px; transition: transform .15s, background .2s, color .2s, border-color .2s;
 }
-.btn:active { transform: scale(.97); }
+.btn:active { transform: scale(.98); }
 .btn[disabled] { opacity: .5; cursor: not-allowed; }
-.btn--primary { background: var(--blue); color: var(--white); }
-.btn--primary:hover { background: var(--blue-dark); }
+.btn--primary { background: var(--brand-700); color: var(--white); }
+.btn--primary:hover { background: var(--brand-800); }
 .btn--ghost { border-color: var(--navy); color: var(--navy); background: transparent; }
 .btn--ghost:hover { background: var(--navy); color: var(--white); }
 .btn--light { background: var(--white); color: var(--navy); }
-.btn--light:hover { background: var(--cream); }
-.btn--outline-light { border-color: var(--white); color: var(--white); background: transparent; }
+.btn--light:hover { background: var(--brand-100); }
+.btn--outline-light { border-color: currentColor; color: var(--white); background: transparent; }
 .btn--outline-light:hover { background: rgba(255, 255, 255, .15); }
 .btn--block { width: 100%; }
-.btn--sm { padding: 9px 16px; font-size: 15px; }
+.btn--sm { padding: 8px 14px; font-size: 14px; }
 
 .icon-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 44px; height: 44px; border: 0; border-radius: 50%;
   background: transparent; color: var(--navy);
 }
-.icon-btn:hover { background: var(--blush); }
+.icon-btn:hover { background: var(--tint); }
 
 .link-btn {
-  background: none; border: 0; padding: 0; color: var(--blue); font-weight: 700;
+  background: none; border: 0; padding: 0; color: var(--brand-600); font-weight: 500;
   text-decoration: underline; text-underline-offset: 3px;
 }
-.link-more { color: var(--blue); font-weight: 700; white-space: nowrap; }
+.link-more {
+  color: var(--navy); font-size: 14px; white-space: nowrap;
+  border: 1px solid var(--brand-300); border-radius: var(--pill); padding: 4px 16px; transition: background .2s;
+}
+.link-more:hover { background: var(--brand-100); }
 
 /* ===== شارات ===== */
-.pill { display: inline-block; padding: 4px 14px; border-radius: var(--pill); background: var(--white); color: var(--navy); font-size: 14px; font-weight: 700; }
+.pill { display: inline-block; padding: 3px 14px; border-radius: var(--pill); background: var(--white); color: var(--navy); font-size: 13px; font-weight: 500; }
 .pill--sale { background: var(--mauve); color: var(--white); }
 
-.badge { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: var(--pill); }
-.badge--new { background: var(--navy); color: var(--white); }
+.badge { font-size: 12px; font-weight: 500; padding: 2px 10px; border-radius: var(--pill); }
+.badge--new { background: var(--white); color: var(--navy); }
 .badge--sale { background: var(--mauve); color: var(--white); }
-.badge--deal { background: var(--cream); color: var(--navy); }
+.badge--deal { background: var(--brand-700); color: var(--white); }
 .badge--out { background: #e4e4ea; color: var(--muted); }
 
 /* ===== الأقسام ===== */
-.section { padding: 56px 0; }
-.section--tint { background: var(--white); }
-.section__head { text-align: center; margin-bottom: 28px; }
-.section__head h2 { font-size: clamp(26px, 3.4vw, 36px); }
+.section { padding: 64px 0; }
+.section--tint { background: var(--brand-100); }
+.section__head { text-align: center; margin-bottom: 32px; }
+.section__head h2 { font-size: clamp(26px, 3.2vw, 34px); }
 .section__head p { color: var(--muted); margin: 4px 0 0; }
 .section__head--row { display: flex; justify-content: space-between; align-items: end; text-align: start; gap: 12px; }
-@media (max-width: 859px) { .section { padding: 40px 0; } }
+
+/* سطر بخط اليد فوق العنوان */
+.eyebrow { display: block; font-family: var(--font-script); font-size: clamp(18px, 2.2vw, 22px); color: var(--brand-600); line-height: 1.4; }
+
+@media (max-width: 859px) { .section { padding: 44px 0; } }
 
 /* قائمة بقلوب */
 .hearts { list-style: none; padding: 0; }
-.hearts li::before { content: '♥'; color: var(--pink); margin-inline-end: 8px; }
+.hearts li::before { content: '♡'; color: var(--mauve); margin-inline-end: 8px; }

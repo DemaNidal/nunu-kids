@@ -3,9 +3,17 @@ import { $, esc, money, img, sizeLabel } from '../utils.js';
 import { sizesOf, inStock, stockOf } from '../store/catalog.js';
 import { priceOf, bxgyFor } from '../store/pricing.js';
 import { quickSize } from '../store/recommend.js';
+import { favorites } from '../store/favorites.js';
 import { icon } from './icons.js';
 
 export const productUrl = (p) => `product.html?id=${p.id}`;
+
+// زر القلب (المفضلة) — نفس الزر بكل مكان، والحالة محفوظة
+export function favButton(p, cls = '') {
+  const on = favorites.has(p.id);
+  return `<button type="button" class="icon-btn fav-btn ${cls} ${on ? 'on' : ''}" data-fav="${p.id}"
+    aria-pressed="${on}" aria-label="${on ? 'شيلي من المفضلة' : 'أضيفي للمفضلة'}">${icon('heart')}</button>`;
+}
 
 // السعر: الحالي + القديم مشطوب (إذا في خصم)
 export function priceTag(p, { save = false, cls = '' } = {}) {
@@ -36,8 +44,9 @@ export function productCard(p) {
     <article class="card">
       <a href="${url}" class="card__img">
         <img src="${img(p.images[0], 500)}" alt="${esc(p.name)}" loading="lazy">
+        ${p.images[1] ? `<img class="card__alt" src="${img(p.images[1], 500)}" alt="" loading="lazy">` : ''}
         ${badges(p)}
-        <button class="icon-btn card__fav" aria-label="أضيفي للمفضلة" data-fav>${icon('heart')}</button>
+        ${favButton(p, 'card__fav')}
       </a>
       <div class="card__body">
         <a href="${url}" class="card__title">${esc(p.name)}</a>
@@ -45,7 +54,7 @@ export function productCard(p) {
           ${sizesOf(p).map((s) => `<span class="${stockOf(p, s) ? '' : 'off'}">${s === 'one' ? 'مقاس واحد' : s}</span>`).join('')}
         </div>
         ${priceTag(p)}
-        <a href="${url}" class="btn btn--primary btn--sm">${inStock(p) ? 'اختاري المقاس' : 'شوفي التفاصيل'}</a>
+        <a href="${url}" class="btn btn--ghost btn--sm">${inStock(p) ? 'اختاري المقاس' : 'شوفي التفاصيل'}</a>
       </div>
     </article>`;
 }

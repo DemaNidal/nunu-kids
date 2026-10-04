@@ -34,10 +34,11 @@ export const freeShippingGap = (total) =>
   STORE.freeShippingOver ? Math.max(0, STORE.freeShippingOver - total) : 0;
 
 // اقتراحات بتكمّل الطلب وبتقرّب من التوصيل المجاني
-export function cartSuggestions(total, { limit = 2 } = {}) {
+export function cartSuggestions(total, { limit = 2, titles = {} } = {}) {
   const gap = freeShippingGap(total);
   const products = recommend({ cart: cart.lines, gap, maxPrice: 80, limit });
-  const title = gap ? `ضيفي ${money(gap)} وبيصير التوصيل مجاني` : 'بتلبق مع طلبك';
+  const { needMore = (g) => `ضيفي ${money(g)} وبيصير التوصيل مجاني`, done = 'بتلبق مع طلبك' } = titles;
+  const title = gap ? needMore(gap) : done;
   return suggestBox(title, products, cart.lines);
 }
 
@@ -66,6 +67,7 @@ const lineHTML = (r, i) => `
 export function renderDrawer() {
   const t = cart.totals();
   $('#cartCount').textContent = t.count;
+  $('#cartCount').hidden = !t.count;
   $('#cartTotal').textContent = money(t.total);
   renderShipping(t.total);
   $('#cartDiscounts').innerHTML = t.discounts

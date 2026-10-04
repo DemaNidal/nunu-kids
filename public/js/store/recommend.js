@@ -4,6 +4,7 @@
 import { allProducts, isBundle, inStock, stockOf, firstInStockSize, findProduct } from './catalog.js';
 import { priceOf, bxgyFor } from './pricing.js';
 import { behavior } from './behavior.js';
+import { favorites } from './favorites.js';
 
 // القطع اللي بتكمّل بعض
 const COMPLEMENTS = {
@@ -22,6 +23,7 @@ function scoreProduct(p, ctx) {
   if (ctx.cartCategories.some((c) => COMPLEMENTS[c]?.includes(p.category))) score += 2;
   score += Math.min(3, behavior.interestIn(p.category) * 0.5);
   if (behavior.hasViewed(p.id)) score += 1;
+  if (favorites.has(p.id)) score += 2; // حطّته بالمفضلة وما اشترته لسا
   if (priceOf(p).old || bxgyFor(p).length) score += 1;
   if (p.isNew) score += 0.5;
   if (ctx.gap) score += price >= ctx.gap ? 3 - Math.min(2, (price - ctx.gap) / 30) : -1;

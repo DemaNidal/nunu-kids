@@ -14,10 +14,10 @@
 .field label { display: block; font-weight: 500; margin-bottom: 6px; }
 .field label small { color: var(--muted); font-weight: 400; }
 .field input, .field textarea {
-  width: 100%; font: inherit; color: var(--navy); background: var(--blush);
+  width: 100%; font: inherit; color: var(--navy); background: var(--tint);
   border: 1.5px solid transparent; border-radius: var(--radius-sm); padding: 12px 14px; outline: none; transition: border-color .15s, background .15s;
 }
-.field input::placeholder, .field textarea::placeholder { color: #a3a6b8; }
+.field input::placeholder, .field textarea::placeholder { color: var(--brand-400); }
 .field input:focus, .field textarea:focus { border-color: var(--blue); background: var(--white); }
 .field input[dir="ltr"] { text-align: right; }
 .field__hint { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
@@ -31,10 +31,10 @@
 .zone input { position: absolute; opacity: 0; }
 .zone__name { font-weight: 700; }
 .zone__meta { font-size: 13px; color: var(--muted); }
-.zone:has(input:checked) { border-color: var(--navy); background: var(--blush); }
+.zone:has(input:checked) { border-color: var(--navy); background: var(--tint); }
 .zone:has(input:focus-visible) { outline: 2px solid var(--blue); outline-offset: 2px; }
 
-.pay-opt { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1.5px solid var(--navy); border-radius: var(--radius-sm); background: var(--blush); }
+.pay-opt { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1.5px solid var(--navy); border-radius: var(--radius-sm); background: var(--tint); }
 .pay-opt input { accent-color: var(--navy); width: 18px; height: 18px; }
 .pay-opt .ic { color: var(--blue); width: 28px; height: 28px; }
 .pay-opt small { display: block; color: var(--muted); }
@@ -42,7 +42,7 @@
 .co-summary { position: sticky; top: 140px; }
 .sum-lines { display: grid; gap: 12px; margin-bottom: 8px; }
 .sum-line { display: grid; grid-template-columns: 60px 1fr auto; gap: 12px; align-items: center; }
-.sum-line__img { position: relative; width: 60px; height: 60px; border-radius: var(--radius-sm); background: var(--cream); }
+.sum-line__img { position: relative; width: 60px; height: 60px; border-radius: var(--radius-sm); background: var(--tint-2); }
 .sum-line__img img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
 .sum-line__img span { position: absolute; top: -6px; left: -6px; min-width: 20px; height: 20px; border-radius: 999px; background: var(--navy); color: var(--white); font-size: 12px; display: grid; place-items: center; }
 .sum-line__info b { display: block; font-size: 15px; }
@@ -59,13 +59,14 @@
 .co-submit { margin-top: 16px; font-size: 17px; padding: 14px; }
 .co-note { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; color: var(--muted); margin: 10px 0 0; }
 .co-trust { list-style: none; padding: 12px 0 0; margin: 12px 0 0; border-top: 1px solid var(--line); display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+.co-summary .suggest { margin-bottom: 0; }
 .co-trust li { display: flex; align-items: center; gap: 8px; }
 
 .co-bar { display: none; }
 
 .co-empty, .co-done { text-align: center; padding: 60px 0 20px; max-width: 560px; margin: 0 auto; }
 .co-empty p { color: var(--muted); }
-.co-done__icon { width: 76px; height: 76px; border-radius: 50%; background: var(--cream); display: grid; place-items: center; margin: 0 auto 14px; }
+.co-done__icon { width: 76px; height: 76px; border-radius: 50%; background: var(--tint-2); display: grid; place-items: center; margin: 0 auto 14px; }
 .co-done__icon svg { width: 40px; height: 40px; fill: none; stroke: var(--mauve); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 .co-done h1 { font-size: clamp(26px, 4vw, 34px); }
 .order-no { font-family: var(--font-head); font-size: 22px; background: var(--white); padding: 2px 12px; border-radius: 999px; direction: ltr; display: inline-block; }
@@ -86,7 +87,7 @@
   .co-bar {
     display: flex; align-items: center; gap: 14px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 26;
     background: var(--white); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line);
-    box-shadow: 0 -6px 20px rgba(49,56,87,.08);
+    box-shadow: 0 -6px 20px rgba(var(--shadow-rgb), .08);
   }
   .co-bar div { display: flex; flex-direction: column; line-height: 1.2; }
   .co-bar small { color: var(--muted); font-size: 12px; }

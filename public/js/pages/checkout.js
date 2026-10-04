@@ -17,6 +17,11 @@ const CUSTOMER_KEY = 'nunu_customer'; // بنتذكر معلومات الزبو�
 const FIELDS = ['name', 'phone', 'city', 'address'];
 let zoneId = null;
 
+const CHECKOUT_TITLES = {
+  needMore: (gap) => `ضايلك ${money(gap)} على التوصيل المجاني، بتحبي تضيفي؟`,
+  done: 'ناس كتير بتضيف معه',
+};
+
 const currentZone = () => STORE.shippingZones.find((z) => z.id === zoneId);
 
 // null = لسا ما اختارت منطقة
@@ -116,7 +121,7 @@ function renderSummary() {
     <div class="co-card">
       <h2>ملخص الطلب <small>(${t.count} ${t.count === 1 ? 'قطعة' : 'قطع'})</small></h2>
       <div class="sum-lines">${t.rows.map(summaryLine).join('')}</div>
-      ${cartSuggestions(t.total)}
+      ${cartSuggestions(t.total, { titles: CHECKOUT_TITLES })}
       <div class="sum-rows">
         <div><span>المجموع الفرعي</span><span>${money(t.subtotal)}</span></div>
         ${t.discounts.map((d) => `<div class="sum-disc"><span>${esc(d.title)}</span><span>− ${money(d.amount)}</span></div>`).join('')}

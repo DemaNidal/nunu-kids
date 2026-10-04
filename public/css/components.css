@@ -4,33 +4,37 @@
 
 /* ===== شبكة المنتجات وكرت المنتج ===== */
 .products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-.card {
-  display: flex; flex-direction: column; overflow: hidden;
-  background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); transition: transform .2s;
-}
-.card:hover { transform: translateY(-3px); }
-.card__img { position: relative; display: block; aspect-ratio: 1; overflow: hidden; background: var(--cream); }
-.card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
-.card:hover .card__img img { transform: scale(1.05); }
-.card__fav { position: absolute; top: 8px; left: 8px; width: 36px; height: 36px; background: var(--white); color: var(--mauve); }
-.card__fav.on .ic { fill: var(--mauve); }
-.card__body { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px 14px; }
-.card__title { font-weight: 700; font-size: 16px; }
+.card { display: flex; flex-direction: column; }
+.card__img { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius); background: var(--tint-2); }
+.card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease, opacity .5s ease; }
+.card:hover .card__img img { transform: scale(1.04); }
+/* صورة ثانية بتظهر لما الماوس يمرق */
+.card__alt { position: absolute; inset: 0; opacity: 0; }
+.card:hover .card__alt { opacity: 1; }
+.fav-btn { color: var(--mauve); }
+.fav-btn.on .ic { fill: var(--mauve); }
+.fav-btn.on { animation: bump .35s; }
+.card__fav { position: absolute; top: 8px; left: 8px; width: 36px; height: 36px; background: var(--white); }
+.card__body { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 12px 2px 0; }
+.card__title { font-size: 15px; }
 .card__title:hover { color: var(--blue); }
 
 .badges { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 4px; }
-.chips span { font-size: 11px; padding: 1px 8px; border-radius: var(--pill); background: var(--blush); color: var(--muted); }
+.chips span { font-size: 11px; padding: 1px 8px; border-radius: var(--pill); background: var(--tint); color: var(--muted); }
 .chips span.off { text-decoration: line-through; opacity: .55; }
 
 @media (max-width: 1023px) { .products { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 679px) {
   .products { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .card__body { padding: 10px; }
+  .card__body { padding: 10px 0 0; }
   .card__title { font-size: 14px; }
   .card .btn--sm { font-size: 14px; padding: 8px 10px; }
 }
+
+.empty-state { grid-column: 1 / -1; padding: 30px 0 10px; text-align: center; color: var(--muted); }
+.empty-state p { margin: 0 0 20px; }
 
 /* ===== السعر ===== */
 .price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-top: auto; }
@@ -41,11 +45,11 @@
 .price--xl { align-items: center; gap: 10px; margin: 12px 0 16px; }
 .price--xl b { font-family: var(--font-head); font-size: 34px; line-height: 1; }
 .price--xl s { font-size: 18px; }
-@media (max-width: 679px) { .price b { font-size: 16px; } }
+@media (max-width: 679px) { .card .price b { font-size: 16px; } }
 
 .save {
   display: inline-block; align-self: flex-start; padding: 2px 12px; border-radius: var(--pill);
-  background: var(--cream); color: var(--navy); font-weight: 700; font-size: 14px;
+  background: var(--tint-2); color: var(--navy); font-weight: 700; font-size: 14px;
 }
 .save--empty { visibility: hidden; }
 
@@ -66,12 +70,13 @@
 /* صغير بسطر وحدة (صفحة المنتج) */
 .countdown--mini { flex-wrap: wrap; justify-content: flex-start; gap: 4px 8px; }
 .countdown--mini .countdown__unit { flex-direction: row; align-items: baseline; gap: 3px; font-size: 12px; }
-.countdown--mini b { font-size: 20px; padding: 0 6px; border-radius: 6px; background: rgba(255, 255, 255, .14); }
+.countdown--mini b { line-height: inherit; font-size: 20px; padding: 0 6px; border-radius: 6px; background: rgba(255, 255, 255, .14); }
 
 /* ===== الكمية ===== */
 .qty { display: inline-flex; align-items: center; margin-top: 4px; border: 1px solid var(--line); border-radius: var(--pill); }
 .qty button { width: 28px; height: 28px; border: 0; background: transparent; color: var(--navy); font-size: 16px; }
 .qty span { min-width: 20px; text-align: center; font-size: 14px; }
+.qty--sm { margin-top: 2px; }
 .qty--sm button { width: 24px; height: 24px; font-size: 14px; }
 .qty--sm span { font-size: 13px; }
 .qty--lg { margin: 0; background: var(--white); }
@@ -79,11 +84,11 @@
 .qty--lg span { min-width: 28px; font-size: 17px; font-weight: 700; }
 
 /* ===== اقتراحات (السلة وصفحة الدفع) ===== */
-.suggest { margin: 14px 0 6px; padding: 12px; border-radius: var(--radius-sm); background: var(--blush); }
+.suggest { margin: 14px 0 6px; padding: 12px; border-radius: var(--radius-sm); background: var(--tint); }
 .suggest__title { margin: 0 0 8px; font-weight: 700; font-size: 14px; }
 .suggest__row { display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; align-items: center; padding: 6px 0; }
 .suggest__row + .suggest__row { border-top: 1px solid var(--line); }
-.suggest__img { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; background: var(--cream); }
+.suggest__img { width: 48px; height: 48px; border-radius: 10px; overflow: hidden; background: var(--tint-2); }
 .suggest__img img { width: 100%; height: 100%; object-fit: cover; }
 .suggest__info { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
 .suggest__info a { font-weight: 500; font-size: 14px; }

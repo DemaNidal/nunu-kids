@@ -14,11 +14,18 @@ const NAV_LINKS = [
 ];
 
 // رسائل ثابتة + عناوين العروض الفعّالة
-export const promoMessages = () => [
+const promoMessages = () => [
   ...(STORE.freeShippingOver ? [`توصيل مجاني للطلبات فوق ${money(STORE.freeShippingOver)}`] : []),
   'الدفع نقداً عند الاستلام',
   ...liveOffers().map((o) => o.title),
 ];
+
+// نفس خانة البحث: بالهيدر على الكمبيوتر، وجوا القائمة على الموبايل
+const searchForm = (cls) => `
+  <form class="search ${cls}" role="search" onsubmit="return false">
+    ${icon('search')}
+    <input type="search" placeholder="دوّري على بدلة، طاقية، بكج..." aria-label="بحث">
+  </form>`;
 
 export function headerHTML() {
   const hasOffers = liveOffers().length > 0;
@@ -26,21 +33,27 @@ export function headerHTML() {
     <div class="announce" aria-live="polite"><span id="announceText"></span></div>
     <header class="header">
       <div class="container header__row">
-        <button class="icon-btn only-mobile" id="menuBtn" aria-label="القائمة">${icon('menu')}</button>
-        <a href="index.html" class="logo" aria-label="${STORE.name} الرئيسية"><img src="assets/logo.png" alt="${STORE.name}"></a>
-        <form class="search only-desktop" role="search" onsubmit="return false">
-          ${icon('search')}
-          <input type="search" placeholder="دوّري على بدلة، طاقية، بكج...">
-        </form>
+        <button class="icon-btn only-mobile" id="menuBtn" aria-label="القائمة والبحث" aria-expanded="false" aria-controls="nav">${icon('menuSearch')}</button>
+        <a href="index.html" class="logo" aria-label="${STORE.name} الرئيسية">
+          <picture>
+            <source media="(max-width: 859px)" srcset="assets/logo-wordmark.webp">
+            <img src="assets/logo.png" alt="${STORE.name}">
+          </picture>
+        </a>
+        ${searchForm('only-desktop')}
         <div class="header__actions">
           <a href="#" class="track-link only-desktop">${icon('truck')} تتبع طلبي</a>
-          <button class="icon-btn cart-btn" id="cartBtn" aria-label="السلة">
-            ${icon('bag')}<span class="cart-count" id="cartCount">0</span>
+          <a href="favorites.html" class="icon-btn badge-btn" aria-label="المفضلة">
+            ${icon('heart')}<span class="count-badge" id="favCount" hidden>0</span>
+          </a>
+          <button class="icon-btn badge-btn" id="cartBtn" aria-label="السلة">
+            ${icon('bag')}<span class="count-badge" id="cartCount">0</span>
           </button>
         </div>
       </div>
       <nav class="nav" id="nav">
         <div class="container nav__row">
+          ${searchForm('search--menu only-mobile')}
           ${NAV_LINKS.map((l) => `<a href="${l.href}">${esc(l.text)}</a>`).join('')}
           ${hasOffers ? '<a href="index.html#offers" class="nav__sale">العروض</a>' : ''}
           <a href="#" class="only-mobile">تتبع طلبي</a>
@@ -51,8 +64,14 @@ export function headerHTML() {
 
 export function initHeader() {
   const nav = $('#nav');
-  $('#menuBtn').addEventListener('click', () => nav.classList.toggle('open'));
-  $$('a', nav).forEach((a) => a.addEventListener('click', () => nav.classList.remove('open')));
+  const btn = $('#menuBtn');
+  const setOpen = (open) => {
+    nav.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open);
+    btn.innerHTML = icon(open ? 'x' : 'menuSearch');
+  };
+  btn.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
+  $$('a', nav).forEach((a) => a.addEventListener('click', () => setOpen(false)));
   rotateAnnouncements();
 }
 

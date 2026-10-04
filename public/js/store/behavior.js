@@ -18,6 +18,12 @@ export const behavior = {
     save();
   },
 
+  favorited(id) {
+    const p = findProduct(id);
+    if (p) data.categories[p.category] = (data.categories[p.category] || 0) + 2;
+    save();
+  },
+
   added(id) {
     data.adds = [id, ...data.adds].slice(0, 30);
     save();

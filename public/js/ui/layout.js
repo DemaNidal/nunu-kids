@@ -1,7 +1,8 @@
 // تركيب الأجزاء المشتركة بكل صفحة: الهيدر، الفوتر، السلة، والأزرار العامة
-import { $$ } from '../utils.js';
+import { $, $$ } from '../utils.js';
 import { findProduct } from '../store/catalog.js';
 import { cart } from '../store/cart.js';
+import { favorites } from '../store/favorites.js';
 import { behavior } from '../store/behavior.js';
 import { headerHTML, initHeader } from './header.js';
 import { footerHTML } from './footer.js';
@@ -26,9 +27,23 @@ function handleGlobalClicks(e) {
   }
   const fav = e.target.closest('[data-fav]');
   if (fav) {
-    e.preventDefault();
-    fav.classList.toggle('on');
+    e.preventDefault(); // الزر جوا رابط الكرت
+    const added = favorites.toggle(fav.dataset.fav);
+    toast(added ? 'انضافت للمفضلة ♡' : 'انشالت من المفضلة');
   }
+}
+
+// كل أزرار القلب لنفس المنتج بتتحدث مع بعض، ومعها العداد بالهيدر
+function syncFavorites() {
+  $$('[data-fav]').forEach((b) => {
+    const on = favorites.has(b.dataset.fav);
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on);
+    b.setAttribute('aria-label', on ? 'شيلي من المفضلة' : 'أضيفي للمفضلة');
+  });
+  const count = $('#favCount');
+  count.textContent = favorites.count;
+  count.hidden = !favorites.count;
 }
 
 export function mountLayout() {
@@ -41,6 +56,12 @@ export function mountLayout() {
   initHeader();
   initDrawer();
   document.addEventListener('click', handleGlobalClicks);
+
+  syncFavorites();
+  favorites.subscribe(({ id, added }) => {
+    if (added) behavior.favorited(id);
+    syncFavorites();
+  });
 
   cart.subscribe((event) => {
     if (event.type === 'add') {
