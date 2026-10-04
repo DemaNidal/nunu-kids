@@ -5,12 +5,12 @@ import { liveOffers } from '../store/pricing.js';
 import { icon } from './icons.js';
 
 const NAV_LINKS = [
-  { href: 'index.html#new', text: 'وصل حديثاً' },
-  { href: 'index.html#ages', text: 'حسب العمر' },
-  { href: 'index.html#bundles', text: 'بكجات تجهيز البيبي' },
-  { href: 'index.html#types', text: 'ملابس داخلية' },
-  { href: 'index.html#types', text: 'أواعي' },
-  { href: 'index.html#types', text: 'مستلزمات البيبي' },
+  { href: 'shop.html', text: 'كل المنتجات' },
+  { href: 'shop.html?sort=new', text: 'وصل حديثاً' },
+  { href: 'shop.html?cat=bundles', text: 'بكجات تجهيز البيبي' },
+  { href: 'shop.html?cat=underwear', text: 'ملابس داخلية' },
+  { href: 'shop.html?cat=clothes', text: 'أواعي' },
+  { href: 'shop.html?cat=accessories', text: 'مستلزمات البيبي' },
 ];
 
 // رسائل ثابتة + عناوين العروض الفعّالة
@@ -22,9 +22,9 @@ const promoMessages = () => [
 
 // نفس خانة البحث: بالهيدر على الكمبيوتر، وجوا القائمة على الموبايل
 const searchForm = (cls) => `
-  <form class="search ${cls}" role="search" onsubmit="return false">
+  <form class="search ${cls}" role="search" action="shop.html" method="get">
     ${icon('search')}
-    <input type="search" placeholder="دوّري على بدلة، طاقية، بكج..." aria-label="بحث">
+    <input type="search" name="q" placeholder="دوّري على بدلة، طاقية، بكج..." aria-label="بحث" required>
   </form>`;
 
 export function headerHTML() {
@@ -55,7 +55,7 @@ export function headerHTML() {
         <div class="container nav__row">
           ${searchForm('search--menu only-mobile')}
           ${NAV_LINKS.map((l) => `<a href="${l.href}">${esc(l.text)}</a>`).join('')}
-          ${hasOffers ? '<a href="index.html#offers" class="nav__sale">العروض</a>' : ''}
+          ${hasOffers ? '<a href="shop.html?sale=1" class="nav__sale">العروض</a>' : ''}
           <a href="#" class="only-mobile">تتبع طلبي</a>
         </div>
       </nav>

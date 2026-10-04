@@ -53,8 +53,8 @@ function renderShipping(total) {
   $('#shipFill').style.width = `${Math.min(100, (total / STORE.freeShippingOver) * 100)}%`;
 }
 
-const lineHTML = (r, i) => `
-  <div class="line">
+const lineHTML = (r, i, justAdded) => `
+  <div class="line ${justAdded ? 'line--new' : ''}">
     <a href="${productUrl(r.product)}" class="line__img"><img src="${img(r.product.images[0], 150)}" alt=""></a>
     <div>
       <a href="${productUrl(r.product)}" class="line__name">${esc(r.product.name)}</a>
@@ -64,7 +64,8 @@ const lineHTML = (r, i) => `
     <div class="line__price">${money(r.unit * r.qty)}</div>
   </div>`;
 
-export function renderDrawer() {
+// justAdded: { id, size } للقطعة اللي انضافت هلأ (بتتلوّن لحظة)
+export function renderDrawer(justAdded = null) {
   const t = cart.totals();
   $('#cartCount').textContent = t.count;
   $('#cartCount').hidden = !t.count;
@@ -74,7 +75,7 @@ export function renderDrawer() {
     .map((d) => `<div class="drawer__disc"><span>${esc(d.title)}</span><b>− ${money(d.amount)}</b></div>`)
     .join('');
   $('#cartItems').innerHTML = t.rows.length
-    ? t.rows.map(lineHTML).join('') + cartSuggestions(t.total)
+    ? t.rows.map((r, i) => lineHTML(r, i, justAdded && r.id === justAdded.id && r.size === justAdded.size)).join('') + cartSuggestions(t.total)
     : '<p class="empty">سلتك فاضية لسا</p>';
 }
 

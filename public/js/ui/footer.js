@@ -22,10 +22,10 @@ export function footerHTML() {
         </div>
         <div>
           <h4>تسوقي</h4>
-          <a href="index.html#new">وصل حديثاً</a>
-          <a href="index.html#ages">حسب العمر</a>
-          <a href="index.html#bundles">بكجات تجهيز البيبي</a>
-          <a href="index.html#offers">العروض</a>
+          <a href="shop.html">كل المنتجات</a>
+          <a href="shop.html?sort=new">وصل حديثاً</a>
+          <a href="shop.html?cat=bundles">بكجات تجهيز البيبي</a>
+          <a href="shop.html?sale=1">العروض</a>
         </div>
         <div>
           <h4>مساعدة</h4>

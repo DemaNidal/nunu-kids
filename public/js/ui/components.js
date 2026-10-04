@@ -50,6 +50,7 @@ export function productCard(p) {
       </a>
       <div class="card__body">
         <a href="${url}" class="card__title">${esc(p.name)}</a>
+        ${p.colors?.length > 1 ? `<div class="card__colors" aria-label="الألوان المتوفرة">${p.colors.map((c) => `<i style="--c:${c.hex}" title="${esc(c.name)}"></i>`).join('')}</div>` : ''}
         <div class="chips">
           ${sizesOf(p).map((s) => `<span class="${stockOf(p, s) ? '' : 'off'}">${s === 'one' ? 'مقاس واحد' : s}</span>`).join('')}
         </div>

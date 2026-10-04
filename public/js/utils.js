@@ -33,3 +33,18 @@ export const storage = {
 };
 
 export const queryParam = (name) => new URLSearchParams(location.search).get(name);
+
+// تاريخ بعد عدد أيام عمل (بدون أيام العطلة)
+export function addWorkDays(from, days) {
+  const d = new Date(from);
+  let left = days;
+  while (left > 0) {
+    d.setDate(d.getDate() + 1);
+    if (!STORE.weekend.includes(d.getDay())) left--;
+  }
+  return d;
+}
+
+// "الأحد 12 أكتوبر" بأرقام عادية
+export const formatDay = (d) =>
+  new Intl.DateTimeFormat('ar-u-nu-latn', { weekday: 'long', day: 'numeric', month: 'long' }).format(d);

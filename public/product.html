@@ -46,6 +46,15 @@
 <!-- شريط الإضافة للسلة على الموبايل -->
 <div class="buybar" id="buybar"></div>
 
+<!-- تكبير الصور -->
+<dialog class="lightbox" id="lightbox" aria-label="صور المنتج">
+  <button type="button" class="lightbox__close" data-lb="close" aria-label="إغلاق">✕</button>
+  <button type="button" class="lightbox__nav lightbox__nav--prev" data-lb="-1" aria-label="الصورة السابقة">›</button>
+  <img id="lightboxImg" alt="">
+  <button type="button" class="lightbox__nav lightbox__nav--next" data-lb="1" aria-label="الصورة الجاية">‹</button>
+  <span class="lightbox__count" id="lightboxCount"></span>
+</dialog>
+
 <dialog class="modal" id="sizeGuide">
   <div class="modal__head">
     <h3>دليل المقاسات</h3>

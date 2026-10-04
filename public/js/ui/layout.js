@@ -69,6 +69,6 @@ export function mountLayout() {
       behavior.choseSize(event.size);
       bumpCartCount();
     }
-    renderDrawer();
+    renderDrawer(event.type === 'add' ? event : null);
   });
 }

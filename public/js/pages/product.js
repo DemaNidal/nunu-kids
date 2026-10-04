@@ -1,6 +1,6 @@
 // صفحة المنتج (ونفس الصفحة للبكج)
-import { CATEGORIES } from '../config.js';
-import { $, $$, esc, img, ltr, money, sizeLabel, queryParam } from '../utils.js';
+import { CATEGORIES, STORE } from '../config.js';
+import { $, $$, esc, img, ltr, money, sizeLabel, queryParam, addWorkDays, formatDay } from '../utils.js';
 import { SIZE_GUIDE } from '../data/content.js';
 import { findProduct, isBundle, sizesOf, stockOf, inStock, bundles } from '../store/catalog.js';
 import { priceOf, bxgyFor } from '../store/pricing.js';
@@ -9,7 +9,7 @@ import { behavior } from '../store/behavior.js';
 import { recommend } from '../store/recommend.js';
 import { mountLayout } from '../ui/layout.js';
 import { openDrawer } from '../ui/cart-drawer.js';
-import { icon } from '../ui/icons.js';
+import { icon, brandIcon } from '../ui/icons.js';
 import { badges, favButton, priceTag, productGrid, productUrl, qtyControl, countdownHTML, startCountdown, toast } from '../ui/components.js';
 
 mountLayout();
@@ -20,14 +20,15 @@ const state = { size: null, color: null, qty: 1 };
 // ===== أجزاء الصفحة =====
 const crumbsHTML = (p) => `
   <a href="index.html">الرئيسية</a><span>/</span>
-  <a href="index.html#${isBundle(p) ? 'bundles' : 'types'}">${CATEGORIES[p.category]}</a><span>/</span>
+  <a href="shop.html?cat=${p.category}">${CATEGORIES[p.category]}</a><span>/</span>
   <b>${esc(p.name)}</b>`;
 
 const galleryHTML = (p) => `
   <div class="gallery">
     <div class="gallery__main" id="gMain">
-      ${p.images.map((id, i) => `<img src="${img(id, 900)}" alt="${esc(p.name)} صورة ${i + 1}" ${i ? 'loading="lazy"' : ''}>`).join('')}
+      ${p.images.map((id, i) => `<img src="${img(id, 900)}" alt="${esc(p.name)} صورة ${i + 1}" data-zoom="${i}" ${i ? 'loading="lazy"' : ''}>`).join('')}
     </div>
+    <button type="button" class="gallery__zoom" data-zoom-current aria-label="تكبير الصورة">${icon('search')}</button>
     ${p.images.length > 1 ? `
       <div class="gallery__thumbs">
         ${p.images.map((id, i) => `<button type="button" data-img="${i}" class="${i ? '' : 'on'}" aria-label="صورة ${i + 1}"><img src="${img(id, 160)}" alt=""></button>`).join('')}
@@ -85,14 +86,35 @@ const buyHTML = (p) => `
     ${favButton(p, 'fav-btn--box')}
   </div>`;
 
-const PERKS = [
+// "بيوصلك بين الأحد 12 أكتوبر والثلاثاء 14 أكتوبر"
+function deliveryText() {
+  const { min, max } = STORE.deliveryDays;
+  const now = new Date();
+  return `اطلبي هلأ، بيوصلك بين <b>${formatDay(addWorkDays(now, min))}</b> و<b>${formatDay(addWorkDays(now, max))}</b>`;
+}
+
+const PERKS = () => [
+  ['truck', deliveryText()],
   ['cash', 'الدفع نقداً عند الاستلام'],
-  ['truck', 'التوصيل خلال 2–4 أيام عمل'],
   ['swap', 'تبديل المقاس خلال 7 أيام'],
 ];
 
+// مشاركة المنتج: واتساب أولاً لأنه الأكثر استخداماً
+function shareHTML(p) {
+  const url = location.href;
+  const text = `شوفي هاد من NUNU KIDS: ${p.name}`;
+  return `
+    <div class="share">
+      <span>شاركيها:</span>
+      <a href="https://wa.me/?text=${encodeURIComponent(`${text} ${url}`)}" target="_blank" rel="noopener" aria-label="مشاركة على واتساب">${icon('wa')}</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}" target="_blank" rel="noopener" aria-label="مشاركة على فيسبوك">${brandIcon('facebook')}</a>
+      <button type="button" data-copy-link aria-label="نسخ الرابط">${icon('link')}</button>
+    </div>`;
+}
+
 const detailsHTML = (p) => `
-  <ul class="perks">${PERKS.map(([i, t]) => `<li>${icon(i)} ${t}</li>`).join('')}</ul>
+  <ul class="perks">${PERKS().map(([i, t]) => `<li>${icon(i)} <span>${t}</span></li>`).join('')}</ul>
+  ${shareHTML(p)}
   <div class="acc">
     <details open><summary>الوصف</summary><p>${esc(p.description)}</p></details>
     ${p.material ? `<details><summary>الخامة والعناية</summary><p>${esc(p.material)}</p></details>` : ''}
@@ -160,18 +182,60 @@ function addToCart() {
 function initGallery() {
   const main = $('#gMain');
   const thumbs = $$('.gallery__thumbs button');
+  const current = () => Math.round(Math.abs(main.scrollLeft) / main.clientWidth);
   const mark = (i) => thumbs.forEach((b, j) => b.classList.toggle('on', j === i));
-  thumbs.forEach((b) => b.addEventListener('click', () => {
-    const i = Number(b.dataset.img);
+  const show = (i) => {
     main.scrollTo({ left: -i * main.clientWidth, behavior: 'smooth' }); // RTL: الاتجاه سالب
     mark(i);
-  }));
-  main.addEventListener('scroll', () => mark(Math.round(Math.abs(main.scrollLeft) / main.clientWidth)), { passive: true });
+  };
+  thumbs.forEach((b) => b.addEventListener('click', () => show(Number(b.dataset.img))));
+  main.addEventListener('scroll', () => mark(current()), { passive: true });
+
+  // ===== تكبير الصور =====
+  const box = $('#lightbox');
+  const images = product.images;
+  let index = 0;
+  const paint = () => {
+    $('#lightboxImg').src = img(images[index], 1400, 1400);
+    $('#lightboxImg').alt = `${product.name} صورة ${index + 1}`;
+    $('#lightboxCount').textContent = images.length > 1 ? `${index + 1} / ${images.length}` : '';
+    $$('.lightbox__nav', box).forEach((b) => { b.hidden = images.length < 2; });
+  };
+  const open = (i) => { index = i; paint(); box.showModal(); };
+  const step = (d) => { index = (index + d + images.length) % images.length; paint(); };
+
+  main.addEventListener('click', (e) => { const im = e.target.closest('[data-zoom]'); if (im) open(Number(im.dataset.zoom)); });
+  $('[data-zoom-current]').addEventListener('click', () => open(current()));
+  box.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-lb]');
+    if (e.target === box || b?.dataset.lb === 'close') { box.close(); show(index); return; }
+    if (b) step(Number(b.dataset.lb));
+  });
+  box.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') step(1); // بالعربي: اليسار = الجاية
+    if (e.key === 'ArrowRight') step(-1);
+  });
+  let startX = null;
+  box.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+  box.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+  });
+}
+
+async function copyLink() {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    toast('انسخ الرابط ✓');
+  } catch {
+    toast('ما قدرنا ننسخ الرابط');
+  }
 }
 
 function bindEvents() {
   initGallery();
   document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-copy-link]')) return copyLink();
     const t = e.target.closest('[data-size], [data-color], [data-qty], [data-add-to-cart]');
     if (!t || t.disabled) return;
     if (t.dataset.size) selectSize(t.dataset.size);

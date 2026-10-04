@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الصفحة مش موجودة | NUNU KIDS</title>
+<meta name="robots" content="noindex">
+<base href="/">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/pages/notfound.css">
+<script src="js/file-warning.js"></script>
+<script type="module" src="js/pages/notfound.js"></script>
+</head>
+<body>
+
+<main class="container lost">
+  <!-- بدلة على حبل غسيل -->
+  <div class="lost__art" aria-hidden="true">
+    <svg class="lost__line" viewBox="0 0 400 60" preserveAspectRatio="none"><path d="M0 8 Q200 60 400 8"/></svg>
+    <img src="assets/icon-180.png" alt="" class="lost__onesie">
+    <span class="lost__pin lost__pin--a"></span><span class="lost__pin lost__pin--b"></span>
+    <span class="lost__heart lost__heart--1">♡</span><span class="lost__heart lost__heart--2">♡</span><span class="lost__heart lost__heart--3">♡</span>
+  </div>
+
+  <p class="lost__code">404</p>
+  <span class="eyebrow">أوبس…</span>
+  <h1>الصفحة اللي بتدوّري عليها ضاعت</h1>
+  <p class="lost__text">يمكن الرابط فيه غلطة صغيرة، أو القطعة خلصت وانشالت. بس ولا يهمك، عنا قطع كتير حلوة.</p>
+
+  <form class="search lost__search" role="search" action="shop.html" method="get">
+    <input type="search" name="q" placeholder="دوّري على بدلة، طاقية، بكج..." aria-label="بحث" required>
+    <button type="submit" class="btn btn--primary btn--sm">بحث</button>
+  </form>
+
+  <div class="lost__cta">
+    <a href="index.html" class="btn btn--ghost">الرئيسية</a>
+    <a href="shop.html" class="btn btn--primary">تسوقي كل المنتجات</a>
+  </div>
+</main>
+
+<section class="section section--tint" id="lostRecs">
+  <div class="container">
+    <div class="section__head"><span class="eyebrow">بدل ما ترجعي إيدك فاضية</span><h2>ممكن يعجبك</h2></div>
+    <div class="products" id="lostGrid"></div>
+  </div>
+</section>
+
+</body>
+</html>

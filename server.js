@@ -38,7 +38,11 @@ createServer(async (req, res) => {
     res.writeHead(200, { 'Content-Type': TYPES[extname(path).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
     res.end(body);
   } catch {
-    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end('الصفحة مش موجودة');
+    // صفحة مش موجودة ← صفحة 404 اللطيفة. ملف ناقص (صورة، css...) ← رد قصير
+    const isPage = ['', '.html'].includes(extname(path));
+    const body = isPage ? await readFile(join(ROOT, '404.html')).catch(() => null) : null;
+    res.writeHead(404, { 'Content-Type': body ? TYPES['.html'] : 'text/plain; charset=utf-8' });
+    res.end(body || 'مش موجود');
   }
 }).listen(PORT, () => {
   console.log('\n  NUNU KIDS شغّال:');

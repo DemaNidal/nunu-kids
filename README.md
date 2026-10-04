@@ -22,7 +22,11 @@ npm start
 
 ```
 public/
-├── index.html · product.html · checkout.html   الصفحات (هيكل بس، المحتوى بيتعبى من JS)
+├── index.html       الرئيسية
+├── shop.html        كل المنتجات + الفلاتر والبحث  (shop.html?cat=underwear&size=0-3)
+├── product.html     صفحة المنتج / البكج  (product.html?id=1)
+├── favorites.html   المفضلة
+├── checkout.html    إتمام الطلب
 ├── assets/logo.png
 │
 ├── css/
@@ -44,6 +48,8 @@ public/
     │   ├── catalog.js   الوصول للمنتجات والمخزون
     │   ├── pricing.js   محرّك العروض وحساب الأسعار
     │   ├── cart.js      السلة (والصفحات بتسمع لتغييراتها)
+    │   ├── favorites.js المفضلة
+    │   ├── search.js    البحث والفلترة والترتيب
     │   ├── orders.js    حفظ الطلب (لاحقاً بيبعت للسيرفر)
     │   ├── behavior.js  تتبع تصرفات الزبونة
     │   └── recommend.js الاقتراحات الذكية
@@ -51,13 +57,12 @@ public/
     ├── ui/              قطع الواجهة المشتركة
     │   ├── icons.js     كل الأيقونات
     │   ├── components.js  كرت المنتج، السعر، العداد، الكمية، toast
-    │   ├── header.js · footer.js · cart-drawer.js
+    │   ├── header.js · footer.js · cart-drawer.js · slider.js
     │   └── layout.js    بيركّب الهيدر والفوتر والسلة بكل صفحة
     │
     └── pages/           كود كل صفحة لحالها
-        ├── home.js
-        ├── product.js
-        └── checkout.js
+        ├── home.js · shop.js · product.js
+        └── favorites.js · checkout.js
 ```
 
 **القاعدة:** `data` ← `store` ← `ui` ← `pages`. كل طبقة بتستخدم اللي قبلها بس.
@@ -83,6 +88,5 @@ public/
 
 - [ ] السيرفر ولوحة الأدمن (الطلبات، حالة الطلب، المنتجات، العروض)
 - [ ] صفحة تتبع الطلب
-- [ ] صفحات الأقسام والبحث
 - [ ] صور المنتجات الحقيقية (الصور الحالية مؤقتة من Unsplash)
 - [ ] مناطق وأسعار التوصيل الحقيقية، ورقم الواتساب وروابط السوشال ميديا

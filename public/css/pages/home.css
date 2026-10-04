@@ -3,14 +3,14 @@
    ============================================================ */
 
 /* ===== البانر (سلايدر) ===== */
-.hero { position: relative; overflow: hidden; padding: 44px 0 60px; background: var(--brand-200); }
+.hero { position: relative; overflow: hidden; background: var(--brand-200); }
 .hero__slides { display: grid; }
-.slide { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .9s ease, visibility .9s; }
+.slide { grid-area: 1 / 1; display: grid; align-content: center; opacity: 0; visibility: hidden; transition: opacity .9s ease, visibility .9s; }
 .slide.is-active { opacity: 1; visibility: visible; }
 
 .slide__inner {
   position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1.25fr 1fr;
-  align-items: center; gap: 32px; min-height: 440px;
+  align-items: center; gap: 32px; min-height: 440px; padding-top: 44px; padding-bottom: 60px;
 }
 
 /* الصورة الكبيرة بإطار دائري */
@@ -64,7 +64,7 @@
 .hero__flower--xs { width: 34px; height: 34px; right: 7%; top: 34px; color: var(--brand-50); }
 
 @media (max-width: 859px) {
-  .hero { padding: 28px 0 52px; }
+  .slide__inner { padding-top: 28px; padding-bottom: 52px; }
   .slide__inner { grid-template-columns: 1fr; grid-template-areas: 'media' 'text'; gap: 20px; min-height: 0; }
   .slide__photo { grid-area: media; width: 240px; justify-self: center; margin-inline-start: 40px; }
   .slide__polaroid { grid-area: media; width: 120px; padding: 6px 6px 22px; justify-self: start; align-self: end; margin-inline-start: 8%; }
@@ -72,6 +72,42 @@
   .hero__arrow { display: none; }
   .hero__flower--big { width: 130px; height: 130px; left: -40px; bottom: -40px; }
   .hero__flower--sm { left: auto; right: 12px; bottom: 46%; width: 30px; height: 30px; }
+}
+
+/* ===== شريحة "الإطلالة" (متل Mini You) ===== */
+.editorial { display: grid; grid-template-columns: 1fr 1fr; height: 100%; min-height: 560px; background: var(--white); }
+.editorial__text { position: relative; padding: 56px 72px 0 40px; display: flex; flex-direction: column; align-items: flex-start; }
+/* شريط ملوّن ورا القطعتين من تحت */
+.editorial__text::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background: var(--brand-300); }
+.editorial__text > * { position: relative; z-index: 1; }
+.editorial__text h1, .editorial__text h2 { font-size: clamp(30px, 3.6vw, 46px); margin: 4px 0 22px; color: var(--navy); }
+/* اسم الماركة بالطول وبلون فاتح كتير */
+.editorial__brand {
+  position: absolute !important; top: 36px; right: 14px; writing-mode: vertical-rl; transform: rotate(180deg);
+  font-family: var(--font-head); font-size: 60px; line-height: 1; color: var(--brand-100); pointer-events: none;
+}
+.editorial__picks { display: grid; grid-template-columns: repeat(2, minmax(0, 190px)); gap: 18px; margin-top: auto; padding-bottom: 54px; }
+.editorial__pick { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.editorial__pick img { aspect-ratio: 5 / 6; object-fit: cover; background: var(--brand-50); transition: transform .5s; }
+.editorial__pick:hover img { transform: translateY(-4px); }
+.editorial__photo { position: relative; overflow: hidden; background: var(--brand-50); }
+.editorial__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.editorial__shop { position: absolute; bottom: 52px; right: 50%; transform: translateX(50%); white-space: nowrap; }
+.slide--editorial:not(.is-active) .editorial__photo img { transform: scale(1.04); }
+.editorial__photo img { transition: transform 1.2s ease; }
+/* الورود بتختفي على شريحة الإطلالة */
+.hero[data-slide="editorial"] .hero__flower { opacity: 0; }
+.hero__flower { transition: opacity .6s; }
+@media (max-width: 859px) {
+  .editorial { grid-template-columns: 1fr; min-height: 0; }
+  .editorial__photo { order: -1; aspect-ratio: 4 / 3; }
+  .editorial__shop { bottom: 16px; }
+  .editorial__text { padding: 18px 16px 0; align-items: center; text-align: center; }
+  .editorial__text h1, .editorial__text h2 { font-size: 28px; margin-bottom: 14px; }
+  .editorial__text::after { height: 45%; }
+  .editorial__brand { display: none; }
+  .editorial__picks { grid-template-columns: repeat(2, 120px); justify-content: center; gap: 14px; margin-top: 16px; padding-bottom: 40px; }
+  .editorial__pick { font-size: 12px; }
 }
 
 /* ===== شريط الثقة ===== */

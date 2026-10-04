@@ -20,6 +20,21 @@
 .gallery__thumbs button.on { border-color: var(--navy); }
 .gallery__thumbs img { width: 100%; height: 100%; object-fit: cover; }
 .gallery .badges { top: 14px; right: 14px; }
+.gallery__main img { cursor: zoom-in; }
+.gallery__zoom {
+  position: absolute; bottom: 14px; left: 14px; z-index: 1; width: 40px; height: 40px; border: 0; border-radius: 50%;
+  display: grid; place-items: center; background: rgba(255, 255, 255, .85); color: var(--navy); transition: background .2s;
+}
+.gallery__zoom:hover { background: var(--white); }
+
+/* على الكمبيوتر: الصور الصغيرة عمود جنب الصورة الكبيرة */
+@media (min-width: 860px) {
+  .gallery:has(.gallery__thumbs) { display: grid; grid-template-columns: 84px minmax(0, 1fr); grid-template-areas: 'thumbs main'; gap: 14px; }
+  .gallery:has(.gallery__thumbs) .gallery__main { grid-area: main; }
+  .gallery:has(.gallery__thumbs) .gallery__thumbs { grid-area: thumbs; flex-direction: column; margin-top: 0; }
+  .gallery:has(.gallery__thumbs) .gallery__thumbs button { width: 84px; height: 100px; }
+  .gallery:has(.gallery__thumbs) .badges { right: 112px; }
+}
 
 /* ===== معلومات المنتج ===== */
 .info h1 { font-size: clamp(28px, 3.4vw, 38px); }
@@ -70,6 +85,33 @@
 .perks { list-style: none; display: grid; gap: 8px; margin: 0; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .perks li { display: flex; align-items: center; gap: 10px; }
 .perks .ic { color: var(--blue); }
+.perks b { font-weight: 500; color: var(--brand-700); }
+
+/* ===== المشاركة ===== */
+.share { display: flex; align-items: center; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+.share span { margin-inline-end: 4px; font-family: var(--font-script); font-size: 17px; color: var(--brand-600); }
+.share a, .share button {
+  width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%;
+  background: var(--white); color: var(--brand-700); transition: background .2s;
+}
+.share a:hover, .share button:hover { background: var(--brand-100); }
+.share .ic, .share .brand { width: 18px; height: 18px; }
+
+/* ===== تكبير الصور ===== */
+.lightbox { width: 100vw; height: 100vh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(30, 24, 22, .94); }
+.lightbox[open] { display: grid; place-items: center; }
+.lightbox::backdrop { background: transparent; }
+.lightbox img { max-width: min(92vw, 1000px); max-height: 86vh; object-fit: contain; border-radius: var(--radius-sm); }
+.lightbox__close, .lightbox__nav {
+  position: absolute; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .15); color: var(--white);
+  width: 48px; height: 48px; font-size: 24px; line-height: 1; transition: background .2s;
+}
+.lightbox__close:hover, .lightbox__nav:hover { background: rgba(255, 255, 255, .3); }
+.lightbox__close { top: 18px; left: 18px; font-size: 20px; }
+.lightbox__nav { top: 50%; transform: translateY(-50%); font-size: 30px; }
+.lightbox__nav--prev { right: 18px; }
+.lightbox__nav--next { left: 18px; }
+.lightbox__count { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255, 255, 255, .8); font-size: 14px; direction: ltr; }
 
 .acc details { border-bottom: 1px solid var(--line); }
 .acc summary { display: flex; justify-content: space-between; padding: 14px 0; list-style: none; cursor: pointer; font-weight: 700; }
@@ -105,6 +147,8 @@
   .gallery { position: relative; top: 0; margin: 0 -16px; }
   .gallery__main { border-radius: 0; }
   .gallery__thumbs { padding: 0 16px; }
+  /* على الموبايل الصورة مربعة بعرض الشاشة، فزر التكبير فوق آخرها */
+  .gallery__zoom { bottom: auto; top: calc(100vw - 54px); }
   .contents .hearts { grid-template-columns: 1fr; }
   .upsell { grid-template-columns: 1fr; }
   .upsell > div { padding: 0 18px 20px; }

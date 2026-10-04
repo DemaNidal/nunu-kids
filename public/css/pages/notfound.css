@@ -1,0 +1,30 @@
+/* ============================================================
+   صفحة 404
+   ============================================================ */
+.lost { max-width: 640px; padding-top: 40px; padding-bottom: 56px; text-align: center; }
+
+/* البدلة على حبل الغسيل، بتتمرجح شوي */
+.lost__art { position: relative; height: 230px; margin: 0 auto 4px; max-width: 420px; }
+.lost__line { position: absolute; top: 18px; left: 0; width: 100%; height: 60px; fill: none; stroke: var(--brand-400); stroke-width: 2; }
+.lost__onesie {
+  position: absolute; top: 46px; left: 50%; width: 170px; margin-left: -85px;
+  transform-origin: 50% 0; animation: swing 3.2s ease-in-out infinite;
+}
+.lost__pin { position: absolute; top: 40px; width: 8px; height: 22px; border-radius: 3px; background: var(--brand-500); }
+.lost__pin--a { left: calc(50% - 46px); }
+.lost__pin--b { left: calc(50% + 38px); }
+.lost__heart { position: absolute; color: var(--mauve); font-size: 22px; animation: float 4s ease-in-out infinite; }
+.lost__heart--1 { top: 70px; left: 12%; }
+.lost__heart--2 { top: 140px; right: 10%; font-size: 28px; animation-delay: 1s; }
+.lost__heart--3 { top: 20px; right: 22%; font-size: 16px; animation-delay: 2s; }
+@keyframes swing { 50% { transform: rotate(-5deg); } 0%, 100% { transform: rotate(5deg); } }
+@keyframes float { 50% { transform: translateY(-10px); opacity: .6; } }
+@media (prefers-reduced-motion: reduce) { .lost__onesie, .lost__heart { animation: none; } }
+
+.lost__code { margin: 0; font-family: var(--font-head); font-size: 64px; line-height: 1; color: var(--brand-300); direction: ltr; }
+.lost h1 { font-size: clamp(26px, 4vw, 36px); margin: 4px 0 10px; }
+.lost__text { margin: 0 auto 24px; max-width: 460px; color: var(--muted); }
+
+.lost__search { max-width: 420px; height: 48px; margin: 0 auto 18px; padding-inline-end: 4px; }
+.lost__search .btn { padding-block: 7px; }
+.lost__cta { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }

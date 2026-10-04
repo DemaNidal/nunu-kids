@@ -7,6 +7,9 @@ export const STORE = {
   whatsapp: '', // رقم دولي بدون + (مثلاً 970591234567)
   facebook: '',
   instagram: '',
+  // مدة التوصيل العامة بأيام العمل (الجمعة عطلة) — لجملة "بيوصلك بين..."
+  deliveryDays: { min: 2, max: 4 },
+  weekend: [5], // 0 = الأحد ... 5 = الجمعة
   shippingZones: [
     { id: 'wb', name: 'الضفة الغربية', fee: 20, days: '2–4 أيام' },
     { id: 'jer', name: 'القدس', fee: 30, days: '2–3 أيام' },

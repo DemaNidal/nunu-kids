@@ -2,7 +2,7 @@
 import { $, esc, img, ltr, money } from '../utils.js';
 import { SIZES, CATEGORIES } from '../config.js';
 import { HERO_SLIDES, OFFER_SLIDE_PHOTOS, AGE_GROUPS, TRUST_POINTS, REVIEWS } from '../data/content.js';
-import { items, bundles } from '../store/catalog.js';
+import { items, bundles, findProduct } from '../store/catalog.js';
 import { liveOffers, priceOf } from '../store/pricing.js';
 import { cart } from '../store/cart.js';
 import { behavior } from '../store/behavior.js';
@@ -30,14 +30,46 @@ function heroSlides() {
   }, ...HERO_SLIDES];
 }
 
-const slideHTML = (s, i) => `
+const titleHTML = (s, i) => {
+  const t = esc(s.title).replace('\n', '<br>');
+  return i ? `<h2>${t}</h2>` : `<h1>${t}</h1>`; // عنوان h1 وحيد بالصفحة
+};
+
+// شريحة "إطلالة": صورة بيبي كبيرة + نص + قطعتين من المتجر
+const editorialSlideHTML = (s, i) => {
+  const picks = s.productIds.map(findProduct).filter(Boolean);
+  return `
+  <article class="slide slide--editorial" data-layout="editorial" aria-roledescription="شريحة" aria-label="${i + 1}">
+    <div class="editorial">
+      <div class="editorial__text">
+        <span class="editorial__brand" aria-hidden="true">nunu kids</span>
+        <span class="eyebrow">${esc(s.eyebrow)}</span>
+        ${titleHTML(s, i)}
+        <a href="${s.cta.href}" class="btn btn--ghost">${esc(s.cta.label)}</a>
+        <div class="editorial__picks">
+          ${picks.map((p) => `
+            <a href="${productUrl(p)}" class="editorial__pick">
+              <img src="${img(p.images[0], 360, 420)}" alt="${esc(p.name)}" ${i ? 'loading="lazy"' : ''}>
+              <span>${esc(p.name)}</span>
+            </a>`).join('')}
+        </div>
+      </div>
+      <div class="editorial__photo">
+        <img src="${img(s.photo, 900, 1000)}" alt="" ${i ? 'loading="lazy"' : ''}>
+        <a href="${s.cta.href}" class="btn btn--primary editorial__shop">تسوقي الإطلالة</a>
+      </div>
+    </div>
+  </article>`;
+};
+
+const slideHTML = (s, i) => s.layout === 'editorial' ? editorialSlideHTML(s, i) : `
   <article class="slide" aria-roledescription="شريحة" aria-label="${i + 1}">
     <div class="container slide__inner">
       <div class="slide__photo"><img src="${img(s.photo, 640)}" alt="" ${i ? 'loading="lazy"' : ''}></div>
       <div class="slide__text">
         <span class="slide__hearts" aria-hidden="true">♡♡</span>
         <span class="eyebrow">${esc(s.eyebrow)}</span>
-        ${i ? `<h2>${esc(s.title)}</h2>` : `<h1>${esc(s.title)}</h1>`}
+        ${titleHTML(s, i)}
         <p>${esc(s.text)}</p>
         ${s.endsAt ? countdownHTML('countdown--hero') : ''}
         <a href="${s.cta.href}" class="btn btn--ghost">${esc(s.cta.label)}</a>
@@ -66,7 +98,7 @@ function renderTrust() {
 // مربعات الأقسام بإطار، بدرجات اللون الطاغي
 function renderTypes() {
   $('#typesGrid').innerHTML = Object.entries(CATEGORIES)
-    .map(([key, name]) => `<a href="${key === 'bundles' ? '#bundles' : '#new'}" class="tile tile--${key}"><span>${esc(name)}</span></a>`)
+    .map(([key, name]) => `<a href="shop.html?cat=${key}" class="tile tile--${key}"><span>${esc(name)}</span></a>`)
     .join('');
 }
 
@@ -74,7 +106,7 @@ function renderAges() {
   $('#agesGrid').innerHTML = AGE_GROUPS.map((a) => {
     const size = SIZES[a.size];
     return `
-      <a href="#" class="age">
+      <a href="shop.html?size=${a.size}" class="age">
         <div class="age__img">
           <img src="${img(a.photo, 400, 520)}" alt="بيبي عمر ${ltr(size.range)} ${size.unit}" loading="lazy">
           ${a.tag ? `<small>${esc(a.tag)}</small>` : ''}
