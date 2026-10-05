@@ -102,8 +102,15 @@
 }
 .suggest__add:hover { background: var(--navy); color: var(--white); }
 
+/* ===== جدول المقاسات ===== */
+.size-table { width: 100%; border-collapse: collapse; }
+.size-table th, .size-table td { padding: 11px 10px; text-align: start; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.size-table th { background: var(--tint); font-weight: 500; }
+.size-table tbody tr:nth-child(even) { background: var(--brand-50); }
+
 /* ===== نافذة منبثقة ===== */
 .modal { width: min(460px, calc(100% - 32px)); padding: 22px; border: 0; border-radius: var(--radius); color: var(--navy); }
 .modal::backdrop { background: var(--overlay); }
 .modal__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.modal__note { margin: 14px 0 0; font-size: 14px; color: var(--muted); }
+.modal__note { margin: 14px 0 10px; font-size: 14px; color: var(--muted); }
+.modal .link-btn { font-size: 14px; }

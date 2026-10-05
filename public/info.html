@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>معلومات | NUNU KIDS</title>
+<meta name="description" content="دليل مقاسات ملابس المواليد، التوصيل والدفع عند الاستلام، وسياسة التبديل في NUNU KIDS.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/pages/info.css">
+<script src="js/file-warning.js"></script>
+<script type="module" src="js/pages/info.js"></script>
+</head>
+<body>
+
+<main class="container info">
+  <nav class="crumbs" aria-label="مسار الصفحة"><a href="index.html">الرئيسية</a><span>/</span><span>معلومات</span><span>/</span><b id="crumbTitle">دليل المقاسات</b></nav>
+
+  <!-- التبويبات (كل تبويب إله رابط: info.html#size ...) -->
+  <nav class="info-tabs" role="tablist" aria-label="أقسام المعلومات">
+    <a href="#about" role="tab" data-tab="about">من نحن</a>
+    <a href="#size" role="tab" data-tab="size">دليل المقاسات</a>
+    <a href="#shipping" role="tab" data-tab="shipping">التوصيل والدفع</a>
+    <a href="#returns" role="tab" data-tab="returns">التبديل والإرجاع</a>
+    <a href="#contact" role="tab" data-tab="contact">تواصلي معنا</a>
+  </nav>
+
+  <!-- ===== دليل المقاسات ===== -->
+  <section class="info-panel" id="panel-size" role="tabpanel" data-panel="size">
+    <p class="info-lead">
+      مقاساتنا حسب عمر البيبي، بس كل بيبي بيكبر على طريقته. لهيك اعتمدي على <b>الطول والوزن</b> أكثر من العمر.
+      إذا مش متأكدة، اختاري المقاس الأكبر عشان البيبي يلبس القطعة فترة أطول.
+    </p>
+    <div class="size-guide">
+      <!-- نفس القطعة بأحجام متدرجة على علاقة: بتشرح المقاسات بنظرة -->
+      <div class="size-rail" id="sizeRail" role="img" aria-label="نفس الأوفرول بالمقاسات الأربعة من الأصغر للأكبر"></div>
+      <div>
+        <div id="sizeTable"></div>
+        <p class="info-note">⚠️ الأرقام تقريبية، وبتختلف شوي من قطعة لقطعة. القياسات الدقيقة لكل قطعة مكتوبة بصفحتها.</p>
+      </div>
+    </div>
+
+    <h2 class="info-h2">كيف تقيسي البيبي؟</h2>
+    <div class="steps">
+      <div class="step-card"><span class="step-card__n">1</span><b>الطول</b><p>مدّدي البيبي على ظهره، وقيسي من أعلى راسه لكعب رجله وهو ممدود.</p></div>
+      <div class="step-card"><span class="step-card__n">2</span><b>الوزن</b><p>استعملي آخر وزن من زيارة الطبيب أو المركز الصحي.</p></div>
+      <div class="step-card"><span class="step-card__n">3</span><b>بين مقاسين؟</b><p>خدي المقاس الأكبر، لأنه البيبي بيكبر بسرعة بأول سنة.</p></div>
+      <div class="step-card"><span class="step-card__n">4</span><b>بعد الغسيل</b><p>القطن ممكن يصغر شوي بأول غسلة. اغسليه على 30 درجة.</p></div>
+    </div>
+
+    <div class="info-help">
+      <p>لسا مش متأكدة من المقاس؟ ابعتيلنا عمر البيبي وطوله ووزنه، ومنساعدك نختار.</p>
+      <a class="btn btn--primary" data-whatsapp="مرحبا، بدي مساعدة باختيار المقاس" target="_blank" rel="noopener">اسألينا على واتساب</a>
+    </div>
+  </section>
+
+  <!-- ===== من نحن ===== -->
+  <section class="info-panel" id="panel-about" role="tabpanel" data-panel="about" hidden>
+    <span class="eyebrow">من أول يوم لأول سنة</span>
+    <h1 class="info-h1">NUNU KIDS</h1>
+    <!-- ⚠️ نص مبدئي — بدّليه بقصتك الحقيقية -->
+    <p class="info-lead">
+      نونو كيدز متجر ملابس مواليد، بنختار فيه كل قطعة بإيدنا: قطن ناعم، قصّات مريحة، وألوان هادية بتليق بأحلى بيبي.
+      بدنا نسهّل على كل أم تجهيز بيبيها، من بكج المستشفى لأول عيد ميلاد.
+    </p>
+    <ul class="hearts info-list">
+      <li>قطع مختارة بعناية لبشرة المولود الحساسة</li>
+      <li>بكجات جاهزة ومغلفة كهدية</li>
+      <li>الدفع عند الاستلام والتبديل سهل</li>
+    </ul>
+  </section>
+
+  <!-- ===== التوصيل والدفع ===== -->
+  <section class="info-panel" id="panel-shipping" role="tabpanel" data-panel="shipping" hidden>
+    <h2 class="info-h2">مناطق وأسعار التوصيل</h2>
+    <div id="zonesTable"></div>
+    <h2 class="info-h2">الدفع</h2>
+    <p>الدفع <b>نقداً عند الاستلام</b> فقط. بتدفعي للمندوب لما يوصلك الطلب وتشوفيه بإيدك.</p>
+    <h2 class="info-h2">كيف بيمشي طلبك؟</h2>
+    <ol class="info-steps">
+      <li>بتطلبي من الموقع، وبيوصلك رقم طلب.</li>
+      <li>منتصل فيكِ خلال 24 ساعة لتأكيد الطلب والعنوان.</li>
+      <li>منجهّز الطلب ومنغلفه، ومنسلمه للمندوب.</li>
+      <li>بيوصلك، بتفحصيه، وبتدفعي.</li>
+    </ol>
+  </section>
+
+  <!-- ===== التبديل والإرجاع ===== -->
+  <section class="info-panel" id="panel-returns" role="tabpanel" data-panel="returns" hidden>
+    <!-- ⚠️ سياسة مبدئية — راجعيها وعدليها حسب شغلك -->
+    <h2 class="info-h2">تبديل المقاس خلال 7 أيام</h2>
+    <p>إذا المقاس ما زبط، بتقدري تبدليه خلال <b>7 أيام</b> من استلام الطلب، بشرط:</p>
+    <ul class="hearts info-list">
+      <li>القطعة بحالتها الأصلية، ما انلبست وما انغسلت</li>
+      <li>التيكيت لسا عليها، ومع التغليف الأصلي</li>
+      <li>الملابس الداخلية والبدي ما بتنبدل إذا انفتح تغليفها (لأسباب صحية)</li>
+    </ul>
+    <h2 class="info-h2">كيف أبدّل؟</h2>
+    <p>ابعتيلنا رقم الطلب على واتساب، ومنرتب معك موعد استلام القطعة وتوصيل المقاس الجديد.</p>
+  </section>
+
+  <!-- ===== تواصلي معنا ===== -->
+  <section class="info-panel" id="panel-contact" role="tabpanel" data-panel="contact" hidden>
+    <h2 class="info-h2">تواصلي معنا</h2>
+    <p>بنرد على رسائلك من السبت للخميس، من 10 الصبح لـ 8 المسا.</p>
+    <div class="contact-cards" id="contactCards"></div>
+  </section>
+</main>
+
+</body>
+</html>

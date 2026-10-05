@@ -1,5 +1,6 @@
 // قطع واجهة بتتكرر بأكثر من صفحة
-import { $, esc, money, img, sizeLabel } from '../utils.js';
+import { $, esc, money, img, sizeLabel, ltr } from '../utils.js';
+import { SIZE_GUIDE } from '../data/content.js';
 import { sizesOf, inStock, stockOf } from '../store/catalog.js';
 import { priceOf, bxgyFor } from '../store/pricing.js';
 import { quickSize } from '../store/recommend.js';
@@ -93,6 +94,15 @@ export const qtyControl = (value, { plus, minus, cls = '' }) => `
     <span>${value}</span>
     <button type="button" ${minus} aria-label="نقصان">−</button>
   </div>`;
+
+// جدول المقاسات (صفحة المنتج + صفحة دليل المقاسات)
+export const sizeTableHTML = () => `
+  <table class="size-table">
+    <thead><tr><th>المقاس</th><th>الطول</th><th>الوزن</th></tr></thead>
+    <tbody>
+      ${SIZE_GUIDE.map((r) => `<tr><td>${sizeLabel(r.size)}</td><td>${ltr(r.height)} سم</td><td>${ltr(r.weight)} كغ</td></tr>`).join('')}
+    </tbody>
+  </table>`;
 
 // ===== عدّاد تنازلي =====
 const UNITS = [['d', 'يوم'], ['h', 'ساعة'], ['m', 'دقيقة'], ['s', 'ثانية']];

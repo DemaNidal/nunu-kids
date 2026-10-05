@@ -1,7 +1,6 @@
 // صفحة المنتج (ونفس الصفحة للبكج)
 import { CATEGORIES, STORE } from '../config.js';
-import { $, $$, esc, img, ltr, money, sizeLabel, queryParam, addWorkDays, formatDay } from '../utils.js';
-import { SIZE_GUIDE } from '../data/content.js';
+import { $, $$, esc, img, money, sizeLabel, queryParam, addWorkDays, formatDay } from '../utils.js';
 import { findProduct, isBundle, sizesOf, stockOf, inStock, bundles } from '../store/catalog.js';
 import { priceOf, bxgyFor } from '../store/pricing.js';
 import { cart } from '../store/cart.js';
@@ -10,7 +9,7 @@ import { recommend } from '../store/recommend.js';
 import { mountLayout } from '../ui/layout.js';
 import { openDrawer } from '../ui/cart-drawer.js';
 import { icon, brandIcon } from '../ui/icons.js';
-import { badges, favButton, priceTag, productGrid, productUrl, qtyControl, countdownHTML, startCountdown, toast } from '../ui/components.js';
+import { badges, favButton, sizeTableHTML, priceTag, productGrid, productUrl, qtyControl, countdownHTML, startCountdown, toast } from '../ui/components.js';
 
 mountLayout();
 
@@ -124,9 +123,6 @@ const detailsHTML = (p) => `
 const buyBarHTML = (p) => `
   ${priceTag(p, { cls: 'buybar__price' })}
   <button type="button" class="btn btn--primary" data-add-to-cart ${inStock(p) ? '' : 'disabled'}>${addLabel(p)}</button>`;
-
-const sizeGuideRows = () => SIZE_GUIDE.map((r) =>
-  `<tr><td>${sizeLabel(r.size)}</td><td>${ltr(r.weight)} كغ</td><td>${ltr(r.height)} سم</td></tr>`).join('');
 
 // ===== التفاعل =====
 function setMessage(text, kind = '') {
@@ -301,7 +297,7 @@ function render(p) {
       ${detailsHTML(p)}
     </div>`;
   $('#buybar').innerHTML = buyBarHTML(p);
-  $('#sizeGuideBody').innerHTML = sizeGuideRows();
+  $('#sizeGuideBody').innerHTML = sizeTableHTML();
 
   const { offer } = priceOf(p);
   if (offer?.endsAt) startCountdown($('#offerTimer .countdown'), offer.endsAt, () => location.reload());

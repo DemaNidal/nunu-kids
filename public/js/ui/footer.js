@@ -31,16 +31,17 @@ export function footerHTML() {
           <h4>مساعدة</h4>
           <a href="favorites.html">المفضلة</a>
           <a href="#">تتبع طلبي</a>
-          <a href="#">دليل المقاسات</a>
-          <a href="#">سياسة التبديل</a>
-          <a href="#">التوصيل والدفع</a>
+          <a href="info.html#size">دليل المقاسات</a>
+          <a href="info.html#returns">سياسة التبديل</a>
+          <a href="info.html#shipping">التوصيل والدفع</a>
+          <a href="info.html#about">من نحن</a>
         </div>
         <div>
           <h4>تواصلي معنا</h4>
           <a href="${whatsappUrl()}" ${ext}>${icon('wa', 'ic--sm')} واتساب</a>
           <a href="${link(STORE.instagram)}" ${ext}>${brandIcon('instagram', 'ic--sm')} إنستغرام</a>
           <a href="${link(STORE.facebook)}" ${ext}>${brandIcon('facebook', 'ic--sm')} فيسبوك</a>
-          <a href="#">${icon('pin', 'ic--sm')} مناطق التوصيل</a>
+          <a href="info.html#shipping">${icon('pin', 'ic--sm')} مناطق التوصيل</a>
         </div>
       </div>
       <div class="container footer__bottom">
