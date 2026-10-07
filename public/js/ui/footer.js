@@ -32,7 +32,7 @@ export function footerHTML() {
           <a href="favorites.html">المفضلة</a>
           <a href="#">تتبع طلبي</a>
           <a href="info.html#size">دليل المقاسات</a>
-          <a href="info.html#returns">سياسة التبديل</a>
+          <a href="info.html#exchange">سياسة التبديل</a>
           <a href="info.html#shipping">التوصيل والدفع</a>
           <a href="info.html#about">من نحن</a>
         </div>

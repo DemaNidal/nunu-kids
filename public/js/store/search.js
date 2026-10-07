@@ -1,6 +1,6 @@
 // البحث والفلترة والترتيب (منطق بس، بدون HTML)
 import { CATEGORIES, SIZES } from '../config.js';
-import { allProducts, sizesOf, stockOf, inStock } from './catalog.js';
+import { allProducts, sizesOf, stockOf, inStock, bundleItems } from './catalog.js';
 import { priceOf, bxgyFor } from './pricing.js';
 
 // شرائح السعر بالفلتر
@@ -30,7 +30,7 @@ const normalize = (s) => String(s || '')
 
 const matchesQuery = (p, q) => {
   if (!q) return true;
-  const text = normalize([p.name, p.description, CATEGORIES[p.category], ...(p.contents || [])].join(' '));
+  const text = normalize([p.name, p.description, CATEGORIES[p.category], ...bundleItems(p).map((i) => i.name)].join(' '));
   return normalize(q).split(/\s+/).every((word) => text.includes(word));
 };
 

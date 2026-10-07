@@ -11,3 +11,13 @@ export const sizesOf = (p) => Object.keys(p.stock);
 export const stockOf = (p, size) => p.stock[size] || 0;
 export const inStock = (p) => Object.values(p.stock).some((n) => n > 0);
 export const firstInStockSize = (p) => sizesOf(p).find((s) => stockOf(p, s) > 0);
+
+// قطع البكج: { product (أو null), name, qty, label: "8 بدي قطن بقلب" }
+export const bundleItems = (b) => (b.items || []).map((it) => {
+  const product = it.id ? findProduct(it.id) : null;
+  const name = it.name || product?.name || '';
+  return { product, name, qty: it.qty, label: it.qty > 1 ? `${it.qty} ${name}` : name };
+});
+
+// عدد القطع الكلي بالبكج
+export const bundleCount = (b) => (b.items || []).reduce((sum, it) => sum + it.qty, 0);

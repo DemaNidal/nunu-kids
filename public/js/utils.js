@@ -34,6 +34,15 @@ export const storage = {
 
 export const queryParam = (name) => new URLSearchParams(location.search).get(name);
 
+// "يوم واحد" / "يومين" / "3 أيام" / "11 يوم"
+export const daysLabel = (n) => (n === 1 ? 'يوم واحد' : n === 2 ? 'يومين' : n <= 10 ? `${n} أيام` : `${n} يوم`);
+
+// "قطعة" / "قطعتين" / "7 قطع" / "22 قطعة"
+export const piecesLabel = (n) => (n === 1 ? 'قطعة وحدة' : n === 2 ? 'قطعتين' : n <= 10 ? `${n} قطع` : `${n} قطعة`);
+
+// جملة التبديل الموحّدة بكل الموقع
+export const exchangeText = () => `تبديل المقاس خلال ${daysLabel(STORE.exchangeDays)}`;
+
 // تاريخ بعد عدد أيام عمل (بدون أيام العطلة)
 export function addWorkDays(from, days) {
   const d = new Date(from);

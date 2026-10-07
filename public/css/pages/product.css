@@ -51,7 +51,14 @@
 
 .contents { margin: 16px 0; padding: 14px 18px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-sm); }
 .contents h3 { font-size: 18px; }
-.contents .hearts { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin: 8px 0 0; }
+.contents h3 small { font-family: var(--font-body); font-size: 13px; font-weight: 400; color: var(--muted); }
+.bitems { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.bitem { display: flex; align-items: center; gap: 10px; padding: 6px; border-radius: var(--radius-sm); transition: background .2s; }
+a.bitem:hover { background: var(--brand-50); }
+.bitem__img { flex-shrink: 0; width: 46px; height: 46px; display: grid; place-items: center; overflow: hidden; border-radius: 8px; background: var(--brand-100); color: var(--brand-600); }
+.bitem__img img { width: 100%; height: 100%; object-fit: cover; }
+.bitem__name { flex: 1; min-width: 0; font-size: 14px; line-height: 1.4; }
+.bitem__qty { font-size: 13px; color: var(--brand-700); direction: ltr; }
 
 /* ===== الخيارات (اللون والمقاس) ===== */
 .opt { margin: 18px 0; }
@@ -105,6 +112,7 @@
 .lightbox__close, .lightbox__nav {
   position: absolute; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .15); color: var(--white);
   width: 48px; height: 48px; font-size: 24px; line-height: 1; transition: background .2s;
+  direction: ltr; /* عشان الأسهم ‹ › ما تنقلب بالعربي */
 }
 .lightbox__close:hover, .lightbox__nav:hover { background: rgba(255, 255, 255, .3); }
 .lightbox__close { top: 18px; left: 18px; font-size: 20px; }
@@ -146,7 +154,7 @@
   .gallery__thumbs { padding: 0 16px; }
   /* على الموبايل الصورة مربعة بعرض الشاشة، فزر التكبير فوق آخرها */
   .gallery__zoom { bottom: auto; top: calc(100vw - 54px); }
-  .contents .hearts { grid-template-columns: 1fr; }
+  .bitems { grid-template-columns: 1fr; }
   .upsell { grid-template-columns: 1fr; }
   .upsell > div { padding: 0 18px 20px; }
   .upsell img { min-height: 0; aspect-ratio: 16 / 9; }

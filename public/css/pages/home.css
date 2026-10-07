@@ -9,37 +9,37 @@
 .slide.is-active { opacity: 1; visibility: visible; }
 
 .slide__inner {
-  position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1.25fr 1fr;
-  align-items: center; gap: 32px; min-height: 440px; padding-top: 44px; padding-bottom: 60px;
+  position: relative; z-index: 1; display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 56px;
+  min-height: 580px; padding-top: 56px; padding-bottom: 72px;
 }
 
-/* الصورة الكبيرة بإطار دائري */
-.slide__photo {
-  justify-self: center; width: min(100%, 330px); aspect-ratio: 1; overflow: hidden;
-  border-radius: 50%; border: 8px solid rgba(255, 255, 255, .55);
+/* صورة وحدة كبيرة بإطار عضوي ناعم، وحواليها خط رفيع مايل (لمسة فخمة) */
+.slide__frame {
+  position: relative; justify-self: center; width: min(100%, 520px);
+  border-radius: 46% 54% 42% 58% / 52% 44% 56% 48%;
 }
-/* صورة البولارويد المايلة */
-.slide__polaroid {
-  justify-self: center; width: min(100%, 230px); padding: 10px 10px 36px; background: var(--white);
-  transform: rotate(4deg); box-shadow: 0 14px 30px rgba(var(--shadow-rgb), .18);
+.slide__frame::before {
+  content: ""; position: absolute; inset: -16px; border: 1px solid var(--brand-500); border-radius: inherit;
+  opacity: .55; transform: rotate(-5deg); pointer-events: none;
 }
-.slide__photo img, .slide__polaroid img { width: 100%; height: 100%; object-fit: cover; }
-.slide__polaroid img { aspect-ratio: 4 / 5; }
+.slide__frame img { width: 100%; aspect-ratio: 1.08; object-fit: cover; border-radius: inherit; background: var(--brand-50); }
 
+/* النص: سطر صغير، سطر بخط اليد، عنوان كبير، خط رفيع، وزر واحد */
 .slide__text { text-align: center; }
-.slide__hearts { display: block; color: var(--mauve); font-size: 30px; line-height: 1; margin-bottom: 6px; }
-.slide__text h1, .slide__text h2 { font-size: clamp(30px, 4vw, 46px); margin: 2px 0 10px; }
-.slide__text p { max-width: 400px; margin: 0 auto 22px; color: var(--navy); }
-.slide__text .eyebrow { color: var(--brand-700); }
+.slide__kicker { display: inline-flex; align-items: center; gap: 12px; font-size: 14px; color: var(--brand-700); }
+.slide__kicker::before, .slide__kicker::after { content: ""; width: 28px; height: 1px; background: var(--brand-500); }
+.slide__script { display: block; margin-top: 10px; font-family: var(--font-script); font-size: clamp(30px, 3.4vw, 44px); line-height: 1.2; color: var(--brand-600); }
+.slide__text h1, .slide__text h2 { margin: 0; font-size: clamp(46px, 6.4vw, 84px); line-height: 1.05; color: var(--brand-800); }
+.slide__rule { display: block; width: 56px; height: 1px; margin: 22px auto 18px; background: var(--brand-600); }
+.slide__text p { max-width: 380px; margin: 0 auto 28px; color: var(--muted); }
 
-/* حركة دخول الشريحة */
-.slide__photo, .slide__polaroid, .slide__text { transition: transform 1.1s ease, opacity 1.1s ease; }
-.slide:not(.is-active) .slide__photo { transform: scale(.94); }
-.slide:not(.is-active) .slide__polaroid { transform: rotate(10deg) translateY(16px); }
-.slide:not(.is-active) .slide__text { transform: translateY(14px); opacity: 0; }
+/* حركة دخول هادية */
+.slide__frame, .slide__text { transition: transform 1.2s ease, opacity 1.2s ease; }
+.slide:not(.is-active) .slide__frame { transform: scale(.96); opacity: 0; }
+.slide:not(.is-active) .slide__text { transform: translateY(16px); opacity: 0; }
 
 /* عدّاد العرض جوا الشريحة */
-.countdown--hero { margin-bottom: 22px; }
+.countdown--hero { margin-bottom: 26px; }
 .countdown--hero .countdown__unit { min-width: 58px; padding: 6px 4px; border-radius: var(--radius-sm); background: rgba(255, 255, 255, .6); }
 .countdown--hero b { font-size: 22px; }
 .countdown--hero span { font-size: 11px; color: var(--muted); }
@@ -47,67 +47,32 @@
 /* الأسهم والنقاط */
 .hero__arrow {
   position: absolute; top: 50%; z-index: 2; transform: translateY(-50%);
-  width: 44px; height: 44px; border: 0; border-radius: 50%;
-  background: rgba(255, 255, 255, .7); color: var(--navy); font-size: 26px; line-height: 1; transition: background .2s;
+  width: 44px; height: 44px; border: 1px solid rgba(255, 255, 255, .8); border-radius: 50%;
+  background: rgba(255, 255, 255, .35); color: var(--brand-800); font-size: 24px; line-height: 1; transition: background .2s;
+  direction: ltr; /* عشان الأسهم ‹ › ما تنقلب بالعربي */
 }
 .hero__arrow:hover { background: var(--white); }
-.hero__arrow--prev { right: 16px; }
-.hero__arrow--next { left: 16px; }
-.slider__dots { position: absolute; bottom: 20px; left: 50%; z-index: 2; transform: translateX(-50%); display: flex; gap: 8px; }
-.slider__dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .7); transition: width .3s, background .3s; }
-.slider__dots button[aria-current="true"] { width: 24px; border-radius: var(--pill); background: var(--brand-700); }
+.hero__arrow--prev { right: 18px; }
+.hero__arrow--next { left: 18px; }
+.slider__dots { position: absolute; bottom: 24px; left: 50%; z-index: 2; transform: translateX(-50%); display: flex; gap: 8px; }
+.slider__dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .8); transition: width .3s, background .3s; }
+.slider__dots button[aria-current="true"] { width: 26px; border-radius: var(--pill); background: var(--brand-700); }
 
-/* الورود */
-.hero__flower { position: absolute; color: var(--white); pointer-events: none; }
-.hero__flower--big { width: 210px; height: 210px; left: -50px; bottom: -60px; opacity: .9; }
-.hero__flower--sm { width: 46px; height: 46px; left: 170px; bottom: 120px; }
-.hero__flower--xs { width: 34px; height: 34px; right: 7%; top: 34px; color: var(--brand-50); }
+/* أغصان ناعمة بالزوايا */
+.hero__sprig { position: absolute; z-index: 0; pointer-events: none; fill: var(--brand-300); transition: opacity .6s; }
+.sprig__stem { fill: none; stroke: var(--brand-300); stroke-width: 1.6; stroke-linecap: round; }
+.hero__sprig--a { width: 230px; height: 230px; top: -30px; left: -40px; transform: rotate(8deg); opacity: .9; }
+.hero__sprig--b { width: 170px; height: 170px; bottom: -40px; right: 34%; transform: rotate(200deg); opacity: .7; }
 
 @media (max-width: 859px) {
-  .slide__inner { padding-top: 28px; padding-bottom: 52px; }
-  .slide__inner { grid-template-columns: 1fr; grid-template-areas: 'media' 'text'; gap: 20px; min-height: 0; }
-  .slide__photo { grid-area: media; width: 240px; justify-self: center; margin-inline-start: 40px; }
-  .slide__polaroid { grid-area: media; width: 120px; padding: 6px 6px 22px; justify-self: start; align-self: end; margin-inline-start: 8%; }
-  .slide__text { grid-area: text; }
+  .slide__inner { grid-template-columns: 1fr; gap: 28px; min-height: 0; padding-top: 34px; padding-bottom: 58px; }
+  .slide__frame { width: min(82%, 380px); }
+  .slide__frame::before { inset: -10px; }
+  .slide__text h1, .slide__text h2 { font-size: clamp(40px, 12vw, 54px); }
+  .slide__rule { margin: 16px auto 14px; }
   .hero__arrow { display: none; }
-  .hero__flower--big { width: 130px; height: 130px; left: -40px; bottom: -40px; }
-  .hero__flower--sm { left: auto; right: 12px; bottom: 46%; width: 30px; height: 30px; }
-}
-
-/* ===== شريحة "الإطلالة" (متل Mini You) ===== */
-.editorial { display: grid; grid-template-columns: 1fr 1fr; height: 100%; min-height: 560px; background: var(--white); }
-.editorial__text { position: relative; padding: 56px 72px 0 40px; display: flex; flex-direction: column; align-items: flex-start; }
-/* شريط ملوّن ورا القطعتين من تحت */
-.editorial__text::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 34%; background: var(--brand-300); }
-.editorial__text > * { position: relative; z-index: 1; }
-.editorial__text h1, .editorial__text h2 { font-size: clamp(30px, 3.6vw, 46px); margin: 4px 0 22px; color: var(--navy); }
-/* اسم الماركة بالطول وبلون فاتح كتير */
-.editorial__brand {
-  position: absolute !important; top: 36px; right: 14px; writing-mode: vertical-rl; transform: rotate(180deg);
-  font-family: var(--font-head); font-size: 60px; line-height: 1; color: var(--brand-100); pointer-events: none;
-}
-.editorial__picks { display: grid; grid-template-columns: repeat(2, minmax(0, 190px)); gap: 18px; margin-top: auto; padding-bottom: 54px; }
-.editorial__pick { display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
-.editorial__pick img { aspect-ratio: 5 / 6; object-fit: cover; background: var(--brand-50); transition: transform .5s; }
-.editorial__pick:hover img { transform: translateY(-4px); }
-.editorial__photo { position: relative; overflow: hidden; background: var(--brand-50); }
-.editorial__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.editorial__shop { position: absolute; bottom: 52px; right: 50%; transform: translateX(50%); white-space: nowrap; }
-.slide--editorial:not(.is-active) .editorial__photo img { transform: scale(1.04); }
-.editorial__photo img { transition: transform 1.2s ease; }
-/* الورود بتختفي على شريحة الإطلالة */
-.hero[data-slide="editorial"] .hero__flower { opacity: 0; }
-.hero__flower { transition: opacity .6s; }
-@media (max-width: 859px) {
-  .editorial { grid-template-columns: 1fr; min-height: 0; }
-  .editorial__photo { order: -1; aspect-ratio: 4 / 3; }
-  .editorial__shop { bottom: 16px; }
-  .editorial__text { padding: 18px 16px 0; align-items: center; text-align: center; }
-  .editorial__text h1, .editorial__text h2 { font-size: 28px; margin-bottom: 14px; }
-  .editorial__text::after { height: 45%; }
-  .editorial__brand { display: none; }
-  .editorial__picks { grid-template-columns: repeat(2, 120px); justify-content: center; gap: 14px; margin-top: 16px; padding-bottom: 40px; }
-  .editorial__pick { font-size: 12px; }
+  .hero__sprig--a { width: 150px; height: 150px; top: -20px; left: -40px; }
+  .hero__sprig--b { display: none; }
 }
 
 /* ===== شريط الثقة ===== */
@@ -160,26 +125,27 @@
   .age b { font-size: 20px; }
 }
 
-/* ===== البكجات ===== */
+/* ===== البكجات: صورة البكج وتحتها صور القطع ===== */
 .bundles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-.bundle {
-  position: relative; display: flex; flex-direction: column; padding: 22px;
-  background: var(--white); border: 1px solid var(--line); border-radius: var(--radius);
+.bundle-card { display: flex; flex-direction: column; gap: 6px; }
+.bundle-card__main { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius); background: var(--brand-50); }
+.bundle-card__main img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+.bundle-card:hover .bundle-card__main img { transform: scale(1.04); }
+.bundle-card__flag { position: absolute; top: 10px; right: 10px; padding: 2px 12px; border-radius: var(--pill); background: var(--white); color: var(--brand-700); font-size: 12px; }
+.bundle-card__items { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.bundle-card__items > span { aspect-ratio: 1; overflow: hidden; border-radius: 6px; background: var(--brand-50); }
+.bundle-card__items img { width: 100%; height: 100%; object-fit: cover; }
+.bundle-card__items .bundle-card__more { display: grid; place-items: center; background: var(--brand-200); color: var(--brand-800); font-size: 15px; direction: ltr; }
+.bundle-card__info { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-top: 6px; }
+.bundle-card h3 { font-size: 22px; color: var(--navy); }
+.bundle-card__info small { color: var(--muted); white-space: nowrap; }
+.bundle-card .price { margin-top: 0; }
+@media (max-width: 859px) {
+  /* على الجوال: بتنسحب بالإصبع لجنب، فما بتاخد مساحة */
+  .bundles { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 80%; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin-inline: -16px; padding: 0 16px 6px; }
+  .bundles::-webkit-scrollbar { display: none; }
+  .bundle-card { scroll-snap-align: start; }
 }
-.bundle--featured { border-color: var(--brand-400); box-shadow: 0 10px 30px rgba(var(--shadow-rgb), .08); }
-.bundle__flag {
-  position: absolute; z-index: 1; top: -13px; right: 50%; transform: translateX(50%);
-  padding: 2px 14px; border-radius: var(--pill); background: var(--brand-700); color: var(--white); font-size: 13px; white-space: nowrap;
-}
-.bundle__img { margin: -6px -6px 16px; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--radius-sm); background: var(--tint-2); }
-.bundle__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
-.bundle:hover .bundle__img img { transform: scale(1.04); }
-.bundle h3 { font-size: 22px; }
-.bundle__count { color: var(--muted); font-size: 14px; }
-.bundle .hearts { display: grid; gap: 6px; margin: 14px 0 18px; font-size: 15px; }
-.bundle .price { margin-bottom: 4px; }
-.bundle .save { margin-bottom: 14px; }
-@media (max-width: 859px) { .bundles { grid-template-columns: 1fr; gap: 26px; } }
 
 /* ===== بانر العرض ===== */
 .promo {

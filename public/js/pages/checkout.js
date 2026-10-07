@@ -1,6 +1,6 @@
 // صفحة إتمام الطلب — الدفع عند الاستلام
 import { STORE } from '../config.js';
-import { $, $$, esc, money, img, sizeLabel, storage } from '../utils.js';
+import { $, $$, esc, money, img, sizeLabel, storage, exchangeText, piecesLabel } from '../utils.js';
 import { stockOf } from '../store/catalog.js';
 import { cart } from '../store/cart.js';
 import { createOrder } from '../store/orders.js';
@@ -119,7 +119,7 @@ function renderSummary() {
 
   $('#summary').innerHTML = `
     <div class="co-card">
-      <h2>ملخص الطلب <small>(${t.count} ${t.count === 1 ? 'قطعة' : 'قطع'})</small></h2>
+      <h2>ملخص الطلب <small>(${piecesLabel(t.count)})</small></h2>
       <div class="sum-lines">${t.rows.map(summaryLine).join('')}</div>
       ${cartSuggestions(t.total, { titles: CHECKOUT_TITLES })}
       <div class="sum-rows">
@@ -131,7 +131,7 @@ function renderSummary() {
       <button type="submit" form="coForm" class="btn btn--primary btn--block co-submit">تأكيد الطلب · ${money(grand)}</button>
       <p class="co-note">${icon('cash', 'ic--sm')} بتدفعي ${money(grand)} نقداً لما يوصلك الطلب</p>
       <ul class="co-trust">
-        <li>${icon('swap', 'ic--sm')} تبديل المقاس خلال 7 أيام</li>
+        <li>${icon('swap', 'ic--sm')} ${exchangeText()}</li>
         <li>${icon('truck', 'ic--sm')} ${zone ? `التوصيل خلال ${esc(zone.days)}` : 'توصيل لكل المناطق'}</li>
       </ul>
     </div>`;

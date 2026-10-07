@@ -1,5 +1,5 @@
 // صفحة المفضلة
-import { $ } from '../utils.js';
+import { $, piecesLabel } from '../utils.js';
 import { favorites } from '../store/favorites.js';
 import { cart } from '../store/cart.js';
 import { recommend } from '../store/recommend.js';
@@ -11,7 +11,7 @@ mountLayout();
 function render() {
   const list = favorites.products();
   $('#favSummary').textContent = list.length
-    ? `${list.length} ${list.length === 1 ? 'قطعة' : 'قطع'} محفوظة. اضغطي على القلب لتشيليها.`
+    ? `${piecesLabel(list.length)} محفوظة. اضغطي على القلب لتشيليها.`
     : '';
   $('#favGrid').innerHTML = list.length ? productGrid(list) : `
     <div class="empty-state">

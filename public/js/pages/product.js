@@ -1,7 +1,7 @@
 // صفحة المنتج (ونفس الصفحة للبكج)
 import { CATEGORIES, STORE } from '../config.js';
-import { $, $$, esc, img, money, sizeLabel, queryParam, addWorkDays, formatDay } from '../utils.js';
-import { findProduct, isBundle, sizesOf, stockOf, inStock, bundles } from '../store/catalog.js';
+import { $, $$, esc, img, money, sizeLabel, queryParam, addWorkDays, formatDay, daysLabel, exchangeText, piecesLabel } from '../utils.js';
+import { findProduct, isBundle, sizesOf, stockOf, inStock, bundles, bundleItems, bundleCount } from '../store/catalog.js';
 import { priceOf, bxgyFor } from '../store/pricing.js';
 import { cart } from '../store/cart.js';
 import { behavior } from '../store/behavior.js';
@@ -50,10 +50,17 @@ function offersHTML(p) {
   return timer + deals;
 }
 
+// محتوى البكج: كل قطعة بصورتها وكميتها، وبتفتح صفحتها
+const bundleItemHTML = (it) => {
+  const photo = it.product ? `<img src="${img(it.product.images[0], 160)}" alt="" loading="lazy">` : icon('gift');
+  const inner = `<span class="bitem__img">${photo}</span><span class="bitem__name">${esc(it.name)}</span><span class="bitem__qty">×${it.qty}</span>`;
+  return it.product ? `<a href="${productUrl(it.product)}" class="bitem">${inner}</a>` : `<div class="bitem">${inner}</div>`;
+};
+
 const contentsHTML = (p) => !isBundle(p) ? '' : `
   <div class="contents">
-    <h3>شو بيحتوي البكج؟</h3>
-    <ul class="hearts">${p.contents.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>
+    <h3>شو بيحتوي البكج؟ <small>${piecesLabel(bundleCount(p))}</small></h3>
+    <div class="bitems">${bundleItems(p).map(bundleItemHTML).join('')}</div>
   </div>`;
 
 const colorsHTML = (p) => !p.colors?.length ? '' : `
@@ -95,7 +102,7 @@ function deliveryText() {
 const PERKS = () => [
   ['truck', deliveryText()],
   ['cash', 'الدفع نقداً عند الاستلام'],
-  ['swap', 'تبديل المقاس خلال 7 أيام'],
+  ['swap', exchangeText()],
 ];
 
 // مشاركة المنتج: واتساب أولاً لأنه الأكثر استخداماً
@@ -117,7 +124,7 @@ const detailsHTML = (p) => `
   <div class="acc">
     <details open><summary>الوصف</summary><p>${esc(p.description)}</p></details>
     ${p.material ? `<details><summary>الخامة والعناية</summary><p>${esc(p.material)}</p></details>` : ''}
-    <details><summary>التوصيل والتبديل</summary><p>بنوصل لكل المناطق والدفع عند الاستلام. إذا المقاس ما زبط، بتقدري تبدليه خلال 7 أيام بشرط تكون القطعة بحالتها الأصلية وعليها التيكيت.</p></details>
+    <details><summary>التوصيل والتبديل</summary><p>بنوصل لكل المناطق والدفع عند الاستلام. إذا المقاس ما زبط، بتقدري تبدليه خلال ${daysLabel(STORE.exchangeDays)} من الاستلام، بشرط تكون القطعة بحالتها الأصلية وعليها التيكيت. التبديل على المقاس بس.</p></details>
   </div>`;
 
 const buyBarHTML = (p) => `
@@ -134,7 +141,7 @@ function setMessage(text, kind = '') {
 function showStock() {
   if (!state.size) return setMessage('');
   const n = stockOf(product, state.size);
-  if (n <= 3) setMessage(`باقي ${n} ${n === 1 ? 'قطعة' : 'قطع'} بس من هاد المقاس`, 'low');
+  if (n <= 3) setMessage(`باقي ${piecesLabel(n)} بس من هاد المقاس`, 'low');
   else setMessage('متوفر', 'ok');
 }
 
@@ -268,7 +275,7 @@ function renderExtras(p) {
         <div>
           <span class="pill pill--sale">وفّري أكثر</span>
           <h3>بتجهزي للبيبي؟ جربي ${esc(b.name)}</h3>
-          <p>${b.count} قطعة بطلب واحد${old ? `، ووفّري ${money(old - price)}` : ''}</p>
+          <p>${piecesLabel(bundleCount(b))} بطلب واحد${old ? `، ووفّري ${money(old - price)}` : ''}</p>
           ${priceTag(b)}
         </div>
       </a>
@@ -287,7 +294,7 @@ function render(p) {
     ${galleryHTML(p)}
     <div class="info">
       <h1>${esc(p.name)}</h1>
-      ${isBundle(p) ? `<p class="info__sub">${p.count} قطعة، مغلفة ومرتبة كهدية</p>` : ''}
+      ${isBundle(p) ? `<p class="info__sub">${piecesLabel(bundleCount(p))}، مغلفة ومرتبة كهدية</p>` : ''}
       ${priceTag(p, { save: true, cls: 'price--xl' })}
       ${offersHTML(p)}
       ${contentsHTML(p)}

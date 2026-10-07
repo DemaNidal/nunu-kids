@@ -27,7 +27,6 @@ export function initSlider(root, { interval = 6000 } = {}) {
       s.inert = !active; // الروابط بالشرائح المخفية ما بتنضغط
     });
     dotButtons.forEach((d, i) => d.setAttribute('aria-current', i === index));
-    root.dataset.slide = slides[index].dataset.layout || 'default'; // للتصميم حسب نوع الشريحة
   }
 
   const stop = () => clearInterval(timer);

@@ -27,7 +27,7 @@
     <a href="#about" role="tab" data-tab="about">من نحن</a>
     <a href="#size" role="tab" data-tab="size">دليل المقاسات</a>
     <a href="#shipping" role="tab" data-tab="shipping">التوصيل والدفع</a>
-    <a href="#returns" role="tab" data-tab="returns">التبديل والإرجاع</a>
+    <a href="#exchange" role="tab" data-tab="exchange">تبديل المقاس</a>
     <a href="#contact" role="tab" data-tab="contact">تواصلي معنا</a>
   </nav>
 
@@ -39,7 +39,7 @@
     </p>
     <div class="size-guide">
       <!-- نفس القطعة بأحجام متدرجة على علاقة: بتشرح المقاسات بنظرة -->
-      <div class="size-rail" id="sizeRail" role="img" aria-label="نفس الأوفرول بالمقاسات الأربعة من الأصغر للأكبر"></div>
+      <img class="size-guide__photo" src="assets/size-guide.webp" alt="نفس التيشيرت بمقاسات متدرجة من الأصغر للأكبر معلّق على علاقة" width="900" height="900" loading="lazy">
       <div>
         <div id="sizeTable"></div>
         <p class="info-note">⚠️ الأرقام تقريبية، وبتختلف شوي من قطعة لقطعة. القياسات الدقيقة لكل قطعة مكتوبة بصفحتها.</p>
@@ -91,11 +91,10 @@
     </ol>
   </section>
 
-  <!-- ===== التبديل والإرجاع ===== -->
-  <section class="info-panel" id="panel-returns" role="tabpanel" data-panel="returns" hidden>
-    <!-- ⚠️ سياسة مبدئية — راجعيها وعدليها حسب شغلك -->
-    <h2 class="info-h2">تبديل المقاس خلال 7 أيام</h2>
-    <p>إذا المقاس ما زبط، بتقدري تبدليه خلال <b>7 أيام</b> من استلام الطلب، بشرط:</p>
+  <!-- ===== تبديل المقاس ===== -->
+  <section class="info-panel" id="panel-exchange" role="tabpanel" data-panel="exchange" hidden>
+    <h2 class="info-h2" data-exchange-title></h2>
+    <p>إذا المقاس ما زبط، بتقدري تبدّلي القطعة بمقاس ثاني خلال <b data-exchange-days></b> من استلام الطلب، بشرط:</p>
     <ul class="hearts info-list">
       <li>القطعة بحالتها الأصلية، ما انلبست وما انغسلت</li>
       <li>التيكيت لسا عليها، ومع التغليف الأصلي</li>

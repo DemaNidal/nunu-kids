@@ -1,6 +1,6 @@
 // صفحة كل المنتجات: أقسام + فلاتر + ترتيب + بحث، وكلها محفوظة بالرابط
 import { CATEGORIES } from '../config.js';
-import { $, $$, esc, sizeLabel } from '../utils.js';
+import { $, $$, esc, sizeLabel, piecesLabel } from '../utils.js';
 import { liveOffers } from '../store/pricing.js';
 import { filterProducts, sortProducts, allSizes, allColors, PRICE_RANGES, SORTS } from '../store/search.js';
 import { mountLayout } from '../ui/layout.js';
@@ -116,7 +116,7 @@ function renderActive() {
 // ===== النتائج =====
 function renderResults() {
   const list = sortProducts(filterProducts(state), state.sort);
-  $('#resultCount').textContent = `${list.length} ${list.length === 1 ? 'قطعة' : 'قطع'}`;
+  $('#resultCount').textContent = piecesLabel(list.length);
   $('#showResults').textContent = `عرض النتائج (${list.length})`;
   $('#grid').innerHTML = list.length ? productGrid(list) : `
     <div class="empty-state">

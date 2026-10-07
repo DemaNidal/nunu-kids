@@ -1,8 +1,8 @@
 // الصفحة الرئيسية — أجزاء العروض بتظهر بس إذا في عرض فعّال
-import { $, esc, img, ltr, money } from '../utils.js';
+import { $, esc, img, ltr, piecesLabel } from '../utils.js';
 import { SIZES, CATEGORIES } from '../config.js';
-import { HERO_SLIDES, OFFER_SLIDE_PHOTOS, AGE_GROUPS, TRUST_POINTS, REVIEWS } from '../data/content.js';
-import { items, bundles, findProduct } from '../store/catalog.js';
+import { HERO_SLIDES, OFFER_SLIDE_PHOTO, AGE_GROUPS, TRUST_POINTS, REVIEWS } from '../data/content.js';
+import { items, bundles, bundleItems, bundleCount } from '../store/catalog.js';
 import { liveOffers, priceOf } from '../store/pricing.js';
 import { cart } from '../store/cart.js';
 import { behavior } from '../store/behavior.js';
@@ -21,12 +21,13 @@ function heroSlides() {
   if (!offer) return HERO_SLIDES;
   const onBundles = offer.target.kind === 'category' && offer.target.ids.includes('bundles');
   return [{
+    kicker: 'لفترة محدودة',
     eyebrow: offer.label || 'عرض خاص',
     title: offer.title,
-    text: 'العرض لفترة محدودة، والخصم بيتطبق تلقائياً.',
+    text: 'الخصم بيتطبق تلقائياً على السعر، وبتدفعي عند الاستلام.',
     cta: { label: 'تسوقي العرض', href: onBundles ? '#bundles' : '#new' },
     endsAt: offer.endsAt,
-    ...OFFER_SLIDE_PHOTOS,
+    photo: OFFER_SLIDE_PHOTO,
   }, ...HERO_SLIDES];
 }
 
@@ -35,46 +36,20 @@ const titleHTML = (s, i) => {
   return i ? `<h2>${t}</h2>` : `<h1>${t}</h1>`; // عنوان h1 وحيد بالصفحة
 };
 
-// شريحة "إطلالة": صورة بيبي كبيرة + نص + قطعتين من المتجر
-const editorialSlideHTML = (s, i) => {
-  const picks = s.productIds.map(findProduct).filter(Boolean);
-  return `
-  <article class="slide slide--editorial" data-layout="editorial" aria-roledescription="شريحة" aria-label="${i + 1}">
-    <div class="editorial">
-      <div class="editorial__text">
-        <span class="editorial__brand" aria-hidden="true">nunu kids</span>
-        <span class="eyebrow">${esc(s.eyebrow)}</span>
-        ${titleHTML(s, i)}
-        <a href="${s.cta.href}" class="btn btn--ghost">${esc(s.cta.label)}</a>
-        <div class="editorial__picks">
-          ${picks.map((p) => `
-            <a href="${productUrl(p)}" class="editorial__pick">
-              <img src="${img(p.images[0], 360, 420)}" alt="${esc(p.name)}" ${i ? 'loading="lazy"' : ''}>
-              <span>${esc(p.name)}</span>
-            </a>`).join('')}
-        </div>
-      </div>
-      <div class="editorial__photo">
-        <img src="${img(s.photo, 900, 1000)}" alt="" ${i ? 'loading="lazy"' : ''}>
-        <a href="${s.cta.href}" class="btn btn--primary editorial__shop">تسوقي الإطلالة</a>
-      </div>
-    </div>
-  </article>`;
-};
-
-const slideHTML = (s, i) => s.layout === 'editorial' ? editorialSlideHTML(s, i) : `
+// شريحة: صورة وحدة كبيرة بإطار ناعم، وجنبها نص فخم ومساحة فاضية
+const slideHTML = (s, i) => `
   <article class="slide" aria-roledescription="شريحة" aria-label="${i + 1}">
     <div class="container slide__inner">
-      <div class="slide__photo"><img src="${img(s.photo, 640)}" alt="" ${i ? 'loading="lazy"' : ''}></div>
+      <div class="slide__frame"><img src="${img(s.photo, 900, 820)}" alt="" ${i ? 'loading="lazy"' : ''}></div>
       <div class="slide__text">
-        <span class="slide__hearts" aria-hidden="true">♡♡</span>
-        <span class="eyebrow">${esc(s.eyebrow)}</span>
+        ${s.kicker ? `<span class="slide__kicker">${esc(s.kicker)}</span>` : ''}
+        <span class="slide__script">${esc(s.eyebrow)}</span>
         ${titleHTML(s, i)}
+        <span class="slide__rule" aria-hidden="true"></span>
         <p>${esc(s.text)}</p>
         ${s.endsAt ? countdownHTML('countdown--hero') : ''}
-        <a href="${s.cta.href}" class="btn btn--ghost">${esc(s.cta.label)}</a>
+        <a href="${s.cta.href}" class="btn btn--primary">${esc(s.cta.label)}</a>
       </div>
-      <div class="slide__polaroid"><img src="${img(s.polaroid, 420, 500)}" alt="" loading="lazy"></div>
     </div>
   </article>`;
 
@@ -126,22 +101,34 @@ function renderForYou() {
   $('#forYouGrid').innerHTML = productGrid(picks);
 }
 
-function bundleCard(b) {
-  const { price, old } = priceOf(b);
+// كرت البكج: صورة البكج كامل، وتحتها صور 3 قطع منه، والباقي "+N"
+const THUMBS = 3;
+
+function bundleCardHTML(b) {
+  const withPhotos = bundleItems(b).filter((it) => it.product);
+  const shown = withPhotos.slice(0, THUMBS);
+  const rest = bundleItems(b).length - shown.length;
   return `
-    <article class="bundle ${b.featured ? 'bundle--featured' : ''}">
-      ${b.featured ? '<span class="bundle__flag">الأكثر طلباً</span>' : ''}
-      <a href="${productUrl(b)}" class="bundle__img"><img src="${img(b.images[0], 700, 440)}" alt="${esc(b.name)}" loading="lazy"></a>
-      <h3><a href="${productUrl(b)}">${esc(b.name)}</a></h3>
-      <span class="bundle__count">${b.count} قطعة</span>
-      <ul class="hearts">${b.contents.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>
-      ${priceTag(b, { cls: 'price--lg' })}
-      <span class="save ${old ? '' : 'save--empty'}">${old ? `وفّري ${money(old - price)}` : ''}</span>
-      <a href="${productUrl(b)}" class="btn ${b.featured ? 'btn--primary' : 'btn--ghost'} btn--block">اختاري البكج</a>
-    </article>`;
+    <a href="${productUrl(b)}" class="bundle-card">
+      <span class="bundle-card__main">
+        <img src="${img(b.images[0], 800, 600)}" alt="${esc(b.name)}" loading="lazy">
+        ${b.featured ? '<span class="bundle-card__flag">الأكثر طلباً</span>' : ''}
+      </span>
+      <span class="bundle-card__items">
+        ${shown.map((it) => `<span title="${esc(it.label)}"><img src="${img(it.product.images[0], 200)}" alt="${esc(it.label)}" loading="lazy"></span>`).join('')}
+        ${rest > 0 ? `<span class="bundle-card__more">+${rest}</span>` : ''}
+      </span>
+      <span class="bundle-card__info">
+        <h3>${esc(b.name)}</h3>
+        <small>${piecesLabel(bundleCount(b))}</small>
+      </span>
+      ${priceTag(b)}
+    </a>`;
 }
 
-const renderBundles = () => { $('#bundleGrid').innerHTML = bundles().map(bundleCard).join(''); };
+function renderBundles() {
+  $('#bundleGrid').innerHTML = bundles().map(bundleCardHTML).join('');
+}
 
 function renderPromo() {
   const offer = liveOffers().find((o) => o.banner);
