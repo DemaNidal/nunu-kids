@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>إتمام الطلب | NUNU KIDS</title>
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3EFEC">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/components.css">
@@ -27,16 +28,41 @@
     <form class="co-form" id="coForm" novalidate>
       <section class="co-card">
         <h2><span class="step">1</span> معلوماتك</h2>
-        <div class="field">
-          <label for="fName">الاسم الكامل</label>
-          <input id="fName" name="name" autocomplete="name" placeholder="مثلاً: سارة أحمد" required>
-          <p class="field__err"></p>
+        <div class="field-row">
+          <div class="field">
+            <label for="fFirst">الاسم الأول <small>(بالعربي)</small></label>
+            <input id="fFirst" name="firstName" autocomplete="given-name" lang="ar" dir="rtl" placeholder="مثلاً: سارة" required>
+            <p class="field__err"></p>
+          </div>
+          <div class="field">
+            <label for="fLast">اسم العائلة <small>(بالعربي)</small></label>
+            <input id="fLast" name="lastName" autocomplete="family-name" lang="ar" dir="rtl" placeholder="مثلاً: أحمد" required>
+            <p class="field__err"></p>
+          </div>
         </div>
+        <p class="field__hint field__hint--top">اكتبي الاسم بالعربي، لأنه هيك بينكتب عالكيس وبيشوفه المندوب.</p>
         <div class="field">
-          <label for="fPhone">رقم الموبايل</label>
-          <input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="05X XXX XXXX" required>
-          <p class="field__hint">رح نتصل فيكِ على هاد الرقم لتأكيد الطلب</p>
+          <label for="fPhone">رقم الهاتف <small>(متل ما هو على واتساب)</small></label>
+          <div class="phone" id="phoneBox">
+            <select name="prefix" id="fPrefix" aria-label="مقدمة الدولة" dir="ltr">
+              <option value="970">+970</option>
+              <option value="972">+972</option>
+            </select>
+            <input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" dir="ltr" placeholder="05X XXX XXXX" required>
+            <button type="button" class="phone__help" id="phoneHelp" aria-expanded="false" aria-controls="phoneTip" aria-label="شو المقدمة الصح؟">?</button>
+          </div>
+          <p class="phone__tip" id="phoneTip" hidden>
+            اختاري المقدمة متل ما رقمك مسجّل على واتساب:<br>
+            <b dir="ltr">+970</b> لأرقام جوال وأوريدو (059، 056) ·
+            <b dir="ltr">+972</b> للأرقام الإسرائيلية (050، 052، 053، 054، 055، 058).<br>
+            منختارها لحالها من أول أرقام رقمك، وبتقدري تغيّريها.
+          </p>
           <p class="field__err"></p>
+          <label class="wa-ok">
+            <input type="checkbox" name="whatsappOk" checked>
+            <span class="wa-ok__box" aria-hidden="true"></span>
+            ستصلك رسالة عبر الواتساب لتأكيد طلبك
+          </label>
         </div>
       </section>
 
@@ -48,13 +74,18 @@
           <p class="field__err" id="zoneErr"></p>
         </div>
         <div class="field">
-          <label for="fCity">المدينة أو القرية</label>
-          <input id="fCity" name="city" autocomplete="address-level2" placeholder="مثلاً: رام الله" required>
+          <label for="fArea">القرية / المخيم / المنطقة</label>
+          <input id="fArea" name="area" autocomplete="address-level3" placeholder="مثلاً: بيرزيت، مخيم الجلزون، الطيرة" required>
           <p class="field__err"></p>
         </div>
         <div class="field">
           <label for="fAddress">العنوان بالتفصيل</label>
           <input id="fAddress" name="address" autocomplete="street-address" placeholder="الحي، الشارع، أقرب معلم" required>
+          <p class="field__err"></p>
+        </div>
+        <div class="field">
+          <label for="fCity">المدينة</label>
+          <input id="fCity" name="city" autocomplete="address-level2" placeholder="مثلاً: رام الله" required>
           <p class="field__err"></p>
         </div>
         <div class="field">

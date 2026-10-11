@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>العروض والكوبونات | لوحة تحكم NUNU KIDS</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F3EFEC">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/admin.css">
+<script type="module" src="../js/admin/offers.js"></script>
+</head>
+<body class="admin">
+
+<main class="adm-main">
+  <div class="adm-head">
+    <div>
+      <span class="eyebrow" id="summary"></span>
+      <h1>العروض والكوبونات</h1>
+    </div>
+    <button type="button" class="btn btn--primary btn--sm" id="addBtn">+ عرض جديد</button>
+  </div>
+
+  <div class="adm-tabs adm-tabs--page" role="tablist" aria-label="النوع">
+    <button type="button" role="tab" data-tab="offers" aria-selected="true">العروض <span id="offersCount"></span></button>
+    <button type="button" role="tab" data-tab="coupons" aria-selected="false">كوبونات الخصم <span id="couponsCount"></span></button>
+  </div>
+  <p class="tab-hint" id="tabHint"></p>
+
+  <div class="olist-cards" id="list"></div>
+</main>
+
+<!-- نموذج الإضافة / التعديل -->
+<div class="adm-scrim" id="odScrim"></div>
+<aside class="od od--form" id="od" aria-label="نموذج"></aside>
+
+</body>
+</html>

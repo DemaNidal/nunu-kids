@@ -43,7 +43,6 @@
 .price b { font-size: 19px; }
 .price s { color: var(--muted); font-size: 14px; }
 .price--sale b { color: var(--mauve); }
-.price--lg b { font-family: var(--font-head); font-size: 28px; }
 .price--xl { align-items: center; gap: 10px; margin: 12px 0 16px; }
 .price--xl b { font-family: var(--font-head); font-size: 34px; line-height: 1; }
 .price--xl s { font-size: 18px; }
@@ -53,21 +52,11 @@
   display: inline-block; align-self: flex-start; padding: 2px 12px; border-radius: var(--pill);
   background: var(--tint-2); color: var(--navy); font-weight: 700; font-size: 14px;
 }
-.save--empty { visibility: hidden; }
 
 /* ===== العدّاد التنازلي ===== */
 .countdown { display: flex; justify-content: center; gap: 10px; }
 .countdown__unit { display: flex; flex-direction: column; align-items: center; }
 .countdown b { font-family: var(--font-head); line-height: 1.1; }
-
-/* شفاف فوق الصور (البانر) */
-.countdown--glass .countdown__unit {
-  min-width: 66px; padding: 8px 6px; border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, .18); border: 1px solid rgba(255, 255, 255, .45); backdrop-filter: blur(6px);
-}
-.countdown--glass b { font-size: 26px; }
-.countdown--glass span { font-size: 12px; opacity: .9; }
-@media (max-width: 859px) { .countdown--glass .countdown__unit { min-width: 58px; } }
 
 /* صغير بسطر وحدة (صفحة المنتج) */
 .countdown--mini { flex-wrap: wrap; justify-content: flex-start; gap: 4px 8px; }

@@ -42,13 +42,15 @@
   --pill: 999px;
 
   --font-head: 'Markazi Text', serif;                   /* العناوين: راقي متل المجلات */
-  --font-script: 'Aref Ruqaa', serif;               /* سطر بخط اليد فوق العناوين */
+  --font-script: 'El Messiri', serif;               /* السطر الصغير الناعم فوق العناوين */
   --font-body: 'IBM Plex Sans Arabic', system-ui, sans-serif;
 }
 
 /* ===== Reset ===== */
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+:focus-visible { outline: 2px solid var(--brand-500); outline-offset: 2px; }
+
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -88,8 +90,6 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1
 .btn--ghost:hover { background: var(--navy); color: var(--white); }
 .btn--light { background: var(--white); color: var(--navy); }
 .btn--light:hover { background: var(--brand-100); }
-.btn--outline-light { border-color: currentColor; color: var(--white); background: transparent; }
-.btn--outline-light:hover { background: rgba(255, 255, 255, .15); }
 .btn--block { width: 100%; }
 .btn--sm { padding: 8px 14px; font-size: 14px; }
 
@@ -129,7 +129,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 600; line-height: 1
 .section__head--row { display: flex; justify-content: space-between; align-items: end; text-align: start; gap: 12px; }
 
 /* سطر بخط اليد فوق العنوان */
-.eyebrow { display: block; font-family: var(--font-script); font-size: clamp(18px, 2.2vw, 22px); color: var(--brand-600); line-height: 1.4; }
+.eyebrow { display: block; font-family: var(--font-script); font-size: clamp(15px, 1.7vw, 18px); letter-spacing: .02em; color: var(--brand-500); line-height: 1.5; }
 
 @media (max-width: 859px) { .section { padding: 44px 0; } }
 

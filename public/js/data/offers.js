@@ -3,14 +3,13 @@
 //
 // type:   'percent' خصم نسبة | 'fixed' خصم مبلغ | 'bxgy' اشتري X وخذي Y
 // target: { kind: 'all' } | { kind: 'category', ids: [...] } | { kind: 'products', ids: [...] }
-// hero:   بيظهر بالبانر الرئيسي (مع عداد إذا إله endsAt)
 // banner: بيظهر كبانر بالصفحة الرئيسية
 
 export const OFFERS = [
   {
     id: 'o1', active: true, label: 'عرض الأسبوع', title: 'خصم 20% على كل بكجات تجهيز المولود',
     type: 'percent', value: 20, target: { kind: 'category', ids: ['bundles'] },
-    startsAt: null, endsAt: '2026-10-09T23:59:00', hero: true,
+    startsAt: null, endsAt: '2026-10-09T23:59:00',
   },
   {
     id: 'o2', active: true, label: 'عرض خاص', title: 'اشتري 3 قطع داخلي والرابعة علينا',

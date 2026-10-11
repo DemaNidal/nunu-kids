@@ -12,3 +12,6 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+
+# صور المنتجات المرفوعة من لوحة الأدمن (لاحقاً Cloudinary)
+public/uploads/

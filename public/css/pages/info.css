@@ -22,6 +22,9 @@
 .info-lead { max-width: 760px; margin: 0 auto 28px; text-align: center; color: var(--muted); font-size: 16px; }
 .info-h1 { font-size: clamp(32px, 4vw, 44px); margin-bottom: 12px; }
 .info-h2 { font-size: 24px; margin: 32px 0 12px; }
+.info-h3 { font-size: 19px; margin: 24px 0 8px; color: var(--navy); }
+#panel-privacy p { color: var(--muted); }
+#panel-privacy a { color: var(--brand-700); text-decoration: underline; }
 .info-note { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 .info-list { display: grid; gap: 8px; margin: 12px 0; }
 .info-steps { display: grid; gap: 8px; padding-inline-start: 22px; margin: 0; }
@@ -67,3 +70,11 @@
   .info-help { flex-direction: column; text-align: center; }
   .contact-cards { grid-template-columns: 1fr; }
 }
+
+/* ===== نصائح للأمهات ===== */
+.tip-articles { display: grid; gap: 28px; margin-top: 18px; }
+.tip-article { padding-bottom: 24px; border-bottom: 1px solid var(--line); }
+.tip-article:last-child { border-bottom: 0; }
+.tip-article img { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; border-radius: var(--radius); margin-bottom: 14px; }
+.tip-article h3 { margin: 0 0 8px; font-size: 22px; }
+.tip-article p { margin: 0 0 8px; color: var(--muted); }

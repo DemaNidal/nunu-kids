@@ -1,5 +1,7 @@
-// الوصول للمنتجات
-import { PRODUCTS } from '../data/products.js';
+// الوصول للمنتجات (الظاهرة بالمتجر بس)
+import { REMOTE } from './remote.js';
+
+const PRODUCTS = REMOTE.products.filter((p) => p.visible !== false);
 
 export const allProducts = () => PRODUCTS;
 export const findProduct = (id) => PRODUCTS.find((p) => p.id === Number(id));

@@ -5,10 +5,27 @@
   "description": "NUNU KIDS — متجر ملابس المواليد",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "node --env-file-if-exists=.env server/index.js",
+    "dev": "node --env-file-if-exists=.env --watch server/index.js",
+    "db:migrate": "prisma migrate dev",
+    "postdb:migrate": "prisma generate",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "node --env-file-if-exists=.env prisma/seed.js",
+    "db:studio": "prisma studio",
+    "admin:password": "node --env-file-if-exists=.env server/scripts/set-password.js",
+    "postinstall": "prisma generate"
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
+    "bcryptjs": "^3.0.3",
+    "express": "^5.3.0",
+    "zod": "^4.6.6"
+  },
+  "devDependencies": {
+    "prisma": "7.10.0"
   }
 }

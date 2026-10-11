@@ -8,10 +8,19 @@ const listeners = new Set();
 
 // كل سطر: { id, size, color, qty }
 // عند التحميل: بنشيل المنتجات المحذوفة، وبنقلل الكمية إذا المخزون نزل بعد ما انضافت
-let lines = storage.get(KEY, [])
+const load = () => storage.get(KEY, [])
   .filter((l) => l && l.size && findProduct(l.id))
   .map((l) => ({ ...l, qty: Math.min(l.qty, stockOf(findProduct(l.id), l.size)) }))
   .filter((l) => l.qty > 0);
+
+let lines = load();
+
+// تغيّرت السلة بتبويب تاني؟ منحدّث هون كمان
+window.addEventListener('storage', (e) => {
+  if (e.key !== KEY) return;
+  lines = load();
+  listeners.forEach((fn) => fn({ type: 'sync' }));
+});
 
 function commit(event) {
   storage.set(KEY, lines);

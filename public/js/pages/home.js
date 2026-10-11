@@ -1,80 +1,56 @@
 // الصفحة الرئيسية — أجزاء العروض بتظهر بس إذا في عرض فعّال
-import { $, esc, img, ltr, piecesLabel } from '../utils.js';
-import { SIZES, CATEGORIES } from '../config.js';
-import { HERO_SLIDES, OFFER_SLIDE_PHOTO, AGE_GROUPS, TRUST_POINTS, REVIEWS } from '../data/content.js';
+import { $, esc, img, ltr, money, piecesLabel, daysLabel, exchangeText } from '../utils.js';
+import { STORE, SIZES, CATEGORIES } from '../config.js';
+import { HERO, AGE_GROUPS, REVIEWS } from '../data/content.js';
 import { items, bundles, bundleItems, bundleCount } from '../store/catalog.js';
-import { liveOffers, priceOf } from '../store/pricing.js';
+import { liveOffers } from '../store/pricing.js';
 import { cart } from '../store/cart.js';
 import { behavior } from '../store/behavior.js';
 import { recommend } from '../store/recommend.js';
 import { mountLayout } from '../ui/layout.js';
-import { initSlider } from '../ui/slider.js';
 import { icon } from '../ui/icons.js';
-import { productGrid, productUrl, priceTag, countdownHTML, startCountdown } from '../ui/components.js';
+import { productGrid, productUrl, priceTag } from '../ui/components.js';
 
 mountLayout();
 
-// ===== البانر الرئيسي (سلايدر) =====
-// العرض الفعّال (إذا في) بيصير أول شريحة، ومعه عدّاد
-function heroSlides() {
-  const offer = liveOffers().find((o) => o.hero);
-  if (!offer) return HERO_SLIDES;
-  const onBundles = offer.target.kind === 'category' && offer.target.ids.includes('bundles');
-  return [{
-    kicker: 'لفترة محدودة',
-    eyebrow: offer.label || 'عرض خاص',
-    title: offer.title,
-    text: 'الخصم بيتطبق تلقائياً على السعر، وبتدفعي عند الاستلام.',
-    cta: { label: 'تسوقي العرض', href: onBundles ? '#bundles' : '#new' },
-    endsAt: offer.endsAt,
-    photo: OFFER_SLIDE_PHOTO,
-  }, ...HERO_SLIDES];
-}
-
-const titleHTML = (s, i) => {
-  const t = esc(s.title).replace('\n', '<br>');
-  return i ? `<h2>${t}</h2>` : `<h1>${t}</h1>`; // عنوان h1 وحيد بالصفحة
-};
-
-// شريحة: صورة وحدة كبيرة بإطار ناعم، وجنبها نص فخم ومساحة فاضية
-const slideHTML = (s, i) => `
-  <article class="slide" aria-roledescription="شريحة" aria-label="${i + 1}">
-    <div class="container slide__inner">
-      <div class="slide__frame"><img src="${img(s.photo, 900, 820)}" alt="" ${i ? 'loading="lazy"' : ''}></div>
-      <div class="slide__text">
-        ${s.kicker ? `<span class="slide__kicker">${esc(s.kicker)}</span>` : ''}
-        <span class="slide__script">${esc(s.eyebrow)}</span>
-        ${titleHTML(s, i)}
-        <span class="slide__rule" aria-hidden="true"></span>
-        <p>${esc(s.text)}</p>
-        ${s.endsAt ? countdownHTML('countdown--hero') : ''}
-        <a href="${s.cta.href}" class="btn btn--primary">${esc(s.cta.label)}</a>
-      </div>
-    </div>
-  </article>`;
-
+// ===== البانر الرئيسي: الشعار + نص، صورة الأواعي الكبيرة، وتحت كروت الأقسام =====
 function renderHero() {
-  const slides = heroSlides();
-  $('#heroSlides').innerHTML = slides.map(slideHTML).join('');
-  slides.forEach((s, i) => {
-    if (s.endsAt) startCountdown($(`#heroSlides .slide:nth-child(${i + 1}) .countdown`), s.endsAt);
-  });
-  initSlider($('#offers'));
+  $('#heroInner').innerHTML = `
+    <div class="hero__text">
+      <img class="hero__logo" src="assets/logo.png" alt="" width="150" height="90">
+      <h1>${esc(HERO.title).replace('\n', '<br>')}</h1>
+      <p>${esc(HERO.text)}</p>
+      <a href="${HERO.cta.href}" class="btn btn--primary hero__btn">${esc(HERO.cta.label)}</a>
+    </div>
+    <div class="hero__photo">
+      <img src="${HERO.image}" alt="لفّة مولود مع طاقية بلون أخضر ناعم" width="1100" height="968" fetchpriority="high">
+    </div>`;
+  $('#heroCats').innerHTML = HERO.cats.map((c) => `
+    <a href="shop.html?cat=${c.cat}" class="hero-cat">
+      <img src="${img(c.photo, 360, 280)}" alt="" loading="lazy">
+      <span>${esc(c.label || CATEGORIES[c.cat])}</span>
+    </a>`).join('');
 }
 
-function renderTrust() {
-  $('#trust').innerHTML = TRUST_POINTS.map((t) => `
-    <div class="trust__item">
-      ${icon(t.icon)}
-      <div><b>${esc(t.text)}</b><small>${esc(t.desc)}</small></div>
-    </div>`).join('');
-}
+// كرت ملوّن: أيقونة بالزاوية، وتحت عنوان ونص (متل كروت Banny&Me)
+const colorCardHTML = (c) => `
+  <${c.href ? `a href="${c.href}"` : 'div'} class="c-card c-card--${c.tone}">
+    <span class="c-card__ic">${icon(c.icon)}</span>
+    <h3>${esc(c.title)}</h3>
+    <p>${esc(c.text)}</p>
+    ${c.href ? '<span class="c-card__more">التفاصيل</span>' : ''}
+  </${c.href ? 'a' : 'div'}>`;
 
-// مربعات الأقسام بإطار، بدرجات اللون الطاغي
-function renderTypes() {
-  $('#typesGrid').innerHTML = Object.entries(CATEGORIES)
-    .map(([key, name]) => `<a href="shop.html?cat=${key}" class="tile tile--${key}"><span>${esc(name)}</span></a>`)
-    .join('');
+// ليش نونو كيدز — نصوص التوصيل والتبديل من الإعدادات عشان تضل متطابقة مع صفحة المعلومات والسلة
+function renderWhy() {
+  const minFee = Math.min(...STORE.shippingZones.map((z) => z.fee));
+  const { min, max } = STORE.deliveryDays;
+  $('#whyCards').innerHTML = [
+    { icon: 'leaf', tone: 'sand', title: 'قطن ناعم 100%', text: 'خامات لطيفة بتتنفس، ما بتهيّج بشرة المولود الحساسة.' },
+    { icon: 'cash', tone: 'deep', title: 'الدفع عند الاستلام', text: 'بتدفعي نقداً للمندوب لما يوصلك الطلب وتشوفيه بعينك.', href: 'info.html#shipping' },
+    { icon: 'truck', tone: 'rose', title: 'توصيل لكل المناطق', text: `خلال ${min}–${max} أيام عمل، والتوصيل من ${money(minFee)}.`, href: 'info.html#shipping' },
+    { icon: 'swap', tone: 'pink', title: exchangeText(), text: `إذا المقاس ما زبط، منبدله خلال ${daysLabel(STORE.exchangeDays)} من الاستلام.`, href: 'info.html#exchange' },
+  ].map(colorCardHTML).join('');
 }
 
 function renderAges() {
@@ -91,7 +67,7 @@ function renderAges() {
   }).join('');
 }
 
-const renderNew = () => { $('#newGrid').innerHTML = productGrid(items().filter((p) => p.isNew).slice(0, 8)); };
+const renderNew = () => { $('#newGrid').innerHTML = productGrid(items().filter((p) => p.isNew).slice(0, 4)); };
 
 function renderForYou() {
   if (behavior.viewCount() < 2) return;
@@ -101,33 +77,37 @@ function renderForYou() {
   $('#forYouGrid').innerHTML = productGrid(picks);
 }
 
-// كرت البكج: صورة البكج كامل، وتحتها صور 3 قطع منه، والباقي "+N"
+// البكجات بصفوف متناوبة: صورة بجهة ونص بالجهة التانية (وعالجوال الصورة بتطلع لطرف الشاشة بشكل نص دائرة)
+// تحت الوصف صور 3 قطع من البكج، والباقي "+N"
 const THUMBS = 3;
 
-function bundleCardHTML(b) {
-  const withPhotos = bundleItems(b).filter((it) => it.product);
-  const shown = withPhotos.slice(0, THUMBS);
-  const rest = bundleItems(b).length - shown.length;
+function bundleRowHTML(b) {
+  const list = bundleItems(b);
+  const shown = list.filter((it) => it.product).slice(0, THUMBS);
+  const rest = list.length - shown.length;
+  const url = productUrl(b);
   return `
-    <a href="${productUrl(b)}" class="bundle-card">
-      <span class="bundle-card__main">
-        <img src="${img(b.images[0], 800, 600)}" alt="${esc(b.name)}" loading="lazy">
-        ${b.featured ? '<span class="bundle-card__flag">الأكثر طلباً</span>' : ''}
-      </span>
-      <span class="bundle-card__items">
-        ${shown.map((it) => `<span title="${esc(it.label)}"><img src="${img(it.product.images[0], 200)}" alt="${esc(it.label)}" loading="lazy"></span>`).join('')}
-        ${rest > 0 ? `<span class="bundle-card__more">+${rest}</span>` : ''}
-      </span>
-      <span class="bundle-card__info">
-        <h3>${esc(b.name)}</h3>
-        <small>${piecesLabel(bundleCount(b))}</small>
-      </span>
-      ${priceTag(b)}
-    </a>`;
+    <article class="bundle-row">
+      <a href="${url}" class="bundle-row__img" tabindex="-1" aria-hidden="true">
+        <img src="${img(b.images[0], 900, 700)}" alt="" loading="lazy">
+        ${b.featured ? '<span class="bundle-row__flag">الأكثر طلباً</span>' : ''}
+      </a>
+      <div class="bundle-row__text">
+        <h3><a href="${url}">${esc(b.name)}</a></h3>
+        <small class="bundle-row__count">${piecesLabel(bundleCount(b))}</small>
+        <p>${esc(b.description)}</p>
+        <span class="bundle-row__items">
+          ${shown.map((it) => `<span title="${esc(it.label)}"><img src="${img(it.product.images[0], 160)}" alt="${esc(it.label)}" loading="lazy"></span>`).join('')}
+          ${rest > 0 ? `<span class="bundle-row__more">+${rest}</span>` : ''}
+        </span>
+        ${priceTag(b)}
+        <a href="${url}" class="btn bundle-row__btn">التفاصيل</a>
+      </div>
+    </article>`;
 }
 
 function renderBundles() {
-  $('#bundleGrid').innerHTML = bundles().map(bundleCardHTML).join('');
+  $('#bundleGrid').innerHTML = bundles().map(bundleRowHTML).join('');
 }
 
 function renderPromo() {
@@ -155,7 +135,7 @@ function renderReviews() {
 }
 
 // كل قسم لحاله: إذا قسم واحد صار فيه خطأ، باقي الصفحة بتضل تظهر
-[renderHero, renderTrust, renderNew, renderTypes, renderAges, renderForYou, renderBundles, renderPromo, renderReviews]
+[renderHero, renderNew, renderBundles, renderAges, renderForYou, renderPromo, renderWhy, renderReviews]
   .forEach((render) => {
     try { render(); } catch (err) { console.error(`خطأ بقسم ${render.name}:`, err); }
   });

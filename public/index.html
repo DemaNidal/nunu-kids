@@ -5,11 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NUNU KIDS | ملابس المواليد</title>
 <meta name="description" content="نونو كيدز: ملابس المواليد من الولادة حتى عمر سنة، وبكجات تجهيز البيبي. الدفع عند الاستلام.">
+<meta name="theme-color" content="#F3EFEC">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="NUNU KIDS">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:title" content="NUNU KIDS | ملابس المواليد">
+<meta property="og:description" content="ملابس المواليد من الولادة حتى عمر سنة، وبكجات تجهيز البيبي. الدفع عند الاستلام.">
+<meta property="og:image" content="assets/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/layout.css">
 <link rel="stylesheet" href="css/components.css">
@@ -20,29 +28,23 @@
 <body class="page-home">
 
 <main>
-  <!-- البانر الرئيسي: شرائح بتتحرك -->
-  <section class="hero" id="offers" aria-roledescription="سلايدر" aria-label="العروض والمجموعات">
-    <div class="hero__slides" id="heroSlides"></div>
-    <button type="button" class="hero__arrow hero__arrow--prev" data-prev aria-label="الشريحة السابقة">›</button>
-    <button type="button" class="hero__arrow hero__arrow--next" data-next aria-label="الشريحة الجاية">‹</button>
-    <div class="slider__dots"></div>
-
-    <!-- أغصان ناعمة للزينة -->
-    <svg class="hero__sprig hero__sprig--a" aria-hidden="true"><use href="#sprig"/></svg>
-    <svg class="hero__sprig hero__sprig--b" aria-hidden="true"><use href="#sprig"/></svg>
-    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-      <symbol id="sprig" viewBox="0 0 120 120">
-        <path class="sprig__stem" d="M8 114C40 84 72 50 112 8"/>
-        <path d="M35 85C22 83 14 74 13 62C26 64 34 72 35 85Z M35 85C37 72 45 64 58 63C57 75 48 83 35 85Z M60 58C47 56 39 47 38 35C51 37 59 45 60 58Z M60 58C62 45 70 37 83 36C82 48 73 56 60 58Z M86 31C77 27 73 19 73 11C82 14 87 22 86 31Z M86 31C90 23 98 19 107 19C103 28 95 32 86 31Z"/>
-      </symbol>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="d-pacifier" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="2.8"/><path d="M4.5 12c0-1.7 3.4-3.4 7.5-3.4s7.5 1.7 7.5 3.4-3.4 3.4-7.5 3.4-7.5-1.7-7.5-3.4z"/><path d="M10 15.3c0 3.2 1 5.2 2 5.2s2-2 2-5.2"/></symbol>
+    <symbol id="d-pin" viewBox="0 0 24 24"><path d="M4.5 19.5c-1.6-1.6-.2-4 1.7-2.6L17 6.1"/><path d="M6.4 20.6 18.2 8.8a2.4 2.4 0 0 0-3.4-3.4"/><circle cx="5.3" cy="18.7" r="1.4"/></symbol>
+  </svg>
+  <!-- البانر الرئيسي (متل Banny&Me): خلفية رملية، موجة كريمية، صورة كبيرة للأواعي، نص، وتحته الأقسام -->
+  <section class="hero" aria-label="نونو كيدز">
+    <svg class="hero__cream" viewBox="0 0 1440 800" preserveAspectRatio="none" aria-hidden="true">
+      <path class="hero__cream-wide" d="M1440 300C1310 270 1180 330 1080 400S860 470 700 455 420 520 300 600 80 650 0 640V800H1440Z"/>
+      <path class="hero__cream-narrow" d="M1440 360C1250 320 1080 420 860 430S420 470 0 400V800H1440Z"/>
     </svg>
-  </section>
-
-  <section class="trust">
-    <div class="container">
-      <p class="trust__title">كل قطعة اخترناها بحب، عشان بيبيك يرتاح وإنتِ تطمّني</p>
-      <div class="trust__row" id="trust"></div>
-    </div>
+    <div class="container hero__inner" id="heroInner"></div>
+    <div class="container hero__cats" id="heroCats"></div>
+    <!-- رسومات صغيرة للزينة -->
+    <svg class="hero__leaf" viewBox="0 0 64 64" aria-hidden="true"><path d="M8 58C22 42 36 26 58 6"/><path d="M24 42c-9-1-14-7-14-15 9 1 14 7 14 15zM24 42c1-9 7-14 15-14-1 8-7 13-15 14zM40 26c-8-2-12-8-11-15 8 2 12 8 11 15zM40 26c2-8 8-12 15-11-2 8-8 12-15 11z"/></svg>
+    <svg class="hero__wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 52C180 92 360 96 560 70S920 4 1120 14s260 46 320 62V90H0Z"/>
+    </svg>
   </section>
 
   <section class="section" id="new">
@@ -55,10 +57,14 @@
     </div>
   </section>
 
-  <section class="section section--tint" id="types">
+  <section class="section" id="bundles">
     <div class="container">
-      <div class="section__head"><span class="eyebrow">اكتشفي مجموعاتنا</span><h2>تسوقي حسب النوع</h2></div>
-      <div class="tiles" id="typesGrid"></div>
+      <div class="section__head">
+        <span class="eyebrow">فخر نونو كيدز</span>
+        <h2>بكجات تجهيز البيبي <svg class="doodle" aria-hidden="true"><use href="#d-pacifier"/></svg></h2>
+        <p>كل اللي بتحتاجيه للبيبي، وبسعر أقل من شراء كل قطعة لحالها</p>
+      </div>
+      <div class="bundles" id="bundleGrid"></div>
     </div>
   </section>
 
@@ -83,19 +89,19 @@
     </div>
   </section>
 
-  <section class="section" id="bundles">
-    <div class="container">
-      <div class="section__head">
-        <span class="eyebrow">كل شي بطلب واحد</span>
-        <h2>بكجات تجهيز البيبي</h2>
-        <p>كل اللي بتحتاجيه للبيبي، وبسعر أقل من شراء كل قطعة لحالها</p>
-      </div>
-      <div class="bundles" id="bundleGrid"></div>
-    </div>
-  </section>
-
   <!-- بيظهر بس إذا في عرض فعّال محدد كـ banner -->
   <section class="container" id="promo" hidden></section>
+
+  <!-- ليش نونو كيدز: 4 كروت ملوّنة على شريط كريمي بحواف موجة -->
+  <section class="section wave-band" id="why">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">ليش نونو كيدز</span>
+        <h2>راحة بيبيك وراحتك <svg class="doodle" aria-hidden="true"><use href="#d-pin"/></svg></h2>
+      </div>
+      <div class="c-cards" id="whyCards"></div>
+    </div>
+  </section>
 
   <section class="section">
     <div class="container">

@@ -4,7 +4,15 @@ import { findProduct } from './catalog.js';
 
 const KEY = 'nunu_favorites';
 const listeners = new Set();
-let ids = storage.get(KEY, []).filter((id) => findProduct(id));
+const load = () => storage.get(KEY, []).filter((id) => findProduct(id));
+let ids = load();
+
+// تغيّرت المفضلة بتبويب تاني؟ منحدّث هون كمان
+window.addEventListener('storage', (e) => {
+  if (e.key !== KEY) return;
+  ids = load();
+  listeners.forEach((fn) => fn({ id: null, added: false }));
+});
 
 export const favorites = {
   has: (id) => ids.includes(Number(id)),

@@ -18,9 +18,12 @@ export const sizeLabel = (key) => {
   return s.range ? `${ltr(s.range)} ${s.unit}` : s.unit;
 };
 
-// الصور مؤقتاً من Unsplash — لاحقاً من Cloudinary
+// الصورة: رقم صورة Unsplash (مؤقت)، أو رابط كامل / صورة مرفوعة (data:) بتنعرض متل ما هي.
+// لاحقاً روابط Cloudinary بتنعرض بنفس الطريقة.
 export const img = (id, w = 600, h = w) =>
-  `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=70`;
+  /^(https?:|data:|blob:|\/)/.test(id)
+    ? id
+    : `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=70`;
 
 // localStorage آمن (ممكن يكون مقفول بالتصفح الخاص)
 export const storage = {
@@ -28,7 +31,7 @@ export const storage = {
     try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
   },
   set(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* تجاهل */ }
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { return false; }
   },
 };
 
@@ -42,6 +45,32 @@ export const piecesLabel = (n) => (n === 1 ? 'قطعة وحدة' : n === 2 ? 'ق
 
 // جملة التبديل الموحّدة بكل الموقع
 export const exchangeText = () => `تبديل المقاس خلال ${daysLabel(STORE.exchangeDays)}`;
+
+// أرقام الجوال بالصيغة الدولية متل واتساب: 970 (جوال، أوريدو) أو 972 (أرقام إسرائيلية)
+// "972541234567" ← "+972 54 123 4567"
+export const phoneDisplay = (p) => {
+  const m = /^(970|972)(\d{2})(\d{3})(\d{4})$/.exec(String(p || ''));
+  return m ? `+${m[1]} ${m[2]} ${m[3]} ${m[4]}` : String(p || '');
+};
+
+// نسخ نص: الطريقة الحديثة بتشتغل بس على https أو localhost،
+// فإذا مش متاحة (مثلاً فتحتي الموقع من الموبايل على http://192.168...) منستعمل الطريقة القديمة
+export async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try { await navigator.clipboard.writeText(text); return true; } catch { /* نجرب الطريقة القديمة */ }
+  }
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
+  document.body.append(ta);
+  ta.select();
+  ta.setSelectionRange(0, text.length); // iPhone
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch { ok = false; }
+  ta.remove();
+  return ok;
+}
 
 // تاريخ بعد عدد أيام عمل (بدون أيام العطلة)
 export function addWorkDays(from, days) {

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منتج | لوحة تحكم NUNU KIDS</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F3EFEC">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/admin.css">
+<script type="module" src="../js/admin/product-edit.js"></script>
+</head>
+<body class="admin">
+
+<main class="adm-main adm-main--form">
+  <a href="products.html" class="adm-back">› كل المنتجات</a>
+  <div class="adm-head">
+    <div>
+      <span class="eyebrow" id="formEyebrow">منتج جديد</span>
+      <h1 id="formTitle">إضافة منتج</h1>
+    </div>
+    <a href="#" class="btn btn--sm btn--ghost" id="viewInShop" target="_blank" rel="noopener" hidden>عرض بالمتجر</a>
+  </div>
+
+  <form class="pform" id="pform" novalidate>
+    <div class="pform__main">
+      <!-- الأساسيات -->
+      <section class="ocard">
+        <h2 class="ocard__title">المعلومات الأساسية</h2>
+        <label class="fld"><span>اسم المنتج *</span><input name="name" required maxlength="80" placeholder="مثلاً: بدي قطن بكبسات"><small class="fld__err"></small></label>
+        <div class="fld-row">
+          <label class="fld"><span>القسم *</span><select name="category" id="category"></select></label>
+          <label class="fld"><span>السعر (₪) *</span><input name="price" type="number" min="1" step="1" inputmode="numeric" required><small class="fld__err"></small></label>
+        </div>
+        <label class="fld"><span>الوصف</span><textarea name="description" rows="3" placeholder="شو بيميّز القطعة؟ لمين مناسبة؟"></textarea></label>
+        <label class="fld"><span>الخامة والعناية</span><textarea name="material" rows="2" placeholder="مثلاً: قطن 100%. غسيل على 30 درجة."></textarea></label>
+      </section>
+
+      <!-- الصور -->
+      <section class="ocard">
+        <h2 class="ocard__title">الصور <small>أول صورة هي الرئيسية · الصورة التانية بتبين لما تمرري عالكرت</small></h2>
+        <div class="pimgs" id="images"></div>
+        <label class="pimgs__add">
+          <input type="file" id="imageInput" accept="image/*" multiple hidden>
+          <span>+ إضافة صور</span>
+        </label>
+        <small class="fld__err" id="imagesErr"></small>
+      </section>
+
+      <!-- المقاسات والمخزون -->
+      <section class="ocard">
+        <h2 class="ocard__title">المقاسات والكمية بالمخزن</h2>
+        <div class="psizes" id="sizes"></div>
+        <small class="fld__err" id="sizesErr"></small>
+      </section>
+
+      <!-- الألوان -->
+      <section class="ocard" id="colorsCard">
+        <h2 class="ocard__title">الألوان <small>اختياري</small></h2>
+        <div class="pcolors" id="colors"></div>
+        <button type="button" class="link-btn" id="addColor">+ إضافة لون</button>
+      </section>
+
+      <!-- قطع البكج -->
+      <section class="ocard" id="bundleCard" hidden>
+        <h2 class="ocard__title">شو جوا البكج؟</h2>
+        <div class="pbundle" id="bundleItems"></div>
+        <button type="button" class="link-btn" id="addBundleItem">+ إضافة قطعة</button>
+        <p class="pbundle__sum" id="bundleSum"></p>
+      </section>
+    </div>
+
+    <aside class="pform__side">
+      <section class="ocard">
+        <h2 class="ocard__title">الظهور</h2>
+        <label class="toggle"><input type="checkbox" name="visible" checked><span></span> ظاهر بالمتجر</label>
+        <label class="toggle"><input type="checkbox" name="isNew"><span></span> بقسم "وصل حديثاً"</label>
+        <label class="toggle" id="featuredRow" hidden><input type="checkbox" name="featured"><span></span> شارة "الأكثر طلباً"</label>
+      </section>
+      <section class="ocard pform__preview" id="preview"></section>
+      <button type="button" class="btn od__cancel" id="deleteBtn" hidden>حذف المنتج</button>
+    </aside>
+
+    <div class="savebar">
+      <span id="dirty" hidden>في تعديلات ما انحفظت</span>
+      <a href="products.html" class="btn btn--ghost btn--sm">إلغاء</a>
+      <button type="submit" class="btn btn--primary btn--sm">حفظ المنتج</button>
+    </div>
+  </form>
+</main>
+
+</body>
+</html>

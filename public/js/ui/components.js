@@ -39,7 +39,7 @@ export function badges(p) {
     </div>`;
 }
 
-export function productCard(p) {
+function productCard(p) {
   const url = productUrl(p);
   return `
     <article class="card">
@@ -64,7 +64,7 @@ export function productCard(p) {
 export const productGrid = (products) => products.map(productCard).join('');
 
 // سطر اقتراح صغير مع زر إضافة سريعة
-export function suggestRow(p, cartLines) {
+function suggestRow(p, cartLines) {
   const size = quickSize(p, cartLines);
   const { price, old } = priceOf(p);
   return `

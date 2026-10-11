@@ -25,7 +25,7 @@
 .shop__layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 36px; align-items: start; }
 
 /* ===== الفلاتر ===== */
-.filters { position: sticky; top: 140px; padding: 18px 18px 6px; background: var(--brand-50); border: 1px solid var(--line); border-radius: var(--radius); }
+.filters { position: sticky; top: 112px; padding: 18px 18px 6px; background: var(--brand-50); border: 1px solid var(--line); border-radius: var(--radius); }
 .filters__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .filters__head h2 { font-size: 22px; }
 .fgroup { border: 0; border-top: 1px solid var(--line); margin: 0; padding: 14px 0 10px; }

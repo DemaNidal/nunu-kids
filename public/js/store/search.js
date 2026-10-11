@@ -34,7 +34,7 @@ const matchesQuery = (p, q) => {
   return normalize(q).split(/\s+/).every((word) => text.includes(word));
 };
 
-export const isOnSale = (p) => Boolean(priceOf(p).old || bxgyFor(p).length);
+const isOnSale = (p) => Boolean(priceOf(p).old || bxgyFor(p).length);
 
 /** @param {object} f الفلاتر: { cat, sizes:Set, colors:Set, price, sale, stock, q } */
 export function filterProducts(f) {

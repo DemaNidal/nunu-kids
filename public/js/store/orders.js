@@ -1,26 +1,25 @@
-// حفظ الطلبات — مؤقتاً بالمتصفح.
-// بخطوة السيرفر، createOrder رح تبعت الطلب لـ API وهيك بيوصل للوحة الأدمن.
-import { storage } from '../utils.js';
+import { rememberOrder } from './tracking.js';
 
-const KEY = 'nunu_orders';
+// إرسال الطلب للسيرفر. السيرفر بيحسب الأسعار والخصومات والتوصيل من جديد،
+// بيتأكد من المخزون والكوبون، وبيحفظ الطلب بقاعدة البيانات.
 
-const newOrderId = () => `NK-${String(Date.now()).slice(-6)}`;
-
-export function createOrder({ customer, totals, shipping }) {
-  const order = {
-    id: newOrderId(),
-    createdAt: new Date().toISOString(),
-    status: 'new',
-    payment: 'cod',
-    customer,
-    items: totals.rows.map((r) => ({
-      id: r.product.id, name: r.product.name, size: r.size, color: r.color, qty: r.qty, unit: r.unit,
-    })),
-    subtotal: totals.subtotal,
-    discounts: totals.discounts,
-    shipping,
-    total: totals.total + shipping,
-  };
-  storage.set(KEY, [order, ...storage.get(KEY, [])]);
-  return order;
+/**
+ * @param {{ customer, items: {id, size, color, qty}[], couponCode?: string }} payload
+ * @returns {Promise<object>} الطلب كما انحفظ
+ */
+export async function placeOrder(payload) {
+  let res;
+  try {
+    res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch {
+    throw new Error('ما قدرنا نوصل للسيرفر — تأكدي من الإنترنت وجربي كمان مرة');
+  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'صار خطأ وما انبعت الطلب — جربي كمان مرة');
+  rememberOrder(data.order.id, data.trackToken); // عشان يبين بصفحة "تتبع طلبي" على هالجهاز
+  return data.order;
 }

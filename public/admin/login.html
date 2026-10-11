@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول | لوحة تحكم NUNU KIDS</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F3EFEC">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/admin.css">
+<script type="module" src="../js/admin/login.js"></script>
+</head>
+<body class="admin admin--login">
+
+<main class="login">
+  <form class="login__card" id="loginForm" novalidate>
+    <img src="../assets/logo.png" alt="NUNU KIDS" class="login__logo">
+    <span class="eyebrow">أهلاً فيكِ</span>
+    <h1>لوحة التحكم</h1>
+
+    <label class="login__field">
+      <span>اسم المستخدم</span>
+      <input name="username" autocomplete="username" required>
+    </label>
+    <label class="login__field">
+      <span>كلمة السر</span>
+      <input name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <p class="login__err" id="loginErr" role="alert"></p>
+
+    <button type="submit" class="btn btn--primary btn--block">دخول</button>
+  </form>
+  <a href="../index.html" class="login__back">الرجوع للمتجر</a>
+</main>
+
+</body>
+</html>

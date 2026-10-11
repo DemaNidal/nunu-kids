@@ -1,0 +1,72 @@
+/* ============================================================
+   تتبع الطلب
+   ============================================================ */
+.track__wrap { max-width: 760px; }
+.track__list { display: grid; gap: 12px; margin-bottom: 28px; }
+.track__list:empty { display: none; }
+.track__loading { text-align: center; color: var(--muted); }
+
+/* كرت الطلب (بيفتح وبيسكّر) */
+.torder { border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); overflow: hidden; }
+.torder summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'head chev' 'now chev'; gap: 4px 12px; align-items: center; padding: 16px 18px; list-style: none; cursor: pointer; }
+.torder summary::-webkit-details-marker { display: none; }
+.torder__head { grid-area: head; }
+.torder__head b { font-family: var(--font-head); font-size: 22px; color: var(--navy); }
+.torder__head small { display: block; color: var(--muted); font-size: 13px; }
+.torder__now { grid-area: now; justify-self: start; padding: 3px 12px; border-radius: var(--pill); background: var(--brand-100); color: var(--brand-800); font-size: 13px; font-weight: 500; }
+.torder--confirmed .torder__now { background: var(--brand-200); }
+.torder--shipped .torder__now { background: #F3E6D3; color: #85561f; }
+.torder--delivered .torder__now { background: #E3EFE7; color: var(--success); }
+.torder--cancelled .torder__now { background: #ECECF0; color: var(--muted); }
+.torder__chev { grid-area: chev; color: var(--muted); transition: transform .2s; }
+.torder[open] .torder__chev { transform: rotate(180deg); }
+.torder__body { display: grid; gap: 16px; padding: 0 18px 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+.torder__eta { display: flex; align-items: center; gap: 8px; margin: 0; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--brand-50); font-size: 14px; }
+.torder__to { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; font-size: 13.5px; color: var(--muted); }
+.torder__help { justify-self: start; }
+
+/* مراحل الطلب (عمودية — أوضح على الجوال) */
+.tsteps { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.tsteps li { position: relative; display: flex; gap: 12px; padding-bottom: 16px; color: var(--muted); }
+.tsteps li:last-child { padding-bottom: 0; }
+.tsteps li::before { content: ""; position: absolute; top: 28px; bottom: 0; right: 13px; width: 2px; background: var(--line); }
+.tsteps li:last-child::before { display: none; }
+.tsteps li.done::before { background: var(--brand-500); }
+.tsteps__dot { position: relative; z-index: 1; flex-shrink: 0; width: 28px; height: 28px; display: grid; place-items: center; border: 2px solid var(--line); border-radius: 50%; background: var(--white); }
+.tsteps__dot .ic { width: 15px; height: 15px; stroke-width: 2.4; }
+.tsteps li.done .tsteps__dot { border-color: var(--brand-500); background: var(--brand-500); color: var(--white); }
+.tsteps li.now .tsteps__dot { border-color: var(--brand-700); background: var(--brand-700); color: var(--white); box-shadow: 0 0 0 4px var(--brand-100); }
+.tsteps b { display: block; font-weight: 500; color: var(--navy); }
+.tsteps li:not(.done):not(.now) b { color: var(--muted); }
+.tsteps small { font-size: 12.5px; }
+.tsteps-cancel { display: flex; align-items: center; gap: 8px; margin: 0; padding: 10px 14px; border-radius: var(--radius-sm); background: #ECECF0; color: var(--muted); }
+
+/* القطع والمجموع */
+.titems { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.titem { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.titem__img { width: 48px; height: 48px; overflow: hidden; border-radius: var(--radius-sm); background: var(--brand-100); }
+.titem__img img { width: 100%; height: 100%; object-fit: cover; }
+.titem__name b { display: block; font-weight: 500; font-size: 14px; }
+.titem__name small { font-size: 12.5px; color: var(--muted); }
+.titem__price { font-weight: 500; font-size: 14px; }
+.tsum { display: grid; gap: 6px; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 14px; }
+.tsum div { display: flex; justify-content: space-between; gap: 12px; }
+.tsum__disc { color: var(--mauve); }
+.tsum__total { padding-top: 8px; border-top: 1px solid var(--line); font-size: 16px; }
+
+/* البحث */
+.track-find { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--brand-50); }
+.track-find h2 { font-size: 22px; color: var(--navy); }
+.track-find__sub { margin: 2px 0 14px; color: var(--muted); font-size: 14px; }
+.track-find__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tf { display: grid; gap: 6px; font-size: 14px; font-weight: 500; }
+.tf input { height: 46px; padding: 0 14px; border: 1.5px solid var(--line); border-radius: var(--radius-sm); background: var(--white); font: inherit; letter-spacing: .03em; text-align: left; color: var(--navy); }
+.tf input:focus { outline: none; border-color: var(--brand-500); }
+.track-find__err { min-height: 1.2em; margin: 8px 0; color: var(--mauve); font-size: 13.5px; font-weight: 500; }
+
+@media (max-width: 859px) {
+  .torder summary { padding: 14px; }
+  .torder__body { padding: 14px; }
+  .track-find { padding: 18px 16px; }
+  .track-find__row { grid-template-columns: 1fr; }
+}

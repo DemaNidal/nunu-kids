@@ -30,7 +30,7 @@ export function drawerHTML() {
 }
 
 // المبلغ الناقص للتوصيل المجاني (0 إذا وصلت أو ما في توصيل مجاني)
-export const freeShippingGap = (total) =>
+const freeShippingGap = (total) =>
   STORE.freeShippingOver ? Math.max(0, STORE.freeShippingOver - total) : 0;
 
 // اقتراحات بتكمّل الطلب وبتقرّب من التوصيل المجاني
@@ -82,6 +82,7 @@ export function renderDrawer(justAdded = null) {
 export function openDrawer(open = true) {
   $('#drawer').classList.toggle('show', open);
   $('#overlay').classList.toggle('show', open);
+  if (open) $('#closeCart').focus({ preventScroll: true });
 }
 
 export function bumpCartCount() {
@@ -95,5 +96,6 @@ export function initDrawer() {
   $('#cartBtn').addEventListener('click', () => openDrawer(true));
   $('#closeCart').addEventListener('click', () => openDrawer(false));
   $('#overlay').addEventListener('click', () => openDrawer(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('#drawer').classList.contains('show')) openDrawer(false); });
   renderDrawer();
 }

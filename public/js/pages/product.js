@@ -1,6 +1,6 @@
 // صفحة المنتج (ونفس الصفحة للبكج)
 import { CATEGORIES, STORE } from '../config.js';
-import { $, $$, esc, img, money, sizeLabel, queryParam, addWorkDays, formatDay, daysLabel, exchangeText, piecesLabel } from '../utils.js';
+import { $, $$, esc, img, money, sizeLabel, queryParam, addWorkDays, formatDay, exchangeText, piecesLabel, copyText } from '../utils.js';
 import { findProduct, isBundle, sizesOf, stockOf, inStock, bundles, bundleItems, bundleCount } from '../store/catalog.js';
 import { priceOf, bxgyFor } from '../store/pricing.js';
 import { cart } from '../store/cart.js';
@@ -102,7 +102,7 @@ function deliveryText() {
 const PERKS = () => [
   ['truck', deliveryText()],
   ['cash', 'الدفع نقداً عند الاستلام'],
-  ['swap', exchangeText()],
+  ['swap', `${exchangeText()} · <a href="info.html#exchange">الشروط</a>`],
 ];
 
 // مشاركة المنتج: واتساب أولاً لأنه الأكثر استخداماً
@@ -120,12 +120,11 @@ function shareHTML(p) {
 
 const detailsHTML = (p) => `
   <ul class="perks">${PERKS().map(([i, t]) => `<li>${icon(i)} <span>${t}</span></li>`).join('')}</ul>
-  ${shareHTML(p)}
   <div class="acc">
     <details open><summary>الوصف</summary><p>${esc(p.description)}</p></details>
     ${p.material ? `<details><summary>الخامة والعناية</summary><p>${esc(p.material)}</p></details>` : ''}
-    <details><summary>التوصيل والتبديل</summary><p>بنوصل لكل المناطق والدفع عند الاستلام. إذا المقاس ما زبط، بتقدري تبدليه خلال ${daysLabel(STORE.exchangeDays)} من الاستلام، بشرط تكون القطعة بحالتها الأصلية وعليها التيكيت. التبديل على المقاس بس.</p></details>
-  </div>`;
+  </div>
+  ${shareHTML(p)}`;
 
 const buyBarHTML = (p) => `
   ${priceTag(p, { cls: 'buybar__price' })}
@@ -227,12 +226,7 @@ function initGallery() {
 }
 
 async function copyLink() {
-  try {
-    await navigator.clipboard.writeText(location.href);
-    toast('انسخ الرابط ✓');
-  } catch {
-    toast('ما قدرنا ننسخ الرابط');
-  }
+  toast(await copyText(location.href) ? 'انسخ الرابط ✓' : 'ما قدرنا ننسخ الرابط');
 }
 
 function bindEvents() {
@@ -259,7 +253,7 @@ function renderExtras(p) {
   $('#relatedGrid').innerHTML = productGrid(recommend({ exclude: [p.id], similarTo: p, cart: cart.lines }));
 
   const recent = behavior.recentlyViewed([p.id]).slice(0, 4);
-  if (recent.length >= 2) {
+  if (recent.length >= 3) {
     $('#recent').hidden = false;
     $('#recentGrid').innerHTML = productGrid(recent);
   }
@@ -289,6 +283,7 @@ function render(p) {
   state.color = p.colors?.[0]?.name || null;
 
   document.title = `${p.name} | NUNU KIDS`;
+  $('meta[name="description"]')?.setAttribute('content', `${p.name} من NUNU KIDS — ${p.description}`.slice(0, 160));
   $('#crumbs').innerHTML = crumbsHTML(p);
   $('#pdp').innerHTML = `
     ${galleryHTML(p)}

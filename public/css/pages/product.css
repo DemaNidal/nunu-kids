@@ -8,7 +8,7 @@
 .pdp { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 44px; align-items: start; padding-bottom: 20px; }
 
 /* ===== معرض الصور ===== */
-.gallery { position: sticky; top: 140px; }
+.gallery { position: sticky; top: 112px; }
 .gallery__main {
   display: flex; aspect-ratio: 1; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
   border-radius: var(--radius); background: var(--tint-2);
@@ -93,10 +93,11 @@ a.bitem:hover { background: var(--brand-50); }
 .perks li { display: flex; align-items: center; gap: 10px; }
 .perks .ic { color: var(--blue); }
 .perks b { font-weight: 500; color: var(--brand-700); }
+.perks a { color: var(--brand-700); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ===== المشاركة ===== */
-.share { display: flex; align-items: center; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; color: var(--muted); }
-.share span { margin-inline-end: 4px; font-family: var(--font-script); font-size: 17px; color: var(--brand-600); }
+.share { display: flex; align-items: center; gap: 6px; padding: 14px 0 0; font-size: 14px; color: var(--muted); }
+.share span { margin-inline-end: 4px; font-family: var(--font-script); font-size: 15px; color: var(--brand-600); }
 .share a, .share button {
   width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%;
   background: var(--white); color: var(--brand-700); transition: background .2s;
@@ -155,9 +156,21 @@ a.bitem:hover { background: var(--brand-50); }
   /* على الموبايل الصورة مربعة بعرض الشاشة، فزر التكبير فوق آخرها */
   .gallery__zoom { bottom: auto; top: calc(100vw - 54px); }
   .bitems { grid-template-columns: 1fr; }
-  .upsell { grid-template-columns: 1fr; }
-  .upsell > div { padding: 0 18px 20px; }
-  .upsell img { min-height: 0; aspect-ratio: 16 / 9; }
+  /* اقتراح البكج: كرت صغير بالعرض (صورة | نص) بدل كرت طويل */
+  .upsell { grid-template-columns: 38% 1fr; gap: 14px; }
+  .upsell > div { padding: 14px 4px 14px 14px; }
+  .upsell img { min-height: 0; height: 100%; aspect-ratio: auto; }
+  .upsell h3 { font-size: 17px; line-height: 1.35; margin: 6px 0 2px; }
+  .upsell p { font-size: 13px; }
+  .upsell .price b { font-size: 19px; }
+  /* صفوف المنتجات تحت: صف واحد بينسحب بالإصبع، فالصفحة ما بتطول */
+  .page-product #recent .products, .page-product #related .products {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 46%;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: -16px; padding: 0 16px 4px;
+  }
+  .page-product #recent .products::-webkit-scrollbar, .page-product #related .products::-webkit-scrollbar { display: none; }
+  .page-product #recent .products > *, .page-product #related .products > * { scroll-snap-align: start; }
 
   /* شريط ثابت تحت: السعر + زر الإضافة */
   .buybar {

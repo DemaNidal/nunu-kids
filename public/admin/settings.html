@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إعدادات المتجر | لوحة تحكم NUNU KIDS</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F3EFEC">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/admin.css">
+<script type="module" src="../js/admin/settings.js"></script>
+</head>
+<body class="admin">
+
+<main class="adm-main adm-main--form">
+  <div class="adm-head">
+    <div>
+      <span class="eyebrow">كل إشي بيتغير هون بيبين بالمتجر</span>
+      <h1>إعدادات المتجر</h1>
+    </div>
+  </div>
+
+  <form class="pform" id="sform" novalidate>
+    <div class="pform__main">
+      <section class="ocard">
+        <h2 class="ocard__title">التواصل <small>بيبينوا بالفوتر، بصفحة "تواصلي معنا"، وزر واتساب العايم</small></h2>
+        <label class="fld"><span>رقم واتساب</span>
+          <input name="whatsapp" dir="ltr" inputmode="tel" placeholder="0599 123 456 أو 970599123456">
+          <small class="fld__hint" id="waHint">اكتبيه متل ما بتكتبيه عادي، وإحنا منحوّله للصيغة الدولية</small>
+          <small class="fld__err"></small>
+        </label>
+        <label class="fld"><span>رابط إنستغرام</span><input name="instagram" dir="ltr" inputmode="url" placeholder="https://instagram.com/nunukids"><small class="fld__err"></small></label>
+        <label class="fld"><span>رابط فيسبوك</span><input name="facebook" dir="ltr" inputmode="url" placeholder="https://facebook.com/nunukids"><small class="fld__err"></small></label>
+      </section>
+
+      <section class="ocard">
+        <h2 class="ocard__title">مناطق وأسعار التوصيل <small>بتبين للزبونة بصفحة الدفع وبصفحة "التوصيل والدفع"</small></h2>
+        <div class="zones-ed" id="zones"></div>
+        <button type="button" class="link-btn" id="addZone">+ إضافة منطقة</button>
+        <small class="fld__err" id="zonesErr"></small>
+
+        <div class="fld-row fld-row--top">
+          <label class="fld"><span>التوصيل بياخد من (أيام عمل)</span><input name="deliveryMin" type="number" min="1" max="30"></label>
+          <label class="fld"><span>لـ (أيام عمل)</span><input name="deliveryMax" type="number" min="1" max="30"><small class="fld__err"></small></label>
+        </div>
+        <div class="fld"><span>أيام العطلة (ما في توصيل)</span><div class="checks" id="weekend"></div></div>
+        <label class="fld fld--short"><span>توصيل مجاني للطلبات فوق (₪)</span><input name="freeShippingOver" type="number" min="0" placeholder="0 = بدون"></label>
+      </section>
+
+      <section class="ocard">
+        <h2 class="ocard__title">التبديل</h2>
+        <label class="fld fld--short"><span>مدة تبديل المقاس (أيام من الاستلام)</span><input name="exchangeDays" type="number" min="0" max="30"></label>
+        <p class="muted-note">ما في إرجاع، التبديل على المقاس بس. 0 = بدون تبديل.</p>
+      </section>
+    </div>
+
+    <aside class="pform__side">
+      <section class="ocard">
+        <h2 class="ocard__title">الشريط اللي فوق المتجر</h2>
+        <label class="fld"><span>النص</span><input name="announcement" maxlength="80" placeholder="فاضي = بيختفي الشريط"></label>
+        <div class="ann-preview" id="annPreview"></div>
+      </section>
+      <section class="ocard">
+        <h2 class="ocard__title">حسابك</h2>
+        <p class="muted-note">كلمة السر محفوظة مشفّرة بقاعدة البيانات، وما حدا بيقدر يشوفها. لتغييرها هلأ: غيّري ADMIN_PASSWORD بملف .env وشغّلي <bdi dir="ltr">npm run admin:password</bdi>.</p>
+      </section>
+      <button type="button" class="btn btn--sm btn--ghost" id="resetBtn">رجّعي الإعدادات الأساسية</button>
+    </aside>
+
+    <div class="savebar">
+      <span id="dirty" hidden>في تعديلات ما انحفظت</span>
+      <button type="submit" class="btn btn--primary btn--sm">حفظ الإعدادات</button>
+    </div>
+  </form>
+</main>
+
+</body>
+</html>

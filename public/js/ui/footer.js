@@ -1,6 +1,7 @@
 // الفوتر + زر الواتساب العائم
 import { STORE } from '../config.js';
 import { icon, brandIcon } from './icons.js';
+import { liveOffers } from '../store/pricing.js';
 
 const link = (url) => url || '#';
 export const whatsappUrl = (text = '') =>
@@ -25,16 +26,18 @@ export function footerHTML() {
           <a href="shop.html">كل المنتجات</a>
           <a href="shop.html?sort=new">وصل حديثاً</a>
           <a href="shop.html?cat=bundles">بكجات تجهيز البيبي</a>
-          <a href="shop.html?sale=1">العروض</a>
+          ${liveOffers().length ? '<a href="shop.html?sale=1">العروض</a>' : ''}
         </div>
         <div>
           <h4>مساعدة</h4>
           <a href="favorites.html">المفضلة</a>
-          <a href="#">تتبع طلبي</a>
+          <a href="track.html">تتبع طلبي</a>
           <a href="info.html#size">دليل المقاسات</a>
           <a href="info.html#exchange">سياسة التبديل</a>
           <a href="info.html#shipping">التوصيل والدفع</a>
+          <a href="info.html#tips">نصائح للأمهات</a>
           <a href="info.html#about">من نحن</a>
+          <a href="info.html#privacy">سياسة الخصوصية</a>
         </div>
         <div>
           <h4>تواصلي معنا</h4>

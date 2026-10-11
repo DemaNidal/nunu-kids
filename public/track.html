@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تتبع طلبي | NUNU KIDS</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3EFEC">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/pages/track.css">
+<script src="js/file-warning.js"></script>
+<script type="module" src="js/pages/track.js"></script>
+</head>
+<body class="page-track">
+
+<main class="section track">
+  <div class="container track__wrap">
+    <div class="section__head">
+      <span class="eyebrow">وين وصل طلبك؟</span>
+      <h1>تتبع طلبي</h1>
+      <p id="trackIntro"></p>
+    </div>
+
+    <!-- طلبات هالجهاز -->
+    <div class="track__list" id="myOrders" aria-live="polite"></div>
+
+    <!-- البحث برقم الطلب والجوال -->
+    <section class="track-find" id="findBox">
+      <h2 id="findTitle">عندك رقم طلب؟</h2>
+      <p class="track-find__sub">اكتبي رقم الطلب ورقم الجوال اللي طلبتي فيه.</p>
+      <form id="findForm" novalidate>
+        <div class="track-find__row">
+          <label class="tf">
+            <span>رقم الطلب</span>
+            <input name="number" dir="ltr" autocomplete="off" autocapitalize="characters" placeholder="NK-100001" required>
+          </label>
+          <label class="tf">
+            <span>رقم الجوال</span>
+            <input name="phone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel-national" placeholder="05X XXX XXXX" required>
+          </label>
+        </div>
+        <p class="track-find__err" id="findErr" role="alert"></p>
+        <button type="submit" class="btn btn--primary">اعرضي الطلب</button>
+      </form>
+    </section>
+  </div>
+</main>
+
+</body>
+</html>
