@@ -129,6 +129,9 @@ export const trackOut = (o) => ({
   history: o.history.map((h) => ({ status: h.status, at: h.at.toISOString() })),
 });
 
+// لما البحث برقم الطلب لحاله أو بالجوال لحاله: الحالة والقطع بس، بدون اسم وعنوان وجوال
+export const trackLite = (o) => ({ ...trackOut(o), customer: null, lite: true });
+
 export const orderOut = (o) => ({
   id: o.number,
   createdAt: o.createdAt.toISOString(),

@@ -53,11 +53,44 @@ export const updateOrder = (id, changes) => request(`/orders/${encodeURIComponen
 export const listProducts = () => request('/products');
 export const getProduct = (id) => request(`/products/${encodeURIComponent(id)}`).catch(() => null);
 
-// الصور الجديدة (data:) بترتفع للسيرفر أول، وبتنحفظ روابطها بالمنتج
+// ===== الصور =====
+// WebP أخف بكتير. سفاري القديم ما بيعرف يعمله، فبنرجع لـ JPG
+export function toImageData(canvas) {
+  const webp = canvas.toDataURL('image/webp', 0.82);
+  return webp.startsWith('data:image/webp') ? webp : canvas.toDataURL('image/jpeg', 0.82);
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const im = new Image();
+    im.onload = () => resolve(im);
+    im.onerror = () => reject(new Error('ما قدرنا نقرأ الصورة'));
+    im.src = src;
+  });
+}
+
+// من الصورة الكبيرة بنعمل 3 أحجام: 1600 (صفحة المنتج)، 800 (القوائم)، 400 (الصور الصغيرة)
+async function imageVariants(dataUrl) {
+  const im = await loadImage(dataUrl);
+  const variants = {};
+  for (const w of [400, 800, 1600]) {
+    const scale = Math.min(1, w / im.width); // بالعرض: الـ srcset بيعتمد عالعرض
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(im.width * scale);
+    canvas.height = Math.round(im.height * scale);
+    canvas.getContext('2d').drawImage(im, 0, 0, canvas.width, canvas.height);
+    variants[w] = toImageData(canvas);
+  }
+  return variants;
+}
+
+// الصور الجديدة (data:) بترتفع للسيرفر أول (واحدة ورا التانية عشان ما نتقل عالنت)، وبتنحفظ روابطها بالمنتج
 async function uploadImages(images) {
-  return Promise.all(images.map(async (src) => (
-    src.startsWith('data:') ? (await request('/uploads', { method: 'POST', body: { dataUrl: src } })).url : src
-  )));
+  const out = [];
+  for (const src of images) {
+    out.push(src.startsWith('data:') ? (await request('/uploads', { method: 'POST', body: { variants: await imageVariants(src) } })).url : src);
+  }
+  return out;
 }
 
 export async function saveProduct(product) {
@@ -91,6 +124,30 @@ export function scheduleState(x, now = Date.now()) {
   if (x.maxUses != null && x.used >= x.maxUses) return { key: 'ended', label: 'خلص استعماله' };
   return { key: 'live', label: 'فعّال' };
 }
+
+// ===== النسخ الاحتياطية =====
+export const listBackups = () => request('/backups');
+export const runBackup = () => request('/backups', { method: 'POST', body: {} });
+export const restoreBackup = ({ name, from, password }) => request('/backups/restore', { method: 'POST', body: { name, from, password } });
+
+// ملف كبير: بنبعته كما هو (مش JSON)
+export async function uploadBackup(file) {
+  let res;
+  try {
+    res = await fetch(`${BASE}/backups/upload`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'X-Requested-With': 'nunu-admin', 'Content-Type': 'application/octet-stream' },
+      body: file,
+    });
+  } catch {
+    throw new Error('ما قدرنا نوصل للسيرفر — تأكدي إنه شغّال');
+  }
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'ما زبط رفع الملف');
+  return data;
+}
+export const backupUrl = (name) => `${BASE}/backups/${encodeURIComponent(name)}`;
 
 // ===== إعدادات المتجر =====
 export const getSettings = () => request('/settings');

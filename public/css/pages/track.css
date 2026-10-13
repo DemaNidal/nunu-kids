@@ -22,6 +22,7 @@
 .torder[open] .torder__chev { transform: rotate(180deg); }
 .torder__body { display: grid; gap: 16px; padding: 0 18px 18px; border-top: 1px solid var(--line); padding-top: 16px; }
 .torder__eta { display: flex; align-items: center; gap: 8px; margin: 0; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--brand-50); font-size: 14px; }
+.torder__lite { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--brand-50); font-size: 13px; color: var(--muted); }
 .torder__to { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; font-size: 13.5px; color: var(--muted); }
 .torder__help { justify-self: start; }
 

@@ -7,6 +7,8 @@ import { networkInterfaces } from 'node:os';
 import { db } from './db.js';
 import { storeRouter } from './routes/store.js';
 import { adminRouter } from './routes/admin.js';
+import { scheduleBackups } from './backup.js';
+import { scheduleImageCleanup } from './images.js';
 
 const PORT = Number(process.env.PORT) || 5173;
 const PUBLIC = join(import.meta.dirname, '..', 'public');
@@ -35,7 +37,16 @@ app.use('/api', (_req, res) => res.status(404).json({ error: 'مش موجود' }
 
 // ===== الصفحات والملفات =====
 // no-cache: المتصفح بيتأكد إذا الملف تغيّر كل مرة (مهم وإحنا عم نطوّر)
-app.use(express.static(PUBLIC, { extensions: ['html'], setHeaders: (res) => res.set('Cache-Control', 'no-cache') }));
+// الكاش بالمتصفح (وبعدين بـ Cloudflare):
+// - الصور المرفوعة اسمها ما بيتكرر ← سنة كاملة
+// - صور وأيقونات الموقع ← يوم، وبعده بتتجدد بالخلفية بدون ما الزبونة تستنى
+// - الصفحات و CSS و JS ← بتتفحص كل مرة (رد 304 صغير وسريع)، عشان أي تعديل يبين فوراً
+const cacheFor = (path) => {
+  if (/[\\/]uploads[\\/]/.test(path)) return 'public, max-age=31536000, immutable';
+  if (/\.(webp|png|jpe?g|svg|ico|woff2?)$/i.test(path)) return 'public, max-age=86400, stale-while-revalidate=604800';
+  return 'no-cache';
+};
+app.use(express.static(PUBLIC, { extensions: ['html'], setHeaders: (res, path) => res.set('Cache-Control', cacheFor(path)) }));
 
 // صفحة مش موجودة ← صفحة 404 اللطيفة. ملف ناقص (صورة، css...) ← رد قصير
 app.use(async (req, res) => {
@@ -60,6 +71,9 @@ try {
   console.error(' ', err.message, '\n');
   process.exit(1);
 }
+
+scheduleBackups();
+scheduleImageCleanup();
 
 app.listen(PORT, () => {
   console.log('\n  NUNU KIDS شغّال (مع قاعدة البيانات):');

@@ -57,6 +57,7 @@ export async function requireAdmin(req, res, next) {
     return res.status(401).json({ error: 'لازم تسجلي دخول' });
   }
   req.admin = { id: session.admin.id, username: session.admin.username };
+  req.session = { id: session.id, adminId: session.adminId, expiresAt: session.expiresAt };
   next();
 }
 
@@ -68,3 +69,9 @@ export function requireSameSite(req, res, next) {
 }
 
 export const hashPassword = (password) => bcrypt.hash(password, 12);
+
+// للعمليات الخطيرة (متل الاسترجاع): نتأكد من كلمة السر كمان مرة
+export async function checkPassword(adminId, password) {
+  const admin = await db.admin.findUnique({ where: { id: adminId } });
+  return !!admin && typeof password === 'string' && bcrypt.compare(password, admin.passwordHash);
+}

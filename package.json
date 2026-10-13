@@ -12,8 +12,11 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "node --env-file-if-exists=.env prisma/seed.js",
     "db:studio": "prisma studio",
+    "db:backup": "node --env-file-if-exists=.env server/scripts/backup.js",
+    "db:restore": "node --env-file-if-exists=.env server/scripts/restore.js",
     "admin:password": "node --env-file-if-exists=.env server/scripts/set-password.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "loadtest": "node server/scripts/loadtest.js"
   },
   "engines": {
     "node": ">=20"

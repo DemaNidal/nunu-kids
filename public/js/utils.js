@@ -20,10 +20,31 @@ export const sizeLabel = (key) => {
 
 // الصورة: رقم صورة Unsplash (مؤقت)، أو رابط كامل / صورة مرفوعة (data:) بتنعرض متل ما هي.
 // لاحقاً روابط Cloudinary بتنعرض بنفس الطريقة.
-export const img = (id, w = 600, h = w) =>
-  /^(https?:|data:|blob:|\/)/.test(id)
+// الصور المرفوعة محفوظة بـ 3 أحجام. بنختار أصغر حجم بيطلع واضح (حتى على شاشات الجوال الحادة)
+const IMG_SIZES = [400, 800, 1600];
+const pickSize = (w) => IMG_SIZES.find((s) => s >= w * 1.5) || IMG_SIZES.at(-1);
+
+// الصورة المرفوعة بحجم معيّن. r2:products/abc.webp ← على Cloudflare R2 · up:abc.webp ← على السيرفر نفسه
+const UPLOADED = /^(r2|up):(.+)\.(webp|jpg)$/;
+function variant(id, size) {
+  const [, where, name, ext] = UPLOADED.exec(id);
+  const base = where === 'r2' ? (STORE.imagesUrl || '').replace(/\/$/, '') : '/uploads';
+  return `${base}/${name}-${size}.${ext}`;
+}
+
+// srcset للصور المرفوعة: المتصفح بيختار الحجم حسب عرض الصورة عالشاشة وحدّة الشاشة.
+// sizes = قديش عرض الصورة تقريباً (مثلاً "50vw"). للصور القديمة (روابط) بيرجع فاضي
+export function srcset(id, sizes) {
+  if (!UPLOADED.test(id)) return '';
+  return ` srcset="${IMG_SIZES.map((w) => `${variant(id, w)} ${w}w`).join(', ')}" sizes="${sizes}"`;
+}
+
+export function img(id, w = 600, h = w) {
+  if (UPLOADED.test(id)) return variant(id, pickSize(w));
+  return /^(https?:|data:|blob:|\/)/.test(id)
     ? id
     : `https://images.unsplash.com/photo-${id}?w=${w}&h=${h}&fit=crop&auto=format&q=70`;
+}
 
 // localStorage آمن (ممكن يكون مقفول بالتصفح الخاص)
 export const storage = {

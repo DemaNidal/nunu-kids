@@ -548,3 +548,31 @@ button.stat:hover { border-color: var(--brand-400); transform: translateY(-2px);
 
 /* الزبونة طلبت تأكيد الطلب على واتساب */
 .wa-tag { display: inline-block; margin-inline-start: 6px; padding: 1px 8px; border-radius: var(--pill); background: #E3EFE7; color: var(--success); font-size: 11.5px; font-weight: 500; }
+
+/* النسخ الاحتياطية */
+.bk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.bk-status { margin: 0 0 6px; padding: 10px 12px; border-radius: 10px; background: var(--brand-50); color: var(--navy); font-size: 13.5px; line-height: 1.6; }
+.bk-status small { display: block; font-size: 12.5px; opacity: .85; word-break: break-word; }
+.bk-status--ok { background: #EEF3EC; color: #3F5A3A; }
+.bk-status--warn { background: #FBEDE6; color: #9A4A2E; }
+.bk-list { list-style: none; margin: 8px 0 0; padding: 0; max-height: 420px; overflow-y: auto; }
+.bk-list li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.bk-list li:first-child { border-top: 0; }
+.bk-list li small { display: block; color: var(--muted); font-size: 12px; }
+.bk-list li.is-new { background: #EEF3EC; border-radius: 8px; padding-inline: 8px; }
+.bk-list__acts { display: flex; gap: 14px; flex-shrink: 0; }
+.bk-list__acts a { text-decoration: none; }
+.bk-list__empty { color: var(--muted); justify-content: center !important; }
+.bk-upload { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.bk-upload .ocard__title { flex: 1 1 100%; margin-bottom: 0; }
+.bk-upload .muted-note { margin: 0; }
+.bk-dialog { width: min(440px, calc(100vw - 32px)); padding: 22px; border: 0; border-radius: var(--radius); background: var(--white); color: var(--navy); }
+.bk-dialog::backdrop { background: rgb(40 30 30 / .45); }
+.bk-dialog h2 { margin: 0 0 6px; font-size: 22px; color: var(--navy); }
+.bk-dialog p { margin: 0 0 12px; font-size: 14px; }
+.bk-warn { padding: 10px 12px; border-radius: 10px; background: #FBEDE6; color: #9A4A2E; font-size: 13px !important; line-height: 1.7; }
+.bk-dialog__actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+@media (max-width: 760px) {
+  .bk-grid { grid-template-columns: 1fr; }
+  .adm-head:has(#bkNow) { flex-wrap: wrap; gap: 12px; }
+}

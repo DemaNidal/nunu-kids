@@ -3,10 +3,12 @@ import { Router } from 'express';
 import { randomBytes, createHash } from 'node:crypto';
 import { db } from '../db.js';
 import { getSettings } from '../settings.js';
-import { PRODUCT_INCLUDE, productOut, offerOut, couponPublic, ORDER_INCLUDE, orderOut, trackOut } from '../serialize.js';
+import { PRODUCT_INCLUDE, productOut, offerOut, couponPublic, ORDER_INCLUDE, orderOut, trackOut, trackLite } from '../serialize.js';
 import { orderSchema, couponCheckSchema, trackSchema, trackLookupSchema, firstError } from '../validate.js';
 import { isLive, bestPrice, bxgyDiscounts, couponError, couponDiscount, normalizeCode } from '../../public/js/store/pricing-core.js';
 import { rateLimit } from '../rate-limit.js';
+import { cached, invalidate } from '../cache.js';
+import { imagesUrl } from '../images.js';
 
 export const storeRouter = Router();
 
@@ -18,12 +20,15 @@ const liveOffers = async () => (await db.offer.findMany()).map(offerOut).filter(
 // ===== كل اللي بيحتاجه المتجر بطلب واحد =====
 // المنتجات الظاهرة + العروض الشغّالة + الإعدادات. الكوبونات مش هون (لازم تضل سرية).
 storeRouter.get('/store', async (_req, res) => {
-  const [products, offers, settings] = await Promise.all([
-    db.product.findMany({ where: { visible: true }, include: PRODUCT_INCLUDE, orderBy: { id: 'asc' } }),
-    liveOffers(),
-    getSettings(),
-  ]);
-  res.json({ products: products.map(productOut), offers, settings });
+  const body = await cached('store', async () => {
+    const [products, offers, settings] = await Promise.all([
+      db.product.findMany({ where: { visible: true }, include: PRODUCT_INCLUDE, orderBy: { id: 'asc' } }),
+      liveOffers(),
+      getSettings(),
+    ]);
+    return JSON.stringify({ products: products.map(productOut), offers, settings: { ...settings, imagesUrl: imagesUrl() } });
+  });
+  res.type('json').send(body);
 });
 
 // ===== فحص كوبون =====
@@ -122,6 +127,7 @@ storeRouter.post('/orders', orderLimit, async (req, res) => {
       return { done, token };
     });
     // المفتاح بينبعت مرة وحدة هون، والمتصفح بيحفظه عشان صفحة "تتبع طلبي"
+    invalidate(); // المخزون تغيّر
     res.status(201).json({ order: orderOut(order.done), trackToken: order.token });
   } catch (err) {
     if (err instanceof OrderError) return res.status(409).json({ error: err.message });
@@ -147,20 +153,33 @@ storeRouter.post('/track', async (req, res) => {
   res.json({ orders: orders.map(trackOut), dead });
 });
 
-// من جهاز تاني: رقم الطلب + رقم الجوال
+// من جهاز تاني: برقم الطلب، أو بالجوال، أو بالاثنين.
+// بواحد بس: بنعرض الحالة والقطع، بدون الاسم والعنوان (حدا غريب ممكن يعرف رقمك أو يخمّن رقم طلب).
+// بالاثنين مع بعض: التفاصيل كاملة، والطلب بينحفظ على الجهاز.
 const lookupLimit = rateLimit({ windowMs: 15 * 60_000, max: 10, message: 'محاولات كتير — استني ربع ساعة وجربي كمان مرة' });
 
 storeRouter.post('/track/lookup', lookupLimit, async (req, res) => {
   const parsed = trackLookupSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ error: firstError(parsed.error) });
-  const number = parsed.data.number.replace(/^NK-?/, 'NK-');
-  const last9 = parsed.data.phone.replace(/[^\d]/g, '').slice(-9);
-  const order = await db.order.findUnique({ where: { number }, include: ORDER_INCLUDE });
-  // نفس الرسالة إذا الرقم غلط أو الجوال مش مطابق (ما بنعطي تلميح)
-  if (!order || last9.length < 9 || !order.phone.endsWith(last9)) {
-    return res.status(404).json({ error: 'ما لقينا طلب بهاد الرقم وهاد الجوال — تأكدي منهم' });
+  const number = parsed.data.number?.replace(/^NK-?/, 'NK-');
+  const last9 = parsed.data.phone?.replace(/[^\d]/g, '').slice(-9);
+
+  if (number && last9) {
+    const order = await db.order.findUnique({ where: { number }, include: ORDER_INCLUDE });
+    // نفس الرسالة إذا الرقم غلط أو الجوال مش مطابق (ما بنعطي تلميح)
+    if (!order || !order.phone.endsWith(last9)) {
+      return res.status(404).json({ error: 'ما لقينا طلب بهاد الرقم وهاد الجوال — تأكدي منهم' });
+    }
+    const token = newToken();
+    await db.orderAccess.create({ data: { id: hashToken(token), orderId: order.id } });
+    return res.json({ orders: [trackOut(order)], tokens: { [order.number]: token } });
   }
-  const token = newToken();
-  await db.orderAccess.create({ data: { id: hashToken(token), orderId: order.id } });
-  res.json({ order: trackOut(order), trackToken: token });
+
+  const orders = number
+    ? await db.order.findMany({ where: { number }, include: ORDER_INCLUDE })
+    : await db.order.findMany({ where: { phone: { endsWith: last9 } }, include: ORDER_INCLUDE, orderBy: { createdAt: 'desc' }, take: 10 });
+  if (!orders.length) {
+    return res.status(404).json({ error: number ? 'ما لقينا طلب بهاد الرقم — تأكدي منه' : 'ما لقينا طلبات بهاد الجوال — تأكدي منه' });
+  }
+  res.json({ orders: orders.map(trackLite), tokens: {} });
 });

@@ -1,7 +1,7 @@
 // لوحة الأدمن: إضافة / تعديل منتج (وبكج)
 import { $, $$, esc, money, img, sizeLabel, queryParam, piecesLabel } from '../utils.js';
 import { CATEGORIES, SIZES } from '../config.js';
-import { listProducts, getProduct, saveProduct, deleteProduct } from './api.js';
+import { listProducts, getProduct, saveProduct, deleteProduct, toImageData } from './api.js';
 import { mountAdmin, adminToast } from './layout.js';
 
 mountAdmin('products');
@@ -16,19 +16,19 @@ const isBundle = () => draft.category === 'bundles';
 const markDirty = () => { dirty = true; $('#dirty').hidden = false; };
 
 // ===== الصور =====
-// الصورة بتتصغّر لـ 1000px قبل ما تنحفظ (عشان ما تكون تقيلة). لاحقاً بترفع على Cloudinary.
-function resizeImage(file, max = 1000) {
+// الصورة بتتصغّر لعرض 1600px (WebP) للمعاينة، ووقت الحفظ بنعمل منها 800 و 400 كمان (api.js)
+function resizeImage(file, max = 1600) {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
     const im = new Image();
     im.onload = () => {
-      const scale = Math.min(1, max / Math.max(im.width, im.height));
+      const scale = Math.min(1, max / im.width);
       const canvas = document.createElement('canvas');
       canvas.width = Math.round(im.width * scale);
       canvas.height = Math.round(im.height * scale);
       canvas.getContext('2d').drawImage(im, 0, 0, canvas.width, canvas.height);
       URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL('image/jpeg', 0.82));
+      resolve(toImageData(canvas));
     };
     im.onerror = () => reject(new Error('ما قدرنا نقرأ الصورة'));
     im.src = url;

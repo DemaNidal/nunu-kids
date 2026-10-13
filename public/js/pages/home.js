@@ -1,5 +1,5 @@
 // الصفحة الرئيسية — أجزاء العروض بتظهر بس إذا في عرض فعّال
-import { $, esc, img, ltr, money, piecesLabel, daysLabel, exchangeText } from '../utils.js';
+import { $, esc, img, srcset, ltr, money, piecesLabel, daysLabel, exchangeText } from '../utils.js';
 import { STORE, SIZES, CATEGORIES } from '../config.js';
 import { HERO, AGE_GROUPS, REVIEWS } from '../data/content.js';
 import { items, bundles, bundleItems, bundleCount } from '../store/catalog.js';
@@ -67,7 +67,8 @@ function renderAges() {
   }).join('');
 }
 
-const renderNew = () => { $('#newGrid').innerHTML = productGrid(items().filter((p) => p.isNew).slice(0, 4)); };
+// الأحدث أول: آخر منتج انضاف بيطلع بأول الصف
+const renderNew = () => { $('#newGrid').innerHTML = productGrid(items().filter((p) => p.isNew).sort((a, b) => b.id - a.id).slice(0, 4)); };
 
 function renderForYou() {
   if (behavior.viewCount() < 2) return;
@@ -89,7 +90,7 @@ function bundleRowHTML(b) {
   return `
     <article class="bundle-row">
       <a href="${url}" class="bundle-row__img" tabindex="-1" aria-hidden="true">
-        <img src="${img(b.images[0], 900, 700)}" alt="" loading="lazy">
+        <img src="${img(b.images[0], 900, 700)}"${srcset(b.images[0], '(max-width: 860px) 100vw, 50vw')} alt="" loading="lazy">
         ${b.featured ? '<span class="bundle-row__flag">الأكثر طلباً</span>' : ''}
       </a>
       <div class="bundle-row__text">

@@ -1,6 +1,6 @@
 // صفحة المنتج (ونفس الصفحة للبكج)
 import { CATEGORIES, STORE } from '../config.js';
-import { $, $$, esc, img, money, sizeLabel, queryParam, addWorkDays, formatDay, exchangeText, piecesLabel, copyText } from '../utils.js';
+import { $, $$, esc, img, srcset, money, sizeLabel, queryParam, addWorkDays, formatDay, exchangeText, piecesLabel, copyText } from '../utils.js';
 import { findProduct, isBundle, sizesOf, stockOf, inStock, bundles, bundleItems, bundleCount } from '../store/catalog.js';
 import { priceOf, bxgyFor } from '../store/pricing.js';
 import { cart } from '../store/cart.js';
@@ -25,7 +25,7 @@ const crumbsHTML = (p) => `
 const galleryHTML = (p) => `
   <div class="gallery">
     <div class="gallery__main" id="gMain">
-      ${p.images.map((id, i) => `<img src="${img(id, 900)}" alt="${esc(p.name)} صورة ${i + 1}" data-zoom="${i}" ${i ? 'loading="lazy"' : ''}>`).join('')}
+      ${p.images.map((id, i) => `<img src="${img(id, 900)}"${srcset(id, '(max-width: 860px) 100vw, 50vw')} alt="${esc(p.name)} صورة ${i + 1}" data-zoom="${i}" ${i ? 'loading="lazy"' : ''}>`).join('')}
     </div>
     <button type="button" class="gallery__zoom" data-zoom-current aria-label="تكبير الصورة">${icon('search')}</button>
     ${p.images.length > 1 ? `
@@ -265,7 +265,7 @@ function renderExtras(p) {
   $('#upsell').innerHTML = `
     <div class="container">
       <a href="${productUrl(b)}" class="upsell">
-        <img src="${img(b.images[0], 500, 360)}" alt="${esc(b.name)}" loading="lazy">
+        <img src="${img(b.images[0], 500, 360)}"${srcset(b.images[0], '(max-width: 600px) 80vw, 360px')} alt="${esc(b.name)}" loading="lazy">
         <div>
           <span class="pill pill--sale">وفّري أكثر</span>
           <h3>بتجهزي للبيبي؟ جربي ${esc(b.name)}</h3>

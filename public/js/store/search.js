@@ -12,7 +12,7 @@ export const PRICE_RANGES = [
 ];
 
 export const SORTS = {
-  featured: (a, b) => Number(b.isNew || 0) - Number(a.isNew || 0),
+  featured: (a, b) => Number(b.isNew || 0) - Number(a.isNew || 0) || b.id - a.id, // الجديد أول، وجوّاه الأحدث أول
   new: (a, b) => b.id - a.id,
   'price-asc': (a, b) => priceOf(a).price - priceOf(b).price,
   'price-desc': (a, b) => priceOf(b).price - priceOf(a).price,

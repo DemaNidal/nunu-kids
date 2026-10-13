@@ -36,9 +36,9 @@ export async function myOrders() {
   return orders;
 }
 
-// من جهاز تاني: رقم الطلب + الجوال
-export async function lookupOrder(number, phone) {
-  const { order, trackToken } = await post('/api/track/lookup', { number, phone });
-  rememberOrder(order.id, trackToken);
-  return order;
+// من جهاز تاني: رقم الطلب و/أو الجوال. بالاثنين مع بعض بينحفظ الطلب على هالجهاز
+export async function lookupOrders({ number, phone }) {
+  const { orders, tokens } = await post('/api/track/lookup', { number: number || undefined, phone: phone || undefined });
+  for (const [id, token] of Object.entries(tokens)) rememberOrder(id, token);
+  return orders;
 }

@@ -1,12 +1,14 @@
 // واجهة لوحة الأدمن: كل شي هون بيحتاج تسجيل دخول
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { randomBytes } from 'node:crypto';
-import { writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { db } from '../db.js';
-import { login, logout, startSession, requireAdmin, requireSameSite } from '../auth.js';
+import { login, logout, startSession, requireAdmin, requireSameSite, checkPassword } from '../auth.js';
 import { getSettings, saveSettings } from '../settings.js';
 import { rateLimit } from '../rate-limit.js';
+import { invalidate } from '../cache.js';
+import { IMAGE_SIZES, saveImage, markForCheck } from '../images.js';
+import { BACKUP_DIR, NAME_RE, cloudReady, listBackups, listCloud, readStatus, runBackup, restoreBackup, saveUploadedBackup } from '../backup.js';
 import {
   PRODUCT_INCLUDE, productOut, productIn, offerOut, offerIn, couponOut, couponIn, ORDER_INCLUDE, orderOut,
 } from '../serialize.js';
@@ -14,6 +16,12 @@ import { loginSchema, orderPatchSchema, productSchema, offerSchema, couponSchema
 
 export const adminRouter = Router();
 adminRouter.use(requireSameSite);
+
+// أي تعديل ناجح من لوحة التحكم (منتج، عرض، إعدادات، إلغاء طلب، استرجاع نسخة) بيجدد بيانات المتجر فوراً
+adminRouter.use((req, res, next) => {
+  if (req.method !== 'GET') res.on('finish', () => { if (res.statusCode < 400) invalidate(); });
+  next();
+});
 
 const parse = (schema, body, res) => {
   const r = schema.safeParse(body);
@@ -122,29 +130,48 @@ adminRouter.put('/products/:id', async (req, res) => {
   const data = parse(productSchema, req.body, res);
   if (!data) return;
   const id = Number(req.params.id);
-  if (!await db.product.findUnique({ where: { id } })) return res.status(404).json({ error: 'المنتج مش موجود' });
+  const before = await db.product.findUnique({ where: { id } });
+  if (!before) return res.status(404).json({ error: 'المنتج مش موجود' });
   const saved = await db.$transaction((tx) => writeProduct(tx, id, data));
+  // الصور اللي انشالت من المنتج ← بتنحذف من التخزين بعد 30 يوم إذا ما حدا استعملها
+  await markForCheck(before.images.filter((ref) => !data.images.includes(ref))).catch(() => {});
   res.json(productOut(saved));
 });
 
 adminRouter.delete('/products/:id', async (req, res) => {
-  await db.product.deleteMany({ where: { id: Number(req.params.id) || 0 } });
+  const product = await db.product.findUnique({ where: { id: Number(req.params.id) || 0 } });
+  if (product) {
+    await db.product.delete({ where: { id: product.id } });
+    await markForCheck(product.images).catch(() => {});
+  }
   res.json({ ok: true });
 });
 
-// رفع صورة (مؤقتاً على السيرفر نفسه بمجلد public/uploads — لاحقاً Cloudinary)
-const UPLOADS = join(import.meta.dirname, '..', '..', 'public', 'uploads');
-const TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
-
+// رفع صورة منتج: المتصفح بيبعتها جاهزة بـ 3 أحجام (400 / 800 / 1600)، وكل صفحة بتاخد الحجم اللي بيلزمها.
+// إذا R2 موصول بتنحفظ على Cloudflare (أسرع وما بتتأثر بالضغط)، وإلا بمجلد public/uploads
 adminRouter.post('/uploads', async (req, res) => {
-  const m = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(req.body?.dataUrl || '');
-  if (!m) return res.status(400).json({ error: 'الصورة لازم تكون JPG أو PNG أو WebP' });
-  const buf = Buffer.from(m[2], 'base64');
-  if (buf.length > 4 * 1024 * 1024) return res.status(413).json({ error: 'الصورة كبيرة كتير (أكتر من 4MB)' });
-  await mkdir(UPLOADS, { recursive: true });
-  const name = `${Date.now().toString(36)}-${randomBytes(6).toString('hex')}.${TYPES[m[1]]}`;
-  await writeFile(join(UPLOADS, name), buf);
-  res.status(201).json({ url: `/uploads/${name}` });
+  const variants = req.body?.variants || {};
+  const sizes = Object.keys(variants);
+  if (!sizes.length || sizes.some((w) => !IMAGE_SIZES.includes(Number(w)))) return res.status(400).json({ error: 'الصورة ناقصة' });
+  const files = [];
+  for (const w of sizes) {
+    const m = /^data:(image\/(?:jpeg|webp));base64,([A-Za-z0-9+/=]+)$/.exec(variants[w] || '');
+    if (!m) return res.status(400).json({ error: 'الصورة لازم تكون JPG أو WebP' });
+    const buf = Buffer.from(m[2], 'base64');
+    if (buf.length > 4 * 1024 * 1024) return res.status(413).json({ error: 'الصورة كبيرة كتير (أكتر من 4MB)' });
+    files.push({ w, type: m[1], buf });
+  }
+  if (new Set(files.map((f) => f.type)).size > 1) return res.status(400).json({ error: 'الأحجام لازم تكون نفس النوع' });
+  const ext = files[0].type === 'image/webp' ? 'webp' : 'jpg';
+  const name = `${Date.now().toString(36)}-${randomBytes(6).toString('hex')}`;
+  try {
+    const url = await saveImage(name, ext, files);
+    // لو ما انحفظ المنتج بالآخر (مثلاً سكّرتي الصفحة)، الصورة بتنحذف بعد 30 يوم
+    await markForCheck([url]).catch(() => {});
+    res.status(201).json({ url });
+  } catch (err) {
+    res.status(502).json({ error: `ما زبط رفع الصورة: ${err.message}` });
+  }
 });
 
 // ===== العروض والكوبونات =====
@@ -190,4 +217,58 @@ adminRouter.put('/settings', async (req, res) => {
   if (!data) return;
   if (data.deliveryDays.min > data.deliveryDays.max) return res.status(400).json({ error: 'مدة التوصيل مش منطقية' });
   res.json(await saveSettings(data));
+});
+
+// ===== النسخ الاحتياطية =====
+adminRouter.get('/backups', async (_req, res) => {
+  const [status, files] = await Promise.all([readStatus(), listBackups()]);
+  const cloud = { configured: cloudReady(), files: [], error: null };
+  if (cloud.configured) {
+    try { cloud.files = (await listCloud()).slice(0, 30).map(({ name, size, createdAt }) => ({ name, size, createdAt })); } catch (err) { cloud.error = err.message; }
+  }
+  res.json({ status, files: files.slice(0, 30), cloud });
+});
+
+adminRouter.post('/backups', async (_req, res) => {
+  try {
+    res.status(201).json(await runBackup('manual'));
+  } catch (err) {
+    res.status(500).json({ error: `ما زبطت النسخة: ${err.message}` });
+  }
+});
+
+// رفع ملف نسخة من برا (مثلاً على جهاز جديد). بعد الدخول بس، عشان ما حدا يبعت ملفات كبيرة
+adminRouter.post('/backups/upload', express.raw({ type: 'application/octet-stream', limit: '200mb' }), async (req, res) => {
+  if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(400).json({ error: 'ما وصل الملف' });
+  try {
+    res.status(201).json(await saveUploadedBackup(req.body));
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// الاسترجاع: بيبدّل كل البيانات، فبنطلب كلمة السر كمان مرة
+const restoreLimit = rateLimit({ windowMs: 15 * 60_000, max: 5, message: 'محاولات كتير — استني ربع ساعة' });
+
+adminRouter.post('/backups/restore', restoreLimit, async (req, res) => {
+  const { name, from, password } = req.body || {};
+  if (!NAME_RE.test(String(name)) || !['local', 'cloud'].includes(from)) return res.status(400).json({ error: 'النسخة مش واضحة' });
+  if (!(await checkPassword(req.admin.id, password))) return res.status(403).json({ error: 'كلمة السر غلط' });
+  try {
+    const result = await restoreBackup({ [from]: name });
+    // الجلسات رجعت متل ما كانت بالنسخة — بنرجّع جلستك عشان ما تطلعي من لوحة التحكم
+    await db.session.upsert({ where: { id: req.session.id }, create: req.session, update: {} }).catch(() => {});
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: `ما زبط الاسترجاع (البيانات ما تغيرت): ${err.message}` });
+  }
+});
+
+// تنزيل نسخة (عشان تحتفظي فيها برا الجهاز، مثلاً على Google Drive)
+adminRouter.get('/backups/:name', async (req, res) => {
+  const { name } = req.params;
+  if (!NAME_RE.test(name)) return res.status(400).json({ error: 'اسم مش صحيح' });
+  const files = await listBackups();
+  if (!files.some((f) => f.name === name)) return res.status(404).json({ error: 'النسخة مش موجودة' });
+  res.download(join(BACKUP_DIR, name), name);
 });

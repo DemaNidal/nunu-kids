@@ -1,5 +1,5 @@
 // قطع واجهة بتتكرر بأكثر من صفحة
-import { $, esc, money, img, sizeLabel, ltr } from '../utils.js';
+import { $, esc, money, img, srcset, sizeLabel, ltr } from '../utils.js';
 import { SIZE_GUIDE } from '../data/content.js';
 import { sizesOf, inStock, stockOf } from '../store/catalog.js';
 import { priceOf, bxgyFor } from '../store/pricing.js';
@@ -44,8 +44,8 @@ function productCard(p) {
   return `
     <article class="card">
       <a href="${url}" class="card__img">
-        <img src="${img(p.images[0], 500)}" alt="${esc(p.name)}" loading="lazy">
-        ${p.images[1] ? `<img class="card__alt" src="${img(p.images[1], 500)}" alt="" loading="lazy">` : ''}
+        <img src="${img(p.images[0], 500)}"${srcset(p.images[0], '(max-width: 600px) 50vw, (max-width: 1100px) 33vw, 25vw')} alt="${esc(p.name)}" loading="lazy">
+        ${p.images[1] ? `<img class="card__alt" src="${img(p.images[1], 500)}"${srcset(p.images[1], '(max-width: 600px) 50vw, (max-width: 1100px) 33vw, 25vw')} alt="" loading="lazy">` : ''}
         ${badges(p)}
         ${favButton(p, 'card__fav')}
       </a>

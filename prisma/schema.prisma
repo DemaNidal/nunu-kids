@@ -186,3 +186,12 @@ model Session {
 
   @@index([adminId])
 }
+
+// صور لازم ننتبهلها: انرفعت أو انشالت من منتج. بعد 30 يوم، إذا ما في منتج أو طلب حديث بيستعملها، بتنحذف من التخزين.
+// (مش فوراً: عشان لو استرجعتي نسخة احتياطية من قبل، الصور تضل موجودة)
+model ImageCheck {
+  ref   String   @id // r2:products/abc.webp أو up:abc.webp
+  since DateTime @default(now())
+
+  @@index([since])
+}

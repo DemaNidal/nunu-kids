@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>النسخ الاحتياطية | لوحة تحكم NUNU KIDS</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F3EFEC">
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Markazi+Text:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/admin.css">
+<script type="module" src="../js/admin/backups.js"></script>
+</head>
+<body class="admin">
+
+<main class="adm-main">
+  <div class="adm-head">
+    <div>
+      <span class="eyebrow">نسخة تلقائية كل يوم من كل بيانات المتجر</span>
+      <h1>النسخ الاحتياطية</h1>
+    </div>
+    <button type="button" class="btn btn--primary btn--sm" id="bkNow">اعملي نسخة هلأ</button>
+  </div>
+
+  <div class="bk-grid">
+    <section class="ocard">
+      <h2 class="ocard__title">على هالجهاز</h2>
+      <p class="bk-status" id="localStatus">…</p>
+      <ul class="bk-list" id="localList"></ul>
+    </section>
+
+    <section class="ocard">
+      <h2 class="ocard__title">على Cloudflare <small>نسخة مشفّرة برا الجهاز — إذا خرب الجهاز بتضل البيانات</small></h2>
+      <p class="bk-status" id="cloudStatus">…</p>
+      <ul class="bk-list" id="cloudList"></ul>
+    </section>
+  </div>
+
+  <section class="ocard bk-upload">
+    <h2 class="ocard__title">عندك ملف نسخة؟ <small>مثلاً نزّلتيه قبل، أو جهاز جديد. بيبين بالقائمة وبعدين بتقدري تسترجعيه.</small></h2>
+    <label class="btn btn--ghost btn--sm">
+      اختاري الملف
+      <input type="file" id="bkFile" accept=".dump,.enc" hidden>
+    </label>
+    <small class="muted-note" id="bkFileNote"></small>
+  </section>
+</main>
+
+<dialog class="bk-dialog" id="restoreDlg">
+  <form method="dialog" id="restoreForm">
+    <h2>استرجاع نسخة</h2>
+    <p id="restoreWhat"></p>
+    <p class="bk-warn">كل البيانات الحالية (الطلبات، المنتجات، العروض، الإعدادات) رح تتبدّل بهاي النسخة. الطلبات اللي إجت بعدها رح تروح.<br>قبل الاسترجاع بنعمل نسخة من الوضع الحالي، فبتقدري ترجعي عنه.</p>
+    <label class="fld"><span>كلمة سر لوحة التحكم للتأكيد</span>
+      <input type="password" name="password" autocomplete="current-password" required>
+    </label>
+    <p class="fld__err" id="restoreErr"></p>
+    <div class="bk-dialog__actions">
+      <button type="button" class="btn btn--ghost btn--sm" value="cancel" id="restoreCancel">إلغاء</button>
+      <button type="submit" class="btn btn--primary btn--sm" id="restoreGo">استرجعي</button>
+    </div>
+  </form>
+</dialog>
+
+</body>
+</html>

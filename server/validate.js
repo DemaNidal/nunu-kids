@@ -31,10 +31,11 @@ export const orderSchema = z.object({
 export const trackSchema = z.object({
   tokens: z.array(z.string().min(20).max(100)).max(30),
 });
+// رقم الطلب أو الجوال أو الاثنين (واحد عالأقل)
 export const trackLookupSchema = z.object({
-  number: z.string().trim().toUpperCase().regex(/^NK-?\d{6}$/, 'رقم الطلب بيبلش بـ NK ووراه 6 أرقام'),
-  phone: z.string().trim().min(9).max(20),
-});
+  number: z.string().trim().toUpperCase().regex(/^NK-?\d{6}$/, 'رقم الطلب بيبلش بـ NK ووراه 6 أرقام').optional(),
+  phone: z.string().trim().max(20).refine((p) => p.replace(/[^\d]/g, '').length >= 9, 'رقم الجوال ناقص').optional(),
+}).refine((x) => x.number || x.phone, 'اكتبي رقم الطلب أو رقم الجوال');
 
 export const couponCheckSchema = z.object({
   code: z.string().trim().min(1).max(20),

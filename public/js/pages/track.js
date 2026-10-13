@@ -1,7 +1,7 @@
 // صفحة تتبع الطلب: طلبات هالجهاز بتبين لحالها، ومن جهاز تاني برقم الطلب والجوال
 import { STORE } from '../config.js';
 import { $, esc, money, img, sizeLabel, addWorkDays, formatDay, piecesLabel } from '../utils.js';
-import { myOrders, lookupOrder, hasSavedOrders } from '../store/tracking.js';
+import { myOrders, lookupOrders, hasSavedOrders } from '../store/tracking.js';
 import { mountLayout } from '../ui/layout.js';
 import { whatsappUrl } from '../ui/footer.js';
 import { icon } from '../ui/icons.js';
@@ -52,7 +52,7 @@ function stepsHTML(o) {
 
 const itemHTML = (i) => `
   <li class="titem">
-    <span class="titem__img">${i.image ? `<img src="${img(i.image, 120)}" alt="" loading="lazy">` : ''}</span>
+    <span class="titem__img">${i.image ? `<img src="${img(i.image, 120)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span>
     <span class="titem__name"><b>${esc(i.name)}</b><small>${sizeLabel(i.size)}${i.color ? ` · ${esc(i.color)}` : ''} · × ${i.qty}</small></span>
     <span class="titem__price">${money(i.unit * i.qty)}</span>
   </li>`;
@@ -81,7 +81,9 @@ function orderHTML(o, open) {
           <div><span>التوصيل (${esc(o.customer.zone)})</span><span>${o.shipping ? money(o.shipping) : 'مجاني'}</span></div>
           <div class="tsum__total"><span>${o.status === 'delivered' ? 'دفعتي' : 'بتدفعي عند الاستلام'}</span><b>${money(o.total)}</b></div>
         </div>
-        <p class="torder__to">${icon('pin', 'ic--sm')} ${esc(o.customer.name)} · ${esc([o.customer.area, o.customer.city].filter(Boolean).join('، '))} · <bdi dir="ltr">${esc(o.customer.phone)}</bdi></p>
+        ${o.customer
+    ? `<p class="torder__to">${icon('pin', 'ic--sm')} ${esc(o.customer.name)} · ${esc([o.customer.area, o.customer.city].filter(Boolean).join('، '))} · <bdi dir="ltr">${esc(o.customer.phone)}</bdi></p>`
+    : '<p class="torder__lite">لحماية معلوماتك، الاسم والعنوان بيبينوا بس لما تكتبي رقم الطلب والجوال مع بعض.</p>'}
         <a href="${help}" class="btn btn--ghost btn--sm torder__help"${STORE.whatsapp ? ' target="_blank" rel="noopener"' : ''}>${icon('wa', 'ic--sm')} سؤال عن هالطلب</a>
       </div>
     </details>`;
@@ -104,18 +106,23 @@ function render() {
 $('#findForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target;
-  const number = form.number.value.trim().toUpperCase().replace(/\s+/g, '');
+  let number = form.number.value.trim().toUpperCase().replace(/\s+/g, '');
+  if (/^\d{6}$/.test(number)) number = `NK-${number}`; // كتبت الأرقام بس
   const phone = form.phone.value.trim();
   const err = $('#findErr');
-  if (!/^NK-?\d{6}$/.test(number)) { err.textContent = 'رقم الطلب بيبلش بـ NK ووراه 6 أرقام (متل NK-100001)'; return form.number.focus(); }
-  if (phone.replace(/[^\d]/g, '').length < 9) { err.textContent = 'اكتبي رقم الجوال اللي طلبتي فيه'; return form.phone.focus(); }
+  if (!number && !phone) { err.textContent = 'اكتبي رقم الطلب أو رقم الجوال (أو الاثنين)'; return form.number.focus(); }
+  if (number && !/^NK-?\d{6}$/.test(number)) { err.textContent = 'رقم الطلب بيبلش بـ NK ووراه 6 أرقام (متل NK-100001)'; return form.number.focus(); }
+  if (phone && phone.replace(/[^\d]/g, '').length < 9) { err.textContent = 'رقم الجوال ناقص'; return form.phone.focus(); }
   err.textContent = '';
   const btn = form.querySelector('button');
   btn.disabled = true;
   try {
-    const order = await lookupOrder(number, phone);
-    orders = [order, ...orders.filter((o) => o.id !== order.id)];
-    history.replaceState(null, '', `#${order.id}`);
+    const found = await lookupOrders({ number, phone });
+    const ids = new Set(found.map((o) => o.id));
+    // إذا الطلب أصلاً معروض بالتفاصيل الكاملة، ما بنبدّله بالنسخة المختصرة
+    const full = orders.filter((o) => ids.has(o.id) && !o.lite);
+    orders = [...found.map((o) => (o.lite && full.find((f) => f.id === o.id)) || o), ...orders.filter((o) => !ids.has(o.id))];
+    history.replaceState(null, '', `#${found[0].id}`);
     render();
     form.reset();
   } catch (er) {

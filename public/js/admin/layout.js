@@ -9,6 +9,7 @@ const NAV = [
   { key: 'products', href: 'products.html', icon: 'box', text: 'المنتجات' },
   { key: 'offers', href: 'offers.html', icon: 'tag', text: 'العروض والكوبونات' },
   { key: 'settings', href: 'settings.html', icon: 'gear', text: 'إعدادات المتجر' },
+  { key: 'backups', href: 'backups.html', icon: 'cloud', text: 'النسخ الاحتياطية' },
 ];
 
 const navHTML = (active) => NAV.map((n) => n.soon
